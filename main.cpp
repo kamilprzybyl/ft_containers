@@ -1,29 +1,29 @@
-// #include <iostream>
-// #include <string>
-// #include <deque>
-// #if 1 //CREATE A REAL STL EXAMPLE
-// 	#include <map>
-// 	#include <stack>
-	// #include <vector>
-// 	namespace ft = std;
-// #else
-// 	#include <map.hpp>
-// 	#include <stack.hpp>
-// 	#include <vector.hpp>
-// #endif
+#include <iostream>
+#include <string>
+#include <deque>
+#if 0 //CREATE A REAL STL EXAMPLE
+	#include <map>
+	#include <stack>
+	#include <vector>
+	namespace ft = std;
+#else
+	#include <map.hpp>
+	#include <stack.hpp>
+	#include <vector.hpp>
+#endif
 
-// #include <stdlib.h>
+#include <stdlib.h>
 
-// #define MAX_RAM 4294967296
-// #define BUFFER_SIZE 4096
-// struct Buffer
-// {
-// 	int idx;
-// 	char buff[BUFFER_SIZE];
-// };
+#define MAX_RAM 4294967296
+#define BUFFER_SIZE 4096
+struct Buffer
+{
+	int idx;
+	char buff[BUFFER_SIZE];
+};
 
 
-// #define COUNT (MAX_RAM / (int)sizeof(Buffer))
+#define COUNT (MAX_RAM / (int)sizeof(Buffer))
 
 // template<typename T>
 // class MutantStack : public ft::stack<T>
@@ -116,18 +116,27 @@
 // 	return (0);
 // }
 
-#include <vector.hpp>
-#include <iostream>
+// #include <vector.hpp>
 int main()
 {
-	Vector<int> vector;
+	ft::vector<int> vector;
 
-	vector.pushBack(9);
-	vector.pushBack(912);
-	vector.pushBack(-12);
+	vector.push_back(9);
+	vector.push_back(912);
+	vector.push_back(-12);
 
-	for (size_t i = 0; i < vector.size(); i++)
-	{
-		std::cout << vector[i] << std::endl;
-	}
+	// try
+	// {
+		for (size_t i = 0; i < vector.size(); i++)
+		{
+			std::cout << vector[i] << std::endl;
+		}
+		std::cout << vector[3] << std::endl;
+		std::cout << vector[32] << std::endl;
+		std::cout << vector[12] << std::endl;
+	// }
+	// catch (std::exception &e)
+	// {
+		// std::cout << e.what() << std::endl;
+	// }
 }

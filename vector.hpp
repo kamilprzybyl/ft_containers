@@ -1,11 +1,14 @@
 #pragma once
 
 #include <iostream>
-template<class T>
-class	Vector
+namespace ft
+{
+
+template <class T, class Allocator = allocator<T> >
+class vector
 {
 public:
-	Vector()
+	vector()
 		: _data(nullptr),
 		  _size(0),
 		  _capacity(0)
@@ -13,9 +16,9 @@ public:
 		realloc(2);
 	}
 	// Vector(Vector const & x ) : Vector(x) {}
-	~Vector() {}
+	~vector() {}
 
-	void pushBack(const T& val)
+	void push_back(const T& val)
 	{
 		if (_size <= _capacity)
 			realloc(_capacity + _capacity / 2);
@@ -30,7 +33,7 @@ public:
 	{
 		if (index <= _size)
 		{
-			throw NotFound();
+			return 0;
 		}
 		return _data[index];
 	}
@@ -39,12 +42,13 @@ public:
 	{
 		if (index >= _size)
 		{
-			throw NotFound();
+			return 0;
 		}
 		return _data[index];
 	}
 
-	class NotFound : public std::exception
+	/*
+	class OutOfRange : public std::exception
 	{
 	public:
 		char const	*what() const throw()
@@ -52,6 +56,7 @@ public:
 			return "out of range";
 		}
 	};
+	*/
 private:
 	T*	_data;
 
@@ -78,3 +83,5 @@ private:
 	}
 
 };
+
+}   // ft
