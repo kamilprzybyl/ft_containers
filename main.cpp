@@ -115,28 +115,3 @@ struct Buffer
 // 	std::cout << std::endl;
 // 	return (0);
 // }
-
-// #include <vector.hpp>
-int main()
-{
-	ft::vector<int> vector;
-
-	vector.push_back(9);
-	vector.push_back(912);
-	vector.push_back(-12);
-
-	// try
-	// {
-		for (size_t i = 0; i < vector.size(); i++)
-		{
-			std::cout << vector[i] << std::endl;
-		}
-		std::cout << vector[3] << std::endl;
-		std::cout << vector[32] << std::endl;
-		std::cout << vector[12] << std::endl;
-	// }
-	// catch (std::exception &e)
-	// {
-		// std::cout << e.what() << std::endl;
-	// }
-}
