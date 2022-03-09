@@ -53,42 +53,56 @@ public:
 	{
 	}
 
-	vector& operator= (const vector& x)
+	vector& operator= (const vector& x);
 
 	//	Destructor
 	~vector();
 
 	// 	Iterators
-	iterator 				begin();
-	const_iterator 			begin() const;
-	iterator 				end();
-	const_iterator 			end() const;
+	iterator 				begin()
+		{ return  iterator(this->_begin); }
+	const_iterator 			begin() const
+		{ return  const_iterator(this->_begin); }
+	iterator 				end()
+		{ return  iterator(this->_end); }
+	const_iterator 			end() const
+		{ return  const_iterator(this->_end); }
 
-	// reverse_iterator 		rbegin();
-	// const_reverse_iterator 	rbegin() const;
-	// reverse_iterator 		rend();
-	// const_reverse_iterator 	rend() const;
+	// reverse_iterator 		rbegin()
+	// 	{ return  reverse_iterator(this->_begin); }
+	// const_reverse_iterator 	rbegin() const
+	// 	{ return  const_reverse_iterator(this->_begin); }
+	// reverse_iterator 		rend()
+	// 	{ return  reverse_iterator(this->_end); }
+	// const_reverse_iterator 	rend() const
+	// 	{ return  const_reverse_iterator(this->_end); }
 
 	//	Capacity
-	size_type 	size() const;
-	size_type 	max_size() const;
+	size_type 	size() const
+		{ return this->_end - this->_begin; }
+	size_type 	max_size() const
+		{ return this->_a.max_size(); }
 
-	size_type 	capacity() const;
-	bool 		empty() const;
+	size_type 	capacity() const
+		{ return this->_capacity; }
+	bool 		empty() const
+		{ return this->_begin == this->end; }
 	void 		reserve (size_type n);
 
 	void 		resize (size_type n, value_type val = value_type());
 
 	//	Element access
-	reference 		operator[]( size_type pos );
-	const_reference operator[] (size_type n) const;
-	reference		at( size_type pos );
+	reference 		operator[]( size_type n )
+		{ return this->_begin[n]; }
+	const_reference operator[] (size_type n) const
+		{ return this->_begin[n]; }
+	reference		at( size_type n );
 	const_reference at (size_type n) const;
 
-	reference 		front();
-	const_reference front() const;
-	reference 		back();
-	const_reference back() const;
+	reference 		front()			{ return reference(this->_begin); }
+	const_reference front() const	{ return const_reference(this->_begin); }
+	reference 		back()			{ return reference(this->_end - 1); }
+	const_reference back() const	{ return const_reference(this->_end - 1); }
 
 	//	Modifiers
 	template <class InputIterator>
@@ -112,6 +126,7 @@ public:
 
 	//	Allocator
 	allocator_type get_allocator() const;
+		{ return this->_a; }
 
 	//	Non-member function overloads
 	template <class T, class Alloc>
@@ -170,6 +185,62 @@ vector<T, Allocator>::vector(size_type n, const value_type& val = value_type(),
 // {
 // }
 
+template <typename T, typename Allocator>
+vector<T, Allocator>::reference vector<T, Allocator>::at( size_type n )
+{
+	if (n >= size() || n < 0)
+		throw std::out_of_range("vector");
+	return this->_begin[n];
+}
+
+template <typename T, typename Allocator>
+vector<T, Allocator>::const_reference vector<T, Allocator>::at( size_type n ) const
+{
+	if (n >= size() || n < 0)
+		throw std::out_of_range("vector");
+	return this->_begin[n];
+}
+
+template <typename T, typename Allocator>
+vector<T, Allocator> &vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
+{
+	//  stuff
+	return *this;
+}
+
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::resize(size_type n, value_type val = value_type())
+{
+	if (n > max_size())
+		throw std::length_error("vector");
+	if (n < size())
+	{
+		this->_end = _start + n;
+	}
+	else if (n > size())
+	{
+		if ()
+	}
+}
+
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::reserve(size_type n)
+{
+	if (n > capacity())
+	{
+		pointer new_begin = this->a.allocate();
+		pointer new_end = new_begin + size();
+
+		ft::copy(iterator(_begin), iterator(_end), new_begin);
+		clear();
+		this->_a.deallocate(_begin);
+		this->_begin = new_begin;
+		this->_end = new_end;
+		this->_capacity = n;
+	}
+}
 
 
 }   // ft
