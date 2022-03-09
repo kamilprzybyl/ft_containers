@@ -41,11 +41,25 @@ public:
 	{
 		std::cout << "hi from default constructor" << std::endl;
 	}
-	// explicit vector (size_type n, const value_type& val = value_type(),
-	// 				const allocator_type& alloc = allocator_type());
+	explicit vector (size_type n, const value_type& val = value_type(),
+					const allocator_type& alloc = allocator_type())
+		:	_capacity(n),
+			_begin(nullptr),
+			_end(nullptr),
+			_a(alloc)
+	{
+		this->_begin = this->_a.allocate(n);
+		this->_end = this->_begin;
+		for (size_t i = 0; i < n ; i++)
+		{
+			this->_a.construct(this->_end, val);
+			this->_end++;
+		}
+		std::cout << "hi from fill constructor" << std::endl;
+	}
 	// template <class InputIterator>
     // vector (InputIterator first, InputIterator last,
-	// 		const allocator_type& alloc = allocator_type());
+	// 		const allocator_type& alloc = allocator_type())
 	// 	:	_capacity(),
 	// 		_begin(nullptr),
 	// 		_end(nullptr),
@@ -62,7 +76,7 @@ public:
 		this->_end = this->_begin;
 		for (size_t i = 0; i < x.size() ; i++)
 		{
-			this->_a.construct(_end, x[i]);
+			this->_a.construct(this->_end, x[i]);
 			this->_end++;
 		}
 		std::cout << "hi from copy constructor" << std::endl;
@@ -139,87 +153,16 @@ public:
 	// iterator 	erase (iterator position);
 	// iterator 	erase (iterator first, iterator last);
 
-	// void 		swap (vector& x);
+	void 		swap (vector& x);
 
-	// void 		clear();
+	void 		clear();
 
 	//	Allocator
 	allocator_type get_allocator() const
 		{ return this->_a; }
 
-	// //	Non-member function overloads
-	// template <class T, class Alloc>
-	// bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	// template <class T, class Alloc>
-	// bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+};	//vector
 
-	// template <class T, class Alloc>
-  	// void swap (vector<T,Alloc>& x, vector<T,Alloc>& y);
-};
-
-
-// template <typename T, typename Allocator>
-// vector<T, Allocator>::vector(const allocator_type& alloc = allocator_type())
-// 	:	_capacity(),
-// 		_begin(nullptr),
-// 		_end(nullptr),
-// 		_a(alloc)
-// {
-// 	std::cout << "hi from constrctor" << std::endl;
-// }
-
-// template <typename T, typename Allocator>
-// vector<T, Allocator>::vector(size_type n, const value_type& val = value_type(),
-// 					const allocator_type& alloc = allocator_type())
-// 	:	_capacity(),
-// 		_begin(nullptr),
-// 		_end(nullptr),
-// 		_a(alloc)
-// {
-// }
-
-// template <typename T, typename Allocator>
-// vector<T, Allocator>::vector(InputIterator first, InputIterator last,
-// 			const allocator_type& alloc = allocator_type()))
-// 	:	_capacity(),
-// 		_begin(),
-// 		_end(),
-// 		_a(alloc)
-// {
-// }
-
-// template <typename T, typename Allocator>
-// vector<T, Allocator>::vector(const vector& x)
-// 	:	_capacity(),
-// 		_begin(),
-// 		_end(),
-// 		_a(alloc)
-// {
-// }
-
-template <typename T, typename Allocator>
-typename vector<T, Allocator>::reference vector<T, Allocator>::at( size_type n )
-{
-	if (n >= size() || n < 0)
-		throw std::out_of_range("vector");
-	return this->_begin[n];
-}
-
-template <typename T, typename Allocator>
-typename vector<T, Allocator>::const_reference vector<T, Allocator>::at( size_type n ) const
-{
-	if (n >= size() || n < 0)
-		throw std::out_of_range("vector");
-	return this->_begin[n];
-}
 
 template <typename T, typename Allocator>
 vector<T, Allocator> &
@@ -229,6 +172,24 @@ vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
 	this->_end = this->_begin + x.size();
 	return *this;
 }
+
+// template <typename T, typename Allocator>
+// void
+// vector<T, Allocator>::reserve(size_type n)
+// {
+// 	if (n > capacity())
+// 	{
+// 		pointer new_begin = this->a.allocate();
+// 		pointer new_end = new_begin + size();
+
+// 		ft::copy(iterator(_begin), iterator(_end), new_begin);
+// 		clear();
+// 		this->_a.deallocate(_begin);
+// 		this->_begin = new_begin;
+// 		this->_end = new_end;
+// 		this->_capacity = n;
+// 	}
+// }
 
 // template <typename T, typename Allocator>
 // void
@@ -258,23 +219,32 @@ vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
 // 	}
 // }
 
-// template <typename T, typename Allocator>
-// void
-// vector<T, Allocator>::reserve(size_type n)
-// {
-// 	if (n > capacity())
-// 	{
-// 		pointer new_begin = this->a.allocate();
-// 		pointer new_end = new_begin + size();
+template <typename T, typename Allocator>
+typename vector<T, Allocator>::reference
+vector<T, Allocator>::at( size_type n )
+{
+	if (n >= size() || n < 0)
+		throw std::out_of_range("vector");
+	return this->_begin[n];
+}
 
-// 		ft::copy(iterator(_begin), iterator(_end), new_begin);
-// 		clear();
-// 		this->_a.deallocate(_begin);
-// 		this->_begin = new_begin;
-// 		this->_end = new_end;
-// 		this->_capacity = n;
-// 	}
-// }
+template <typename T, typename Allocator>
+typename vector<T, Allocator>::const_reference
+vector<T, Allocator>::at( size_type n ) const
+{
+	if (n >= size() || n < 0)
+		throw std::out_of_range("vector");
+	return this->_begin[n];
+}
+
+template <typename T, typename Allocator>
+void
+swap (vector<T,Allocator>& x, vector<T,Allocator>& y)
+{
+	vector<T, Allocator> temp = x;
+	x = y;
+	y = temp;
+}
 
 // template <typename T, typename Allocator>
 // void
@@ -283,14 +253,36 @@ vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
 // 	resize(size() + 1, val);
 // }
 
-// template <typename T, typename Allocator>
-// void
-// vector<T, Allocator>::clear()
-// {
-// 	destroy(this->_begin, this->end);
-// 	this->_begin = this->_end;
-// }
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::swap (vector& x)
+{
+	vector<T, Allocator> temp = *this;
+	*this = x;
+	x = temp;
+}
 
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::clear()
+{
+	// destroy(this->_begin, this->end);
+	this->_begin = this->_end;
+}
+
+//	Non-member function overloads
+// template <class T, class Alloc>
+// bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+// template <class T, class Alloc>
+// bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+// template <class T, class Alloc>
+// bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+// template <class T, class Alloc>
+// bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+// template <class T, class Alloc>
+// bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+// template <class T, class Alloc>
+// bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 
 
 }   // ft

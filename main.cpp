@@ -126,6 +126,8 @@ int main()
 
 		ft::vector<int> v2(v);
 
+		ft::vector<int> v3(20, 1);
+
 		v.get_allocator();
 		ft::vector<int>::size_type size = v.size();
 		std::cout << "size: " << size << std::endl;
