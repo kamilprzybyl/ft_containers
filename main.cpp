@@ -1,14 +1,14 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 1 //CREATE A REAL STL EXAMPLE
+#if 0 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
 	#include <vector>
 	namespace ft = std;
 #else
-	#include <map.hpp>
-	#include <stack.hpp>
+	// #include <map.hpp>
+	// #include <stack.hpp>
 	#include <vector.hpp>
 #endif
 
@@ -118,5 +118,37 @@ struct Buffer
 
 int main()
 {
-	
+
+
+	try
+	{
+		ft::vector<int> v;
+
+		ft::vector<int> v2(v);
+
+		v.get_allocator();
+		ft::vector<int>::size_type size = v.size();
+		std::cout << "size: " << size << std::endl;
+		ft::vector<int>::size_type max_size = v.max_size();
+		std::cout << "max_size: " << max_size << std::endl;
+		ft::vector<int>::size_type capacity = v.capacity();
+		std::cout << "capacity: " << capacity << std::endl;
+		ft::vector<int>::size_type empty = v.empty();
+		std::cout << "empty: " << empty << std::endl;
+		ft::vector<int>::iterator begin = v.begin();
+		std::cout << "begin: " << begin << std::endl;
+		// std::cout << "operator[]: " << v[0] << std::endl;
+		ft::vector<int>::reference front = v.front();
+		std::cout << "front: " << front << std::endl;
+		ft::vector<int>::const_reference const_front = v.front();
+		std::cout << "const_front: " << const_front << std::endl;
+		// ft::vector<int>::reference back = v.back();
+		// std::cout << "back: " << back << std::endl;	// seg fault no clue if 
+		int i = v.at(1);
+		std::cout << "at: " << i << std::endl;
+	}
+	catch (std::exception & e)
+	{
+		std::cout << e.what() << std::endl;
+	}
 }
