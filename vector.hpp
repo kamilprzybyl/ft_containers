@@ -56,7 +56,11 @@ public:
 	vector& operator= (const vector& x);
 
 	//	Destructor
-	~vector();
+	~vector()
+	{
+		destroy(this->_begin, this->_end);
+		this->a.deallocate(this->_begin, this->_end);
+	}
 
 	// 	Iterators
 	iterator 				begin()
@@ -202,7 +206,8 @@ vector<T, Allocator>::const_reference vector<T, Allocator>::at( size_type n ) co
 }
 
 template <typename T, typename Allocator>
-vector<T, Allocator> &vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
+vector<T, Allocator> &
+vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
 {
 	//  stuff
 	return *this;
@@ -216,11 +221,23 @@ vector<T, Allocator>::resize(size_type n, value_type val = value_type())
 		throw std::length_error("vector");
 	if (n < size())
 	{
+		destroy(this->_begin + n, this->end);
 		this->_end = _start + n;
 	}
 	else if (n > size())
 	{
-		if ()
+		if (n > this->_capacity)
+		{
+			if (n <= this->_capacity * 2)
+				reserve(this->_capacity * 2)
+			else
+				reserve(n);
+		}
+		for (size_t i = size(); i < n; i++)
+		{
+			this->_a.construct(this->_end, val);
+			this->_end++;
+		}
 	}
 }
 
@@ -241,6 +258,15 @@ vector<T, Allocator>::reserve(size_type n)
 		this->_capacity = n;
 	}
 }
+
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::clear()
+{
+	destroy(this->_begin, this->end);
+	this->_begin = this->_end;
+}
+
 
 
 }   // ft
