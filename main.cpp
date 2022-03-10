@@ -145,7 +145,23 @@ int main()
 		ft::vector<int>::const_reference const_front = v.front();
 		std::cout << "const_front: " << const_front << std::endl;
 		// ft::vector<int>::reference back = v.back();
-		// std::cout << "back: " << back << std::endl;	// seg fault no clue if 
+		// std::cout << "back: " << back << std::endl;	// seg fault no clue if it's ok
+		std::cout << "[] operator: " << v3[19] << std::endl;
+		v3.pop_back();
+		std::cout << "[] operator after pop: " << v3[19] << std::endl;
+		v3.pop_back();
+		std::cout << "[] operator after pop: " << v3[19] << std::endl;
+		// std::cout << "push_back: " << v[0] << std::endl;	//should sef fault
+		v.push_back(24);
+		std::cout << "push_back: " << v[0] << std::endl;
+		v.push_back(19);
+		std::cout << "push_back: " << v[1] << std::endl;
+		v.push_back(-12);
+		std::cout << "push_back: " << v[2] << std::endl;
+		v.pop_back();
+		v.push_back(555);
+		std::cout << "pop and push: " << v[2] << std::endl;
+
 		int i = v.at(1);
 		std::cout << "at: " << i << std::endl;
 	}

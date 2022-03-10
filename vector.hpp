@@ -87,7 +87,7 @@ public:
 	//	Destructor
 	~vector()
 	{
-		// destroy(this->_begin, this->_end);
+		clear();
 		this->_a.deallocate(this->_begin, this->_capacity);
 	}
 
@@ -120,7 +120,7 @@ public:
 		{ return this->_capacity; }
 	bool 		empty() const
 		{ return this->_begin == this->_end; }
-	// void 		reserve (size_type n);
+	void 		reserve (size_type n);
 
 	// void 		resize (size_type n, value_type val = value_type());
 
@@ -142,8 +142,8 @@ public:
 	// void 		assign (InputIterator first, InputIterator last);
 	// void 		assign (size_type n, const value_type& val);
 
-	// void 		push_back (const value_type& val);
-	// void 		pop_back();
+	void 		push_back (const value_type& val);
+	void 		pop_back();
 
 	// iterator 	insert (iterator position, const value_type& val);
 	// void 		insert (iterator position, size_type n, const value_type& val);
@@ -163,6 +163,17 @@ public:
 
 };	//vector
 
+template<typename iterator, typename InputIterator>
+iterator
+copy(InputIterator first, InputIterator last, iterator position) {
+	while (first != last)
+	{
+		*position = *first;
+		first++;
+		position++;
+	}
+	return(position);
+}
 
 template <typename T, typename Allocator>
 vector<T, Allocator> &
@@ -173,23 +184,23 @@ vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
 	return *this;
 }
 
-// template <typename T, typename Allocator>
-// void
-// vector<T, Allocator>::reserve(size_type n)
-// {
-// 	if (n > capacity())
-// 	{
-// 		pointer new_begin = this->a.allocate();
-// 		pointer new_end = new_begin + size();
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::reserve(size_type n)
+{
+	if (n > capacity())
+	{
+		pointer new_begin = this->_a.allocate(n);
+		pointer new_end = new_begin + size();
 
-// 		ft::copy(iterator(_begin), iterator(_end), new_begin);
-// 		clear();
-// 		this->_a.deallocate(_begin);
-// 		this->_begin = new_begin;
-// 		this->_end = new_end;
-// 		this->_capacity = n;
-// 	}
-// }
+		ft::copy(iterator(this->_begin), iterator(this->_end), new_begin);
+		clear();
+		this->_a.deallocate(this->_begin, size());
+		this->_begin = new_begin;
+		this->_end = new_end;
+		this->_capacity = n;
+	}
+}
 
 // template <typename T, typename Allocator>
 // void
@@ -246,12 +257,25 @@ swap (vector<T,Allocator>& x, vector<T,Allocator>& y)
 	y = temp;
 }
 
-// template <typename T, typename Allocator>
-// void
-// vector<T, Allocator>::push_back( const value_type& val )
-// {
-// 	resize(size() + 1, val);
-// }
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::push_back( const value_type& val )
+{
+	if (size() == capacity())
+		reserve(size() + 1);
+	// this->_a.construct(this->_end, val);
+	this->_end++;
+	back() = val;
+	// this->_end++;
+}
+
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::pop_back()
+{
+	this->_a.destroy(this->_end - 1);
+	this->_end--;
+}
 
 template <typename T, typename Allocator>
 void
@@ -266,8 +290,13 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::clear()
 {
-	// destroy(this->_begin, this->end);
-	this->_begin = this->_end;
+	pointer	tmp = this->_begin;	
+	while (tmp != this->_end)
+	{
+		this->_a.destroy(tmp);
+		tmp++;
+	}
+	this->_end = this->_begin;
 }
 
 //	Non-member function overloads
