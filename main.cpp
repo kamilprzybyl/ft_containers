@@ -162,6 +162,11 @@ int main()
 		v.push_back(555);
 		std::cout << "pop and push: " << v[2] << std::endl;
 
+		ft::vector<int>	v4(v);
+
+		std::cout << "operator= " << v4[1] << std::endl;
+
+
 		int i = v.at(1);
 		std::cout << "at: " << i << std::endl;
 	}

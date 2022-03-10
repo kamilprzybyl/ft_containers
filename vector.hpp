@@ -179,25 +179,27 @@ template <typename T, typename Allocator>
 vector<T, Allocator> &
 vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
 {
-	//  stuff
-	this->_end = this->_begin + x.size();
-	return *this;
+    if (this != &x)
+    {
+		reserve(x.size());
+		ft::copy(x.begin(), x.end(), begin()); // not sure if i need it
+		this->_end = this->_begin + x.size();
+    }
+    return *this;
 }
 
 template <typename T, typename Allocator>
 void
 vector<T, Allocator>::reserve(size_type n)
 {
-	if (n > capacity())
+	if (n > capacity() && n < max_size()) // second condition required since we have put a limit on our storage
 	{
-		pointer new_begin = this->_a.allocate(n);
-		pointer new_end = new_begin + size();
-
-		ft::copy(iterator(this->_begin), iterator(this->_end), new_begin);
+		pointer tmp = this->_a.allocate(n);
+		ft::copy(iterator(this->_begin), iterator(this->_end), tmp);
 		clear();
 		this->_a.deallocate(this->_begin, size());
-		this->_begin = new_begin;
-		this->_end = new_end;
+		this->_begin = tmp;
+		this->_end = tmp + n;
 		this->_capacity = n;
 	}
 }
