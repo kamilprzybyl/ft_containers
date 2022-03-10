@@ -122,7 +122,7 @@ public:
 		{ return this->_begin == this->_end; }
 	void 		reserve (size_type n);
 
-	// void 		resize (size_type n, value_type val = value_type());
+	void 		resize (size_type n, value_type val = value_type());
 
 	//	Element access
 	reference 		operator[]( size_type n )
@@ -204,33 +204,33 @@ vector<T, Allocator>::reserve(size_type n)
 	}
 }
 
-// template <typename T, typename Allocator>
-// void
-// vector<T, Allocator>::resize(size_type n, value_type val = value_type())
-// {
-// 	if (n > max_size())
-// 		throw std::length_error("vector");
-// 	if (n < size())
-// 	{
-// 		destroy(this->_begin + n, this->end);
-// 		this->_end = _start + n;
-// 	}
-// 	else if (n > size())
-// 	{
-// 		if (n > this->_capacity)
-// 		{
-// 			if (n <= this->_capacity * 2)
-// 				reserve(this->_capacity * 2)
-// 			else
-// 				reserve(n);
-// 		}
-// 		for (size_t i = size(); i < n; i++)
-// 		{
-// 			this->_a.construct(this->_end, val);
-// 			this->_end++;
-// 		}
-// 	}
-// }
+template <typename T, typename Allocator>
+void
+vector<T, Allocator>::resize(size_type n, value_type val)
+{
+	if (n > max_size())
+		throw std::length_error("vector");
+	if (n < size())
+	{
+		clear();
+		this->_end = this->_start + n;
+	}
+	else if (n > size())
+	{
+		if (n > this->_capacity)
+		{
+			if (n <= this->_capacity * 2)
+				reserve(this->_capacity * 2);
+			else
+				reserve(n);
+		}
+		for (size_t i = size(); i < n; i++)
+		{
+			this->_a.construct(this->_end, val);
+			this->_end++;
+		}
+	}
+}
 
 template <typename T, typename Allocator>
 typename vector<T, Allocator>::reference
