@@ -82,7 +82,7 @@ public:
 		std::cout << "hi from copy constructor" << std::endl;
 	}
 
-	vector& operator= (const vector& x);
+	vector& operator=(const vector& x);
 
 	//	Destructor
 	~vector()
@@ -145,13 +145,13 @@ public:
 	void 		push_back (const value_type& val);
 	void 		pop_back();
 
-	// iterator 	insert (iterator position, const value_type& val);
-	// void 		insert (iterator position, size_type n, const value_type& val);
+	iterator 	insert (iterator position, const value_type& val);
+	void 		insert (iterator position, size_type n, const value_type& val);
 	// template <class InputIterator>
 	// void 		insert (iterator position, InputIterator first, InputIterator last);
 
-	// iterator 	erase (iterator position);
-	// iterator 	erase (iterator first, iterator last);
+	iterator 	erase (iterator position);
+	iterator 	erase (iterator first, iterator last);
 
 	void 		swap (vector& x);
 
@@ -165,14 +165,15 @@ public:
 
 template<typename iterator, typename InputIterator>
 iterator
-copy(InputIterator first, InputIterator last, iterator position) {
+copy(InputIterator first, InputIterator last, iterator position)
+{
 	while (first != last)
 	{
 		*position = *first;
 		first++;
 		position++;
 	}
-	return(position);
+	return position;
 }
 
 template <typename T, typename Allocator>
@@ -192,12 +193,14 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::reserve(size_type n)
 {
-	if (n > capacity() && n < max_size()) // second condition required since we have put a limit on our storage
+	// if (n < max_size())
+	// 	throw std::length_error("vector");
+	if (n > capacity()
 	{
 		pointer tmp = this->_a.allocate(n);
 		ft::copy(iterator(this->_begin), iterator(this->_end), tmp);
 		clear();
-		this->_a.deallocate(this->_begin, size());
+		this->_a.deallocate(this->_begin, size()); // size or capacity?
 		this->_begin = tmp;
 		this->_end = tmp + n;
 		this->_capacity = n;
@@ -208,12 +211,17 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::resize(size_type n, value_type val)
 {
-	if (n > max_size())
-		throw std::length_error("vector");
+	// if (n > max_size())
+	// 	throw std::length_error("vector");
 	if (n < size())
 	{
-		clear();
-		this->_end = this->_start + n;
+		pointer	tmp = this->_begin + n;
+		while (tmp != this->_end)
+		{
+			this->_a.destroy(tmp);
+			tmp++;
+		}
+		this->_end = this->_begin + n;
 	}
 	else if (n > size())
 	{
@@ -277,6 +285,44 @@ vector<T, Allocator>::pop_back()
 {
 	this->_a.destroy(this->_end - 1);
 	this->_end--;
+}
+
+template <typename T, typename Allocator>
+iterator
+vector<T, Allocator>::insert (iterator position, const value_type& val)
+{
+	size_type n = position - this->_begin();
+	insert(position, 1, val);
+	return iterator(this->begin + n);
+}
+
+template <typename T, typename Allocator>
+iterator
+vector<T, Allocator>::insert (iterator position, size_type n, const value_type& val)
+{
+
+}
+
+template <typename T, typename Allocator>
+iterator
+vector<T, Allocator>::erase (iterator position)
+{
+	return erase(position, position + 1);
+}
+
+template <typename T, typename Allocator>
+iterator
+vector<T, Allocator>::erase (iterator first, iterator last)
+{
+	iterator it = ft::copy(last, end(), first);
+	pointer  tmp = this->_begin + (it - this->_begin);
+	while (tmp != this->_end)
+	{
+		this->a.destroy(tmp);
+		tmp++;
+	}
+	this->_end = last - first;
+	return first;
 }
 
 template <typename T, typename Allocator>
