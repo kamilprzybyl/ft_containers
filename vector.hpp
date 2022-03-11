@@ -39,7 +39,6 @@ public:
 			_end(nullptr),
 			_a(alloc)
 	{
-		std::cout << "hi from default constructor" << std::endl;
 	}
 	explicit vector (size_type n, const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type())
@@ -55,7 +54,6 @@ public:
 			this->_a.construct(this->_end, val);
 			this->_end++;
 		}
-		std::cout << "hi from fill constructor" << std::endl;
 	}
 	// template <class InputIterator>
     // vector (InputIterator first, InputIterator last,
@@ -79,7 +77,6 @@ public:
 			this->_a.construct(this->_end, x[i]);
 			this->_end++;
 		}
-		std::cout << "hi from copy constructor" << std::endl;
 	}
 
 	vector& operator=(const vector& x);
@@ -176,6 +173,19 @@ copy(InputIterator first, InputIterator last, iterator position)
 	return position;
 }
 
+template<typename iterator, typename InputIterator>
+iterator
+copy_backwards(InputIterator first, InputIterator last, iterator position)
+{
+	while (first != last)
+	{
+		*position = *first;
+		first++;
+		position++;
+	}
+	return position;
+}
+
 template <typename T, typename Allocator>
 vector<T, Allocator> &
 vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
@@ -195,7 +205,7 @@ vector<T, Allocator>::reserve(size_type n)
 {
 	// if (n < max_size())
 	// 	throw std::length_error("vector");
-	if (n > capacity()
+	if (n > capacity())
 	{
 		pointer tmp = this->_a.allocate(n);
 		ft::copy(iterator(this->_begin), iterator(this->_end), tmp);
@@ -288,7 +298,7 @@ vector<T, Allocator>::pop_back()
 }
 
 template <typename T, typename Allocator>
-iterator
+typename vector<T, Allocator>::iterator
 vector<T, Allocator>::insert (iterator position, const value_type& val)
 {
 	size_type n = position - this->_begin();
@@ -297,25 +307,35 @@ vector<T, Allocator>::insert (iterator position, const value_type& val)
 }
 
 template <typename T, typename Allocator>
-iterator
+void
 vector<T, Allocator>::insert (iterator position, size_type n, const value_type& val)
 {
-
+	size_type start = position - this->_begin();
+	reserve(size() + n);
+	ft::copy(begin() + start, begin() + size() - n, begin() + start + n);
+	iterator first = begin() + start;
+	while (first != begin() + start + n)
+	{
+		*first = val;
+		first++;
+	}
 }
 
 template <typename T, typename Allocator>
-iterator
+typename vector<T, Allocator>::iterator
 vector<T, Allocator>::erase (iterator position)
 {
 	return erase(position, position + 1);
 }
 
 template <typename T, typename Allocator>
-iterator
+typename vector<T, Allocator>::iterator
 vector<T, Allocator>::erase (iterator first, iterator last)
 {
-	iterator it = ft::copy(last, end(), first);
-	pointer  tmp = this->_begin + (it - this->_begin);
+	pointer  tmp = last;
+	ft::copy(last, end(), first);
+	// iterator it = ft::copy(last, end(), first);
+	// pointer  tmp = this->_begin + (it - this->_begin);
 	while (tmp != this->_end)
 	{
 		this->a.destroy(tmp);

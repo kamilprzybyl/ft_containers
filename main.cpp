@@ -169,6 +169,10 @@ int main()
 
 		int i = v.at(1);
 		std::cout << "at: " << i << std::endl;
+
+		ft::vector<int> v5;
+
+		v5.insert(v5.begin(), 10, 42);
 	}
 	catch (std::exception & e)
 	{
