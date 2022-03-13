@@ -160,20 +160,20 @@ public:
 
 };	//vector
 
-// template<class InputIterator>
-// typename iterator_traits<InputIterator>::difference_type
-// distance (InputIterator first, InputIterator last)
-// {
-// 	typename ft::iterator_traits<InputIterator>::difference_type	i = 0;
+template<class InputIterator>
+typename iterator_traits<InputIterator>::difference_type
+distance (InputIterator first, InputIterator last)
+{
+	typename ft::iterator_traits<InputIterator>::difference_type	i = 0;
 
-// 	while (first != last)
-// 	{
-// 		i++;
-// 		first++;
-// 	}
+	while (first != last)
+	{
+		i++;
+		first++;
+	}
 
-// 	return i;
-// }
+	return i;
+}
 
 template<typename iterator, typename InputIterator>
 iterator
@@ -203,6 +203,14 @@ copy_backwards(InputIterator first, InputIterator last, iterator position)
 		position--;
 	}
 	return position + n;
+}
+
+template<typename iterator, typename InputIterator>
+void
+fill(InputIterator first, InputIterator last, typename ft::iterator_traits<Iterator>::value_type val)
+{
+	while (first != last)
+		*first = val;
 }
 
 template <typename T, typename Allocator>
@@ -337,9 +345,10 @@ template <typename T, typename Allocator>
 typename vector<T, Allocator>::iterator
 vector<T, Allocator>::insert (iterator position, const value_type& val)
 {
-	size_type n = position - this->_begin();
+	// size_type n = position - this->_begin();
 	insert(position, 1, val);
-	return iterator(this->begin + n);
+	// return iterator(this->begin + n);
+	return position;
 }
 
 template <typename T, typename Allocator>
