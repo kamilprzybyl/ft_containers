@@ -3,7 +3,12 @@
 
 #include <iostream>
 #include <memory>
-#include <utils.hpp>
+#include "../utils/copy.hpp"
+#include "../utils/distance.hpp"
+#include "../utils/equal.hpp"
+#include "../utils/fill.hpp"
+#include "../utils/iterator_traits.hpp"
+#include "../utils/lexicographical_compare.hpp"
 
 namespace ft
 {

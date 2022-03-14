@@ -1,7 +1,7 @@
 #ifndef EQUAL_HPP
 #define EQUAL_HPP
 
-#include <iterator_traits.hpp>
+#include "../utils/iterator_traits.hpp"
 
 namespace ft
 {
