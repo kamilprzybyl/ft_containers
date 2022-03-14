@@ -3,7 +3,12 @@
 
 #include <iostream>
 #include <memory>
-#include <utils.hpp>
+#include "../utils/copy.hpp"
+#include "../utils/distance.hpp"
+#include "../utils/fill.hpp"
+#include "../utils/equal.hpp"
+#include "../utils/iterator_traits.hpp"
+#include "../utils/lexicographical_compare.hpp"
 
 namespace ft
 {
@@ -306,8 +311,8 @@ void
 vector<T, Allocator>::insert (iterator position, size_type n, const value_type& val)
 {
 	if (n > max_size() || n + size() > max_size())
-		throw std::lenght_error("Length error: vector::insert");
-	size_type start = ft::distance(position, this->_begin);
+		throw std::length_error("Length error: vector::insert");
+	size_type start = std::distance(position, this->_begin);
 	reserve(size() + n);
 	ft::copy_backward(begin() + start, begin() + size() - n, begin() + start + n);
 	// iterator first = begin() + start;
@@ -316,19 +321,18 @@ vector<T, Allocator>::insert (iterator position, size_type n, const value_type& 
 	// 	*first = val;
 	// 	first++;
 	// }
-	ft::fill(begin() + start, begin() + start + n, val)
+	ft::fill(begin() + start, begin() + start + n, val);
 }
 
 template <typename T, typename Allocator>
 template <class InputIterator>
 void
-vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last,
-							 typename std::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true)) //change to ft afterwards
+vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last)
 {
-	size_type n = ft::distance(first, last);
+	size_type n = std::distance(first, last);
 	if (n > max_size() || n + size() > max_size())
-		throw std::lenght_error("Length error: vector::insert");
-	size_type start = ft::distance(position, begin());
+		throw std::length_error("Length error: vector::insert");
+	size_type start = std::distance(position, begin());
 	reserve(size() + n);
 	ft::copy_backward(begin() + start, begin() + size() - n, begin() + start + n);
 	// while (first != begin() + start + n)
@@ -336,7 +340,7 @@ vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterat
 	// 	*first +  = *last;
 	// 	first++;
 	// }
-	ft::fill(begin() + start, start, begin() + start + n, first);
+	ft::fill(begin() + start, begin() + start + n, first);
 }
 
 template <typename T, typename Allocator>

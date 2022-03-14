@@ -1,7 +1,8 @@
 #ifndef EQUAL_HPP
 #define EQUAL_HPP
 
-#include <iterator_traits.hpp>
+// #pragma once
+#include "iterator_traits.hpp"
 
 namespace ft
 {
