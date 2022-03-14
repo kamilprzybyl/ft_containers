@@ -14,7 +14,7 @@ namespace ft
 		typedef typename Iter::iterator_category	iterator_category;
 	};
 
-	template< class T >
+	template<class T>
 	struct iterator_traits<T*>
 	{
 		typedef size_t							difference_type;
