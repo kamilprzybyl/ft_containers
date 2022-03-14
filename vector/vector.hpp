@@ -162,13 +162,6 @@ public:
 };	//vector
 
 
-template<typename iterator, typename InputIterator>
-void
-fill(InputIterator first, InputIterator last, typename ft::iterator_traits<Iterator>::value_type val)
-{
-	while (first != last)
-		*first = val;
-}
 
 template <typename T, typename Allocator>
 vector<T, Allocator> &
@@ -254,7 +247,7 @@ vector<T, Allocator>::at( size_type n ) const
 
 template <typename T, typename Allocator>
 void
-swap (vector<T,Allocator>& x, vector<T,Allocator>& y)
+swap(vector<T,Allocator>& x, vector<T,Allocator>& y)
 {
 	vector<T, Allocator> temp = x;
 	x = y;
@@ -312,23 +305,38 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::insert (iterator position, size_type n, const value_type& val)
 {
+	if (n > max_size() || n + size() > max_size())
+		throw std::lenght_error("Length error: vector::insert");
 	size_type start = ft::distance(position, this->_begin);
 	reserve(size() + n);
-	ft::copy_backwards(begin() + start, begin() + size() - n, begin() + start + n);
-	iterator first = begin() + start;
-	while (first != begin() + start + n)
-	{
-		*first = val;
-		first++;
-	}
+	ft::copy_backward(begin() + start, begin() + size() - n, begin() + start + n);
+	// iterator first = begin() + start;
+	// while (first != begin() + start + n)
+	// {
+	// 	*first = val;
+	// 	first++;
+	// }
+	ft::fill(begin() + start, begin() + start + n, val)
 }
 
 template <typename T, typename Allocator>
 template <class InputIterator>
 void
-vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last)
+vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last,
+							 typename std::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true)) //change to ft afterwards
 {
-	//stuff
+	size_type n = ft::distance(first, last);
+	if (n > max_size() || n + size() > max_size())
+		throw std::lenght_error("Length error: vector::insert");
+	size_type start = ft::distance(position, begin());
+	reserve(size() + n);
+	ft::copy_backward(begin() + start, begin() + size() - n, begin() + start + n);
+	// while (first != begin() + start + n)
+	// {
+	// 	*first +  = *last;
+	// 	first++;
+	// }
+	ft::fill(begin() + start, start, begin() + start + n, first);
 }
 
 template <typename T, typename Allocator>
