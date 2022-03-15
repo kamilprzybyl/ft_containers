@@ -25,7 +25,7 @@ copy_backward(InputIterator first, InputIterator last, iterator position)
 {
 	first--;
 	last--;
-	size_t n = ft::distance(first, last);
+	size_t n = std::distance(first, last);
 	position = position + n - 1;
 	while (last != first)
 	{

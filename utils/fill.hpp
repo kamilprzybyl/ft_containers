@@ -1,27 +1,33 @@
 #ifndef FILL_HPP
 #define FILL_HPP
 
-#include "../utils/iterator_traits.hpp"
+#include "iterator_traits.hpp"
 
 namespace ft
 {
 
 
-template<typename iterator, typename InputIterator>
+template <class ForwardIterator, class T>
 void
-fill(InputIterator first, InputIterator last, typename ft::iterator_traits<Iterator>::value_type val)
+fill(ForwardIterator first, ForwardIterator last, const T& val)
 {
 	while (first != last)
+	{
 		*first = val;
+		++first;
+	}
 }
 
 template<typename iterator, typename InputIterator>
 void
 fill(InputIterator first1, InputIterator last1, InputIterator first2)
 {
-	size_t i = 0;
-	while (i != n)
+	while (first1 != last1)
+	{
 		*first1 = *first2;
+		++first1;
+		++first2;
+	}
 }
 
 
