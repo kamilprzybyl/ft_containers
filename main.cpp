@@ -181,6 +181,7 @@ int main()
 		std::cout << "insert: " << v5[3] << std::endl;
 		v5.erase(v5.begin() + 2, v5.begin() + 7);
 		std::cout << "insert: " << v5[8] << std::endl;
+		v5.insert(v5.begin(), );
 		
 	}
 	catch (std::exception & e)
