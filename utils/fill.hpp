@@ -6,7 +6,6 @@
 namespace ft
 {
 
-
 template <class ForwardIterator, class T>
 void
 fill(ForwardIterator first, ForwardIterator last, const T& val)
@@ -17,19 +16,6 @@ fill(ForwardIterator first, ForwardIterator last, const T& val)
 		++first;
 	}
 }
-
-template<typename iterator, typename InputIterator>
-void
-fill(InputIterator first1, InputIterator last1, InputIterator first2)
-{
-	while (first1 != last1)
-	{
-		*first1 = *first2;
-		++first1;
-		++first2;
-	}
-}
-
 
 } // ft
 

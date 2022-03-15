@@ -69,6 +69,10 @@ public:
 	// 		_end(nullptr),
 	// 		_a(alloc)
 	// {
+	// 	// typename iterator_traits<InputIterator>::difference_type  n = ft::distance(first, last);
+	// 	size_t  n = ft::distance(first, last);
+	// 	reserve(n);
+	// 	ft::copy(first, last, (iterator)this->_begin);
 	// }
 	vector (const vector& x)
 		:	_capacity(x._capacity),
@@ -150,8 +154,8 @@ public:
 
 	iterator 	insert (iterator position, const value_type& val);
 	void 		insert (iterator position, size_type n, const value_type& val);
-	template <class InputIterator>
-	void 		insert (iterator position, InputIterator first, InputIterator last);
+	// template <class InputIterator>
+	// void 		insert (iterator position, InputIterator first, InputIterator last);
 
 	iterator 	erase (iterator position);
 	iterator 	erase (iterator first, iterator last);
@@ -300,9 +304,7 @@ template <typename T, typename Allocator>
 typename vector<T, Allocator>::iterator
 vector<T, Allocator>::insert (iterator position, const value_type& val)
 {
-	// size_type n = position - this->_begin();
 	insert(position, 1, val);
-	// return iterator(this->begin + n);
 	return position;
 }
 
@@ -312,36 +314,30 @@ vector<T, Allocator>::insert (iterator position, size_type n, const value_type& 
 {
 	if (n > max_size() || n + size() > max_size())
 		throw std::length_error("Length error: vector::insert");
-	size_type start = std::distance(position, this->_begin);
+	size_type start = ft::distance(begin(), position);
 	reserve(size() + n);
 	ft::copy_backward(begin() + start, begin() + size() - n, begin() + start + n);
-	// iterator first = begin() + start;
-	// while (first != begin() + start + n)
-	// {
-	// 	*first = val;
-	// 	first++;
-	// }
 	ft::fill(begin() + start, begin() + start + n, val);
 }
 
-template <typename T, typename Allocator>
-template <class InputIterator>
-void
-vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last)
-{
-	size_type n = std::distance(first, last);
-	if (n > max_size() || n + size() > max_size())
-		throw std::length_error("Length error: vector::insert");
-	size_type start = std::distance(position, begin());
-	reserve(size() + n);
-	ft::copy_backward(begin() + start, begin() + size() - n, begin() + start + n);
-	// while (first != begin() + start + n)
-	// {
-	// 	*first +  = *last;
-	// 	first++;
-	// }
-	ft::fill(begin() + start, begin() + start + n, first);
-}
+// template <typename T, typename Allocator>
+// template <class InputIterator>
+// void
+// vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last)
+// {
+// 	size_type n = ft::distance(first, last);
+// 	if (n > max_size() || n + size() > max_size())
+// 		throw std::length_error("Length error: vector::insert");
+// 	size_type start = ft::distance(position, begin());
+// 	reserve(size() + n);
+// 	ft::copy_backward(begin() + start, begin() + size() - n, begin() + start + n);
+// 	// while (first != begin() + start + n)
+// 	// {
+// 	// 	*first +  = *last;
+// 	// 	first++;
+// 	// }
+// 	ft::fill(begin() + start, begin() + start + n, first);
+// }
 
 template <typename T, typename Allocator>
 typename vector<T, Allocator>::iterator
@@ -356,14 +352,12 @@ vector<T, Allocator>::erase (iterator first, iterator last)
 {
 	pointer  tmp = last;
 	ft::copy(last, end(), first);
-	// iterator it = ft::copy(last, end(), first);
-	// pointer  tmp = this->_begin + (it - this->_begin);
 	while (tmp != this->_end)
 	{
-		this->a.destroy(tmp);
+		this->_a.destroy(tmp);
 		tmp++;
 	}
-	this->_end = last - first;
+	this->_end -= ft::distance(first, last);
 	return first;
 }
 
@@ -390,18 +384,49 @@ vector<T, Allocator>::clear()
 }
 
 //	Non-member function overloads
-// template <class T, class Alloc>
-// bool operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-// template <class T, class Alloc>
-// bool operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-// template <class T, class Alloc>
-// bool operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-// template <class T, class Alloc>
-// bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-// template <class T, class Alloc>
-// bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-// template <class T, class Alloc>
-// bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+template <class T, class Alloc>
+bool
+operator== (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	if (lhs.size() != rhs.size())
+		return false;
+	return std::equal(lhs.begin(), lhs.end(), rhs.begin());
+}
+
+template <class T, class Alloc>
+bool
+operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	return !(lhs == rhs);
+}
+
+template <class T, class Alloc>
+bool
+operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+}
+
+template <class T, class Alloc>
+bool
+operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	return !(rhs < lhs);
+}
+
+template <class T, class Alloc>
+bool
+operator> (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	return rhs < lhs;
+}
+
+template <class T, class Alloc>
+bool
+operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+{
+	return !(rhs > lhs);
+}
 
 
 }   // ft

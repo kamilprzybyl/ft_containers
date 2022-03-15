@@ -1,23 +1,36 @@
 #ifndef COPY_HPP
 #define COPY_HPP
 
+#include "distance.hpp"
 
 namespace ft
 {
 
 
-template<typename iterator, typename InputIterator>
-iterator
-copy(InputIterator first, InputIterator last, iterator position)
+template<class InputIterator, class OutputIterator>
+OutputIterator
+copy(InputIterator first, InputIterator last, OutputIterator result)
 {
 	while (first != last)
 	{
-		*position = *first;
-		first++;
-		position++;
+		*result = *first;
+		++result;
+		++first;
 	}
-	return position;
+	return result;
 }
+// template<typename iterator, typename InputIterator>
+// iterator
+// copy(InputIterator first, InputIterator last, iterator position)
+// {
+// 	while (first != last)
+// 	{
+// 		*position = *first;
+// 		first++;
+// 		position++;
+// 	}
+// 	return position;
+// }
 
 template<typename iterator, typename InputIterator>
 iterator
@@ -25,7 +38,7 @@ copy_backward(InputIterator first, InputIterator last, iterator position)
 {
 	first--;
 	last--;
-	size_t n = std::distance(first, last);
+	size_t n = ft::distance(first, last);
 	position = position + n - 1;
 	while (last != first)
 	{
@@ -34,11 +47,6 @@ copy_backward(InputIterator first, InputIterator last, iterator position)
 		position--;
 	}
 	return position + n;
-    // while (first != last)
-	// {
-    //     *(--position) = *(--last);
-    // }
-    // return position;
 }
 
 

@@ -1,7 +1,6 @@
 #ifndef EQUAL_HPP
 #define EQUAL_HPP
 
-// #pragma once
 #include "iterator_traits.hpp"
 
 namespace ft
@@ -9,10 +8,12 @@ namespace ft
 
 
 template<class InputIterator>
-typename iterator_traits<InputIterator>::difference_type
+// typename ft::iterator_traits<InputIterator>::difference_type
+size_t
 distance(InputIterator first, InputIterator last)
 {
-	typename ft::iterator_traits<InputIterator>::difference_type	i;
+	// typename ft::iterator_traits<InputIterator>::difference_type	i;
+	size_t i;
 
 	i = 0;
 	while (first != last)

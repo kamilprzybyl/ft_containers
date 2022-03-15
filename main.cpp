@@ -24,7 +24,6 @@ struct Buffer
 
 
 #define COUNT (MAX_RAM / (int)sizeof(Buffer))
-
 // template<typename T>
 // class MutantStack : public ft::stack<T>
 // {
@@ -137,13 +136,13 @@ int main()
 		std::cout << "capacity: " << capacity << std::endl;
 		ft::vector<int>::size_type empty = v.empty();
 		std::cout << "empty: " << empty << std::endl;
-		ft::vector<int>::iterator begin = v.begin();
-		std::cout << "begin: " << begin << std::endl;
+		// ft::vector<int>::iterator begin = v.begin();
+		// std::cout << "begin: " << begin << std::endl;
 		// std::cout << "operator[]: " << v[0] << std::endl;
-		ft::vector<int>::reference front = v.front();
-		std::cout << "front: " << front << std::endl;
-		ft::vector<int>::const_reference const_front = v.front();
-		std::cout << "const_front: " << const_front << std::endl;
+		// ft::vector<int>::reference front = v.front();
+		// std::cout << "front: " << front << std::endl;
+		// ft::vector<int>::const_reference const_front = v.front();
+		// std::cout << "const_front: " << const_front << std::endl;
 		// ft::vector<int>::reference back = v.back();
 		// std::cout << "back: " << back << std::endl;	// seg fault no clue if it's ok
 		std::cout << "[] operator: " << v3[19] << std::endl;
@@ -173,6 +172,16 @@ int main()
 		ft::vector<int> v5;
 
 		v5.insert(v5.begin(), 10, 42);
+		std::cout << "insert: " << v5[0] << std::endl;
+		v5.insert(v5.begin() + 4, 123);
+		std::cout << "insert: " << v5[0] << std::endl;
+		std::cout << "insert: " << v5[4] << std::endl;
+		std::cout << "insert: " << v5[1] << std::endl;
+		v5.erase(v5.begin() + 3);
+		std::cout << "insert: " << v5[3] << std::endl;
+		v5.erase(v5.begin() + 2, v5.begin() + 7);
+		std::cout << "insert: " << v5[8] << std::endl;
+		
 	}
 	catch (std::exception & e)
 	{
