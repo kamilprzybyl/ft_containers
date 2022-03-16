@@ -190,18 +190,17 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::reserve(size_type n)
 {
-	// if (n < max_size())
-	// 	throw std::length_error("vector");
+	if (n > max_size())
+		throw std::length_error("Length error: vector::reserve");
 	if (n > capacity())
 	{
 		pointer tmp = this->_a.allocate(n);
 		int i = 0;
-		while (this->_begin + i!= this->_end)
+		while (this->_begin + i != this->_end)
 		{
 			this->_a.construct(&tmp[i], *(this->_begin + i));
 			i++;
 		}
-		//ft::copy(iterator(this->_begin), iterator(this->_end), tmp);
 		clear();
 		this->_a.deallocate(this->_begin, size()); // size or capacity?
 		this->_begin = tmp;
@@ -214,8 +213,8 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::resize(size_type n, value_type val)
 {
-	// if (n > max_size())
-	// 	throw std::length_error("vector");
+	if (n > max_size())
+		throw std::length_error("Length error: vector::reserve");
 	if (n < size())
 	{
 		pointer	tmp = this->_begin + n;
@@ -317,12 +316,12 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::insert (iterator position, size_type n, const value_type& val)
 {
-	std::cout << "lol " << std::endl;
 	if (n > max_size() || n + size() > max_size())
 		throw std::length_error("Length error: vector::insert");
 	size_type start = ft::distance(begin(), position);
+	size_type end = size();
 	reserve(size() + n);
-	ft::copy_backward(begin() + start, begin() + size() - n, begin() + start + n);
+	ft::copy_backward(begin() + start, begin() + end, begin() + start + n);
 	ft::fill(begin() + start, begin() + start + n, val);
 }
 
@@ -332,24 +331,18 @@ void
 vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last,
 							 typename std::enable_if<!std::is_integral<InputIterator>::value, bool>::type)
 {
-	// std::cout << "sucks" << std::endl;
 	size_type n = ft::distance(first, last);
 	if (n > max_size() || n + size() > max_size())
 		throw std::length_error("Length error: vector::insert");
 	size_type start = ft::distance(position, begin());
-	size_type old_end = size();
+	size_type end = size();
 	reserve(size() + n);
-	std::cout << "size = " << size() << std::endl;
-	ft::copy_backward(begin() + start, begin() + old_end, begin() + start + n);
-	// for (int i = 0; i < 28; i++)
-	// 	std::cout << *(position + i) << std::endl;
+	ft::copy_backward(begin() + start, begin() + end, begin() + start + n);
 	for (size_t i = 0; i < n; i++)
 	{
-		std::cout << ": " << *first << std::endl;
 		*(this->_begin + start + i) = *first;
 		first++;
 	}
-	// ft::fill(begin() + start, begin() + start + n, first);
 }
 
 template <typename T, typename Allocator>
