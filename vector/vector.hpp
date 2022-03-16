@@ -195,11 +195,17 @@ vector<T, Allocator>::reserve(size_type n)
 	if (n > capacity())
 	{
 		pointer tmp = this->_a.allocate(n);
-		ft::copy(iterator(this->_begin), iterator(this->_end), tmp);
+		int i = 0;
+		while (this->_begin + i!= this->_end)
+		{
+			this->_a.construct(&tmp[i], *(this->_begin + i));
+			i++;
+		}
+		//ft::copy(iterator(this->_begin), iterator(this->_end), tmp);
 		clear();
 		this->_a.deallocate(this->_begin, size()); // size or capacity?
 		this->_begin = tmp;
-		this->_end = tmp + n;
+		this->_end = this->_begin + i;
 		this->_capacity = n;
 	}
 }
@@ -286,8 +292,8 @@ void
 vector<T, Allocator>::push_back( const value_type& val )
 {
 	if (size() == capacity())
-		reserve(size() + 1);
-	back() = val;
+		reserve(size() == 0 ? 1 : size() * 2);
+	this->_a.construct(this->_end, val);
 	this->_end++;
 }
 

@@ -187,12 +187,13 @@ int main()
 		for (int i = 0; i < 20; i++)
 			std::cout << v6[i] << std::endl;
 		ft::vector<int> v7(20, 5);
-		std::cout << "ooooo = " << v6[6] << std::endl;
+		for (int i = 0; i < 20; i++)
+			std::cout << v6[i] << std::endl;
+		std::cout << "ooooo = " << v6[8] << std::endl;
 		// v7.insert(v7.begin(), v6.begin() + 6, v6.begin() + 12);
 		// std::cout << std::endl;
 		// for (int i = 0; i < 20; i++)
 		// 	std::cout << v7[i] << std::endl;
-		
 		
 	}
 	catch (std::exception & e)
