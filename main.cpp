@@ -121,21 +121,21 @@ int main()
 
 	try
 	{
-		ft::vector<int> v;
+		// ft::vector<int> v;
 
-		ft::vector<int> v2(v);
+		// ft::vector<int> v2(v);
 
-		ft::vector<int> v3(20, 1);
+		// ft::vector<int> v3(20, 1);
 
-		v.get_allocator();
-		ft::vector<int>::size_type size = v.size();
-		std::cout << "size: " << size << std::endl;
-		ft::vector<int>::size_type max_size = v.max_size();
-		std::cout << "max_size: " << max_size << std::endl;
-		ft::vector<int>::size_type capacity = v.capacity();
-		std::cout << "capacity: " << capacity << std::endl;
-		ft::vector<int>::size_type empty = v.empty();
-		std::cout << "empty: " << empty << std::endl;
+		// v.get_allocator();
+		// ft::vector<int>::size_type size = v.size();
+		// std::cout << "size: " << size << std::endl;
+		// ft::vector<int>::size_type max_size = v.max_size();
+		// std::cout << "max_size: " << max_size << std::endl;
+		// ft::vector<int>::size_type capacity = v.capacity();
+		// std::cout << "capacity: " << capacity << std::endl;
+		// ft::vector<int>::size_type empty = v.empty();
+		// std::cout << "empty: " << empty << std::endl;
 		// ft::vector<int>::iterator begin = v.begin();
 		// std::cout << "begin: " << begin << std::endl;
 		// std::cout << "operator[]: " << v[0] << std::endl;
@@ -145,43 +145,54 @@ int main()
 		// std::cout << "const_front: " << const_front << std::endl;
 		// ft::vector<int>::reference back = v.back();
 		// std::cout << "back: " << back << std::endl;	// seg fault no clue if it's ok
-		std::cout << "[] operator: " << v3[19] << std::endl;
-		v3.pop_back();
-		std::cout << "[] operator after pop: " << v3[19] << std::endl;
-		v3.pop_back();
-		std::cout << "[] operator after pop: " << v3[19] << std::endl;
-		// std::cout << "push_back: " << v[0] << std::endl;	//should sef fault
-		v.push_back(24);
-		std::cout << "push_back: " << v[0] << std::endl;
-		v.push_back(19);
-		std::cout << "push_back: " << v[1] << std::endl;
-		v.push_back(-12);
-		std::cout << "push_back: " << v[2] << std::endl;
-		v.pop_back();
-		v.push_back(555);
-		std::cout << "pop and push: " << v[2] << std::endl;
+		// std::cout << "[] operator: " << v3[19] << std::endl;
+		// v3.pop_back();
+		// std::cout << "[] operator after pop: " << v3[19] << std::endl;
+		// v3.pop_back();
+		// std::cout << "[] operator after pop: " << v3[19] << std::endl;
+		// // std::cout << "push_back: " << v[0] << std::endl;	//should sef fault
+		// v.push_back(24);
+		// std::cout << "push_back: " << v[0] << std::endl;
+		// v.push_back(19);
+		// std::cout << "push_back: " << v[1] << std::endl;
+		// v.push_back(-12);
+		// std::cout << "push_back: " << v[2] << std::endl;
+		// v.pop_back();
+		// v.push_back(555);
+		// std::cout << "pop and push: " << v[2] << std::endl;
 
-		ft::vector<int>	v4(v);
+		// ft::vector<int>	v4(v);
 
-		std::cout << "operator= " << v4[1] << std::endl;
+		// std::cout << "operator= " << v4[1] << std::endl;
 
 
-		int i = v.at(1);
-		std::cout << "at: " << i << std::endl;
+		// int i = v.at(1);
+		// std::cout << "at: " << i << std::endl;
 
-		ft::vector<int> v5;
+		// ft::vector<int> v5;
 
-		v5.insert(v5.begin(), 10, 42);
-		std::cout << "insert: " << v5[0] << std::endl;
-		v5.insert(v5.begin() + 4, 123);
-		std::cout << "insert: " << v5[0] << std::endl;
-		std::cout << "insert: " << v5[4] << std::endl;
-		std::cout << "insert: " << v5[1] << std::endl;
-		v5.erase(v5.begin() + 3);
-		std::cout << "insert: " << v5[3] << std::endl;
-		v5.erase(v5.begin() + 2, v5.begin() + 7);
-		std::cout << "insert: " << v5[8] << std::endl;
-		v5.insert(v5.begin(), );
+		// v5.insert(v5.begin(), 10, 42);
+		// std::cout << "insert: " << v5[0] << std::endl;
+		// v5.insert(v5.begin() + 4, 123);
+		// std::cout << "insert: " << v5[0] << std::endl;
+		// std::cout << "insert: " << v5[4] << std::endl;
+		// std::cout << "insert: " << v5[1] << std::endl;
+		// v5.erase(v5.begin() + 3);
+		// std::cout << "insert: " << v5[3] << std::endl;
+		// v5.erase(v5.begin() + 2, v5.begin() + 7);
+		// std::cout << "insert: " << v5[8] << std::endl;
+		ft::vector<int> v6;
+		for (int i = 0; i < 20; i++)
+			v6.push_back(i);
+		for (int i = 0; i < 20; i++)
+			std::cout << v6[i] << std::endl;
+		ft::vector<int> v7(20, 5);
+		std::cout << "ooooo = " << v6[6] << std::endl;
+		// v7.insert(v7.begin(), v6.begin() + 6, v6.begin() + 12);
+		// std::cout << std::endl;
+		// for (int i = 0; i < 20; i++)
+		// 	std::cout << v7[i] << std::endl;
+		
 		
 	}
 	catch (std::exception & e)
