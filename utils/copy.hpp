@@ -19,18 +19,6 @@ copy(InputIterator first, InputIterator last, OutputIterator result)
 	}
 	return result;
 }
-// template<typename iterator, typename InputIterator>
-// iterator
-// copy(InputIterator first, InputIterator last, iterator position)
-// {
-// 	while (first != last)
-// 	{
-// 		*position = *first;
-// 		first++;
-// 		position++;
-// 	}
-// 	return position;
-// }
 
 template<typename iterator, typename InputIterator>
 iterator

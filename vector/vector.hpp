@@ -320,7 +320,7 @@ vector<T, Allocator>::insert (iterator position, size_type n, const value_type& 
 		throw std::length_error("Length error: vector::insert");
 	size_type start = ft::distance(begin(), position);
 	size_type end = size();
-	reserve(size() + n);
+	resize(size() + n);
 	ft::copy_backward(begin() + start, begin() + end, begin() + start + n);
 	ft::fill(begin() + start, begin() + start + n, val);
 }
@@ -336,7 +336,7 @@ vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterat
 		throw std::length_error("Length error: vector::insert");
 	size_type start = ft::distance(position, begin());
 	size_type end = size();
-	reserve(size() + n);
+	resize(size() + n);
 	ft::copy_backward(begin() + start, begin() + end, begin() + start + n);
 	for (size_t i = 0; i < n; i++)
 	{
@@ -356,7 +356,8 @@ template <typename T, typename Allocator>
 typename vector<T, Allocator>::iterator
 vector<T, Allocator>::erase (iterator first, iterator last)
 {
-	pointer  tmp = last;
+	size_type n = ft::distance(first, last);
+	pointer  tmp = this->_begin + (size() - n);
 	ft::copy(last, end(), first);
 	while (tmp != this->_end)
 	{
