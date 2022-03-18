@@ -181,37 +181,47 @@ int main()
 		// std::cout << "insert: " << v5[3] << std::endl;
 		// v5.erase(v5.begin() + 2, v5.begin() + 7);
 		// std::cout << "insert: " << v5[8] << std::endl;
+
+		// insert, assign, push, pop
 		ft::vector<int> v6;
 		for (int i = 0; i < 20; i++)
 			v6.push_back(i);
 		for (int i = 0; i < 20; i++)
 			std::cout << v6[i] << std::endl;
 		ft::vector<int> v7(20, 5);
-		std::cout << "test\n";
+		std::cout << "capacity: " << v7.capacity() << std::endl;
 		v7.insert(v7.begin(), v6.begin() + 6, v6.begin() + 12);
 		std::cout << std::endl;
 		for (int i = 0; i < 20; i++)
 			std::cout << v7[i] << std::endl;
-		v7.assign(3, -2);
+		std::cout << "capacity: " << v7.capacity() << std::endl;
+		ft::vector<int> v10(v7.begin(), v7.begin() + 10);
 		std::cout << std::endl;
-		for (int i = 0; i < 20; i++)
-			std::cout << v7[i] << std::endl;
-		v7.assign(v6.begin() + 6, v6.begin() + 12);
-		std::cout << std::endl;
-		for (int i = 0; i < 20; i++)
-			std::cout << v7[i] << std::endl;
+		for (int i = 0; i < 10; i++)
+			std::cout << v10[i] << std::endl;
+
+
+
+		// v7.assign(3, -2);
+		// std::cout << std::endl;
+		// for (int i = 0; i < 20; i++)
+		// 	std::cout << v7[i] << std::endl;
+		// v7.assign(v6.begin() + 6, v6.begin() + 12);
+		// std::cout << std::endl;
+		// for (int i = 0; i < 20; i++)
+		// 	std::cout << v7[i] << std::endl;
 		
-		std::cout << std::endl;
-		v7.erase(v7.begin(), v7.begin() + 3);
-		std::cout << std::endl;
-		for (int i = 0; i < 20; i++)
-			std::cout << v7[i] << std::endl;
+		// std::cout << std::endl;
+		// v7.erase(v7.begin(), v7.begin() + 3);
+		// std::cout << std::endl;
+		// for (int i = 0; i < 20; i++)
+		// 	std::cout << v7[i] << std::endl;
 		
 
-		ft::vector<int> v8(v7.begin(), v7.end());
-		std::cout << std::endl;
-		for (int i = 0; i < 20; i++)
-			std::cout << v8[i] << std::endl;
+		// ft::vector<int> v8(v7.begin(), v7.end());
+		// std::cout << std::endl;
+		// for (int i = 0; i < 20; i++)
+		// 	std::cout << v8[i] << std::endl;
 
 	}
 	catch (std::exception & e)

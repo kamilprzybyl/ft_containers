@@ -49,29 +49,26 @@ public:
 	explicit vector (size_type n, const value_type& val = value_type(),
 					const allocator_type& alloc = allocator_type())
 		:	_capacity(n),
-			_begin(nullptr),
-			_end(nullptr),
+			_begin(),
+			_end(),
 			_a(alloc)
 	{
+		this->_begin = this->_a.allocate(n);
+		this->_end = this->_begin;
 		assign(n, val);
-		// this->_begin = this->_a.allocate(n);
-		// this->_end = this->_begin;
-		// for (size_t i = 0; i < n ; i++)
-		// {
-		// 	this->_a.construct(this->_end, val);
-		// 	this->_end++;
-		// }
 	}
 	template <class InputIterator>
     vector (InputIterator first, InputIterator last,
 			const allocator_type& alloc = allocator_type(),
 			typename std::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true)
 		:	_capacity(),
-			_begin(nullptr),
-			_end(nullptr),
+			_begin(),
+			_end(),
 			_a(alloc)
 	{
 		// size_t  n = ft::distance(first, last);
+		// this->_begin = this->_a.allocate(n);
+		// this->_end = this->_begin;
 		// reserve(n);
 		// ft::copy(first, last, (iterator)this->_begin);
 		assign(first, last);
@@ -221,13 +218,14 @@ vector<T, Allocator>::resize(size_type n, value_type val)
 		throw std::length_error("Length error: vector::reserve");
 	if (n < size())
 	{
-		pointer	tmp = this->_begin + n;
-		while (tmp != this->_end)
-		{
-			this->_a.destroy(tmp);
-			tmp++;
-		}
-		this->_end = this->_begin + n;
+		erase(this->_begin + n, this->_end);
+		// pointer	tmp = this->_begin + n;
+		// while (tmp != this->_end)
+		// {
+		// 	this->_a.destroy(tmp);
+		// 	tmp++;
+		// }
+		// this->_end = this->_begin + n;
 	}
 	else if (n > size())
 	{
