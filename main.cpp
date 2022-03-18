@@ -187,6 +187,7 @@ int main()
 		for (int i = 0; i < 20; i++)
 			std::cout << v6[i] << std::endl;
 		ft::vector<int> v7(20, 5);
+		std::cout << "test\n";
 		v7.insert(v7.begin(), v6.begin() + 6, v6.begin() + 12);
 		std::cout << std::endl;
 		for (int i = 0; i < 20; i++)
@@ -206,6 +207,12 @@ int main()
 		for (int i = 0; i < 20; i++)
 			std::cout << v7[i] << std::endl;
 		
+
+		ft::vector<int> v8(v7.begin(), v7.end());
+		std::cout << std::endl;
+		for (int i = 0; i < 20; i++)
+			std::cout << v8[i] << std::endl;
+
 	}
 	catch (std::exception & e)
 	{

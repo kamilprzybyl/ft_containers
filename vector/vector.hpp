@@ -53,40 +53,43 @@ public:
 			_end(nullptr),
 			_a(alloc)
 	{
-		this->_begin = this->_a.allocate(n);
-		this->_end = this->_begin;
-		for (size_t i = 0; i < n ; i++)
-		{
-			this->_a.construct(this->_end, val);
-			this->_end++;
-		}
+		assign(n, val);
+		// this->_begin = this->_a.allocate(n);
+		// this->_end = this->_begin;
+		// for (size_t i = 0; i < n ; i++)
+		// {
+		// 	this->_a.construct(this->_end, val);
+		// 	this->_end++;
+		// }
 	}
-	// template <class InputIterator>
-    // vector (InputIterator first, InputIterator last,
-	// 		const allocator_type& alloc = allocator_type())
-	// 	:	_capacity(),
-	// 		_begin(nullptr),
-	// 		_end(nullptr),
-	// 		_a(alloc)
-	// {
-	// 	// typename iterator_traits<InputIterator>::difference_type  n = ft::distance(first, last);
-	// 	size_t  n = ft::distance(first, last);
-	// 	reserve(n);
-	// 	ft::copy(first, last, (iterator)this->_begin);
-	// }
+	template <class InputIterator>
+    vector (InputIterator first, InputIterator last,
+			const allocator_type& alloc = allocator_type(),
+			typename std::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true)
+		:	_capacity(),
+			_begin(nullptr),
+			_end(nullptr),
+			_a(alloc)
+	{
+		// size_t  n = ft::distance(first, last);
+		// reserve(n);
+		// ft::copy(first, last, (iterator)this->_begin);
+		assign(first, last);
+	}
 	vector (const vector& x)
 		:	_capacity(x._capacity),
 			_begin(nullptr),
 			_end(nullptr),
 			_a(x._a)
 	{
-		this->_begin = this->_a.allocate(this->_capacity);
-		this->_end = this->_begin;
-		for (size_t i = 0; i < x.size() ; i++)
-		{
-			this->_a.construct(this->_end, x[i]);
-			this->_end++;
-		}
+		assign(x.begin(), x.end());
+		// this->_begin = this->_a.allocate(this->_capacity);
+		// this->_end = this->_begin;
+		// for (size_t i = 0; i < x.size() ; i++)
+		// {
+		// 	this->_a.construct(this->_end, x[i]);
+		// 	this->_end++;
+		// }
 	}
 
 	vector& operator=(const vector& x);
@@ -179,9 +182,10 @@ vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
 {
     if (this != &x)
     {
-		reserve(x.size());
-		ft::copy(x.begin(), x.end(), begin()); // not sure if i need it
-		this->_end = this->_begin + x.size();
+		assign(x.begin(), x.end());
+		// reserve(x.size());
+		// ft::copy(x.begin(), x.end(), begin()); // not sure if i need it
+		// this->_end = this->_begin + x.size();
     }
     return *this;
 }
@@ -306,7 +310,7 @@ vector<T, Allocator>::pop_back()
 
 template <typename T, typename Allocator>
 typename vector<T, Allocator>::iterator
-vector<T, Allocator>::insert (iterator position, const value_type& val)
+vector<T, Allocator>::insert(iterator position, const value_type& val)
 {
 	insert(position, 1, val);
 	return position;
@@ -314,7 +318,7 @@ vector<T, Allocator>::insert (iterator position, const value_type& val)
 
 template <typename T, typename Allocator>
 void
-vector<T, Allocator>::insert (iterator position, size_type n, const value_type& val)
+vector<T, Allocator>::insert(iterator position, size_type n, const value_type& val)
 {
 	if (n > max_size() || n + size() > max_size())
 		throw std::length_error("Length error: vector::insert");
@@ -409,7 +413,7 @@ operator!= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 
 template <class T, class Alloc>
 bool
-operator<  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
+operator<(const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs)
 {
 	return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
 }
