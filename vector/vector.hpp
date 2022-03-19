@@ -41,8 +41,8 @@ public:
 	//	Constructors
 	explicit vector (const allocator_type& alloc = allocator_type())
 		:	_capacity(),
-			_begin(nullptr),
-			_end(nullptr),
+			_begin(),
+			_end(),
 			_a(alloc)
 	{
 	}
@@ -66,27 +66,20 @@ public:
 			_end(),
 			_a(alloc)
 	{
-		// size_t  n = ft::distance(first, last);
-		// this->_begin = this->_a.allocate(n);
-		// this->_end = this->_begin;
-		// reserve(n);
-		// ft::copy(first, last, (iterator)this->_begin);
+		size_t  n = ft::distance(first, last);
+		this->_begin = this->_a.allocate(n);
+		this->_end = this->_begin;
 		assign(first, last);
 	}
 	vector (const vector& x)
 		:	_capacity(x._capacity),
-			_begin(nullptr),
-			_end(nullptr),
+			_begin(),
+			_end(),
 			_a(x._a)
 	{
+		this->_begin = this->_a.allocate(this->_capacity);
+		this->_end = this->_begin;
 		assign(x.begin(), x.end());
-		// this->_begin = this->_a.allocate(this->_capacity);
-		// this->_end = this->_begin;
-		// for (size_t i = 0; i < x.size() ; i++)
-		// {
-		// 	this->_a.construct(this->_end, x[i]);
-		// 	this->_end++;
-		// }
 	}
 
 	vector& operator=(const vector& x);
@@ -180,13 +173,18 @@ vector<T, Allocator>::operator=(const vector<T, Allocator> & x)
     if (this != &x)
     {
 		assign(x.begin(), x.end());
-		// reserve(x.size());
-		// ft::copy(x.begin(), x.end(), begin()); // not sure if i need it
-		// this->_end = this->_begin + x.size();
     }
     return *this;
 }
 
+/*
+Requests that the vector capacity be at least enough to contain n elements.
+If n is greater than the current vector capacity, the function causes
+the container to reallocate its storage increasing its capacity to n (or greater).
+In all other cases, the function call does not cause a reallocation
+and the vector capacity is not affected.
+This function has no effect on the vector size and cannot alter its elements.
+*/
 template <typename T, typename Allocator>
 void
 vector<T, Allocator>::reserve(size_type n)
@@ -203,7 +201,7 @@ vector<T, Allocator>::reserve(size_type n)
 			i++;
 		}
 		clear();
-		this->_a.deallocate(this->_begin, size()); // size or capacity?
+		this->_a.deallocate(this->_begin, this->_capacity);
 		this->_begin = tmp;
 		this->_end = this->_begin + i;
 		this->_capacity = n;
@@ -218,14 +216,13 @@ vector<T, Allocator>::resize(size_type n, value_type val)
 		throw std::length_error("Length error: vector::reserve");
 	if (n < size())
 	{
-		erase(this->_begin + n, this->_end);
-		// pointer	tmp = this->_begin + n;
-		// while (tmp != this->_end)
-		// {
-		// 	this->_a.destroy(tmp);
-		// 	tmp++;
-		// }
-		// this->_end = this->_begin + n;
+		pointer	tmp = this->_begin + n;
+		while (tmp != this->_end)
+		{
+			this->_a.destroy(tmp);
+			tmp++;
+		}
+		this->_end = this->_begin + n;
 	}
 	else if (n > size())
 	{
