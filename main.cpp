@@ -1,7 +1,7 @@
 #include <iostream>
 #include <string>
 #include <deque>
-#if 1 //CREATE A REAL STL EXAMPLE
+#if 0 //CREATE A REAL STL EXAMPLE
 	#include <map>
 	#include <stack>
 	#include <vector>
@@ -269,6 +269,10 @@ int main()
 		std::cout << "size: " << v3.size() << std::endl;
 		std::cout << "capacity: " << v3.capacity() << std::endl;
 		std::cout << std::endl;
+		ft::vector<int>::iterator i2 = v3.begin();
+		std::cout << "op[]: " << i2[2] << std::endl;
+		ft::vector<int>::reverse_iterator i3 = v3.rbegin();
+		std::cout << "op[]: " << i3[2] << std::endl;
 	}
 	catch (std::exception & e)
 	{
