@@ -8,6 +8,7 @@
 #include "../utils/fill.hpp"
 #include "../utils/equal.hpp"
 #include "../utils/iterator_traits.hpp"
+#include "../utils/iterator.hpp"
 #include "../utils/lexicographical_compare.hpp"
 
 namespace ft
@@ -28,8 +29,8 @@ public:
     typedef typename allocator_type::const_pointer   	const_pointer;
     typedef pointer										iterator;
     typedef const_pointer								const_iterator;
-	// typedef ft::reverse_iterator<iterator>          	reverse_iterator;
-	// typedef ft::reverse_iterator<const_iterator>    	const_reverse_iterator;
+	typedef ft::reverse_iterator<iterator>          	reverse_iterator;
+	typedef ft::reverse_iterator<const_iterator>    	const_reverse_iterator;
 
 private:
 	size_type		_capacity;
@@ -101,14 +102,14 @@ public:
 	const_iterator 			end() const
 		{ return  const_iterator(this->_end); }
 
-	// reverse_iterator 		rbegin()
-	// 	{ return  reverse_iterator(this->_begin); }
-	// const_reverse_iterator 	rbegin() const
-	// 	{ return  const_reverse_iterator(this->_begin); }
-	// reverse_iterator 		rend()
-	// 	{ return  reverse_iterator(this->_end); }
-	// const_reverse_iterator 	rend() const
-	// 	{ return  const_reverse_iterator(this->_end); }
+	reverse_iterator 		rbegin()
+		{ return  reverse_iterator(this->_end); }
+	const_reverse_iterator 	rbegin() const
+		{ return  const_reverse_iterator(this->_end); }
+	reverse_iterator 		rend()
+		{ return  reverse_iterator(this->_begin); }
+	const_reverse_iterator 	rend() const
+		{ return  const_reverse_iterator(this->_begin); }
 
 	//	Capacity
 	size_type 	size() const

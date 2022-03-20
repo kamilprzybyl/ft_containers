@@ -7,6 +7,7 @@ INC		=	utils/copy.hpp \
 			utils/fill.hpp \
 			utils/equal.hpp \
 			utils/iterator_traits.hpp \
+			utils/iterator.hpp \
 			utils/lexicographical_compare.hpp
 OBJ		=	$(SRC:.cpp=.o)
 
