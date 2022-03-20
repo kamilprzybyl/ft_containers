@@ -17,6 +17,6 @@ fill(ForwardIterator first, ForwardIterator last, const T& val)
 	}
 }
 
-} // ft
+}
 
 #endif
