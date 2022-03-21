@@ -3,13 +3,10 @@
 
 #include <iostream>
 #include <memory>
-#include "../utils/copy.hpp"
-#include "../utils/distance.hpp"
-#include "../utils/fill.hpp"
-#include "../utils/equal.hpp"
 #include "../utils/iterator_traits.hpp"
 #include "../utils/iterator.hpp"
-#include "../utils/lexicographical_compare.hpp"
+#include "../utils/type_traits.hpp"
+#include "../utils/algorithm.hpp"
 
 namespace ft
 {
@@ -61,7 +58,7 @@ public:
 	template <class InputIterator>
     vector (InputIterator first, InputIterator last,
 			const allocator_type& alloc = allocator_type(),
-			typename std::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true)
+			typename ft::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true)
 		:	_capacity(),
 			_begin(),
 			_end(),

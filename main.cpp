@@ -120,32 +120,41 @@ int main()
 
 	try
 	{
-		// constructors (size, capacity)
-		// ft::vector<int> v1;
-		// for (int i = 0; i < 20; i++)
-		// 	v1.push_back(i);
-		// for (int i = 0; i < 20; i++)
-		// 	std::cout << v1[i] << std::endl;
-		// ft::vector<int> v2(20, 5);
-		// std::cout << "capacity: " << v2.capacity() << std::endl;
-		// v2.insert(v2.begin(), v1.begin() + 6, v1.begin() + 12);
-		// std::cout << std::endl;
-		// for (int i = 0; i < 20; i++)
-		// 	std::cout << v2[i] << std::endl;
-		// std::cout << "capacity: " << v2.capacity() << std::endl;
-		// ft::vector<int> v3(v2.begin(), v2.begin() + 10);
-		// std::cout << std::endl;
-		// for (int i = 0; i < 10; i++)
-		// 	std::cout << v3[i] << std::endl;
-		// ft::vector<int> v4(v3);
-		// std::cout << std::endl;
-		// for (int i = 0; i < 10; i++)
-		// 	std::cout << v4[i] << std::endl;
-		// ft::vector<int> v5;
-		// v5 = v4;
-		// std::cout << std::endl;
-		// for (int i = 0; i < 10; i++)
-		// 	std::cout << v5[i] << std::endl;
+		std::cout << "---v1---" << std::endl;
+		ft::vector<int> v1;
+		for (int i = 0; i < 20; i++)
+			v1.push_back(i);
+		for (int i = 0; i < 20; i++)
+			std::cout << v1[i];
+		std::cout << std::endl;
+		std::cout << "---v2---" << std::endl;
+		ft::vector<int> v2(20, 5);
+		std::cout << "capacity: " << v2.capacity() << std::endl;
+		v2.insert(v2.begin(), v1.begin() + 6, v1.begin() + 12);
+		std::cout << std::endl;
+		for (int i = 0; i < 20; i++)
+			std::cout << v2[i];
+		std::cout << std::endl;
+		std::cout << "capacity: " << v2.capacity() << std::endl;
+		std::cout << "---v3---" << std::endl;
+		ft::vector<int> v3(v2.begin(), v2.begin() + 10);
+		std::cout << std::endl;
+		for (int i = 0; i < 10; i++)
+			std::cout << v3[i];
+		std::cout << std::endl;
+		std::cout << "---v4---" << std::endl;
+		ft::vector<int> v4(v3);
+		std::cout << std::endl;
+		for (int i = 0; i < 10; i++)
+			std::cout << v4[i];
+		std::cout << std::endl;
+		std::cout << "---v5---" << std::endl;
+		ft::vector<int> v5;
+		v5 = v4;
+		std::cout << std::endl;
+		for (int i = 0; i < 10; i++)
+			std::cout << v5[i];
+		std::cout << std::endl;
 		
 
 		// assign (size, capacity)
@@ -228,51 +237,51 @@ int main()
 		// std::cout << std::endl;
 
 		// reverse_iterator
-		ft::vector<int> v1;
-		std::cout << "---v1---" << std::endl;
-		std::cout << "size: " << v1.size() << std::endl;
-		std::cout << "capacity: " << v1.capacity() << std::endl;
-		v1.assign(30, -7);
-		ft::vector<int>::iterator it = v1.begin();
-		while (it != v1.end())
-			std::cout << *(it)++;
-		std::cout << std::endl;
-		std::cout << "size: " << v1.size() << std::endl;
-		std::cout << "capacity: " << v1.capacity() << std::endl;
-		std::cout << std::endl;
-		ft::vector<int> v2;
-		std::cout << "---v2---" << std::endl;
-		std::cout << "size: " << v2.size() << std::endl;
-		std::cout << "capacity: " << v2.capacity() << std::endl;
-		v2.assign(v1.begin(), v1.begin() + 10);
-		ft::vector<int>::iterator it2 = v2.begin();
-		while (it2 != v2.end())
-			std::cout << *(it2)++;
-		std::cout << std::endl;
-		std::cout << "size: " << v2.size() << std::endl;
-		std::cout << "capacity: " << v2.capacity() << std::endl;
-		std::cout << std::endl;
-		ft::vector<int> v3(16, 83);
-		std::cout << "---v3---" << std::endl;
-		std::cout << "size: " << v3.size() << std::endl;
-		std::cout << "capacity: " << v3.capacity() << std::endl;
-		v3.insert(v3.begin(), v1.begin(), v1.begin() + 5);
-		ft::vector<int>::iterator it3 = v3.begin();
-		while (it3 != v3.end())
-			std::cout << *(it3)++;
-		std::cout << std::endl;
-		for (ft::vector<int>::reverse_iterator i = v3.rbegin(); i != v3.rend(); ++i )
-		{
-			std::cout << *(i);
-		}
-		std::cout << std::endl;
-		std::cout << "size: " << v3.size() << std::endl;
-		std::cout << "capacity: " << v3.capacity() << std::endl;
-		std::cout << std::endl;
-		ft::vector<int>::iterator i2 = v3.begin();
-		std::cout << "op[]: " << i2[2] << std::endl;
-		ft::vector<int>::reverse_iterator i3 = v3.rbegin();
-		std::cout << "op[]: " << i3[2] << std::endl;
+		// ft::vector<int> v1;
+		// std::cout << "---v1---" << std::endl;
+		// std::cout << "size: " << v1.size() << std::endl;
+		// std::cout << "capacity: " << v1.capacity() << std::endl;
+		// v1.assign(30, -7);
+		// ft::vector<int>::iterator it = v1.begin();
+		// while (it != v1.end())
+		// 	std::cout << *(it)++;
+		// std::cout << std::endl;
+		// std::cout << "size: " << v1.size() << std::endl;
+		// std::cout << "capacity: " << v1.capacity() << std::endl;
+		// std::cout << std::endl;
+		// ft::vector<int> v2;
+		// std::cout << "---v2---" << std::endl;
+		// std::cout << "size: " << v2.size() << std::endl;
+		// std::cout << "capacity: " << v2.capacity() << std::endl;
+		// v2.assign(v1.begin(), v1.begin() + 10);
+		// ft::vector<int>::iterator it2 = v2.begin();
+		// while (it2 != v2.end())
+		// 	std::cout << *(it2)++;
+		// std::cout << std::endl;
+		// std::cout << "size: " << v2.size() << std::endl;
+		// std::cout << "capacity: " << v2.capacity() << std::endl;
+		// std::cout << std::endl;
+		// ft::vector<int> v3(16, 83);
+		// std::cout << "---v3---" << std::endl;
+		// std::cout << "size: " << v3.size() << std::endl;
+		// std::cout << "capacity: " << v3.capacity() << std::endl;
+		// v3.insert(v3.begin(), v1.begin(), v1.begin() + 5);
+		// ft::vector<int>::iterator it3 = v3.begin();
+		// while (it3 != v3.end())
+		// 	std::cout << *(it3)++;
+		// std::cout << std::endl;
+		// for (ft::vector<int>::reverse_iterator i = v3.rbegin(); i != v3.rend(); ++i )
+		// {
+		// 	std::cout << *(i);
+		// }
+		// std::cout << std::endl;
+		// std::cout << "size: " << v3.size() << std::endl;
+		// std::cout << "capacity: " << v3.capacity() << std::endl;
+		// std::cout << std::endl;
+		// ft::vector<int>::iterator i2 = v3.begin();
+		// std::cout << "op[]: " << i2[2] << std::endl;
+		// ft::vector<int>::reverse_iterator i3 = v3.rbegin();
+		// std::cout << "op[]: " << i3[2] << std::endl;
 	}
 	catch (std::exception & e)
 	{

@@ -1,16 +1,25 @@
-#ifndef REVERSE_ITERATOR_HPP
-#define REVERSE_ITERATOR_HPP
+#ifndef ITERATOR_HPP
+#define ITERATOR_HPP
 
 #include "iterator_traits.hpp"
 
 namespace ft
 {
 
+template <class InputIterator>
+typename ft::iterator_traits<InputIterator>::difference_type
+distance(InputIterator first, InputIterator last)
+{
+	typename ft::iterator_traits<InputIterator>::difference_type	r(0);
+	for (; first != last; ++first)
+		++r;
+	return r;
+}
+
 template <class Iterator>
 class reverse_iterator
 {
 public:
-	//	Member types
 	typedef typename iterator_traits<Iterator>::difference_type		difference_type;
 	typedef typename iterator_traits<Iterator>::value_type			value_type;
 	typedef typename iterator_traits<Iterator>::pointer				pointer;
@@ -21,7 +30,6 @@ private:
 	Iterator _current;
 
 public:
-	// constructors
 	reverse_iterator()
 		: _current()
 	{
@@ -40,7 +48,6 @@ public:
 	{
 	}
 
-	// base
 	Iterator base() const
 		{ return this->_current; }
 
