@@ -130,10 +130,10 @@ public:
 	reference		at( size_type n );
 	const_reference at (size_type n) const;
 
-	reference 		front()			{ return reference(this->_begin); }
-	const_reference front() const	{ return const_reference(this->_begin); }
-	reference 		back()			{ return reference(*(this->_end - 1)); }
-	const_reference back() const	{ return const_reference(*(this->_end - 1)); }
+	reference 		front()			{ return *this->_begin; }
+	const_reference front() const	{ return *this->_begin; }
+	reference 		back()			{ return *(this->_end - 1); }
+	const_reference back() const	{ return *(this->_end - 1); }
 
 	//	Modifiers
 	template <class InputIterator>
@@ -331,7 +331,7 @@ vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterat
 	size_type n = ft::distance(first, last);
 	if (n > max_size() || n + size() > max_size())
 		throw std::length_error("Length error: vector::insert");
-	size_type start = ft::distance(position, begin());
+	size_type start = std::distance(position, begin());
 	size_type end = size();
 	resize(size() + n);
 	ft::copy_backward(begin() + start, begin() + end, begin() + start + n);
@@ -369,9 +369,19 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::swap (vector& x)
 {
-	vector<T, Allocator> temp = *this;
-	*this = x;
-	x = temp;
+	pointer		tmp_pointer = this->_end;
+	size_type	tmp_size = this->_capacity;
+
+	this->_end = x._end;
+	x._end = tmp_pointer;
+	tmp_pointer = this->_begin;
+	this->_begin = x._begin;
+	x._begin = tmp_pointer;
+	this->_capacity = x._capacity;
+	x._capacity = tmp_size;
+	// vector<T, Allocator> temp = *this;
+	// *this = x;
+	// x = temp;
 }
 
 template <typename T, typename Allocator>
