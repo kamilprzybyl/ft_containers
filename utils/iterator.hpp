@@ -13,7 +13,6 @@ distance(InputIterator first, InputIterator last)
 	typename ft::iterator_traits<InputIterator>::difference_type	r(0);
 	for (; first != last; ++first)
 	{
-		// std::cout << "----1\n";
 		++r;
 	}
 	return r;
@@ -84,7 +83,7 @@ template <class Iterator_L, class Iterator_R>
 bool operator== (const reverse_iterator<Iterator_L>& lhs,
 				 const reverse_iterator<Iterator_R>& rhs)
 {
-	return (lhs.base() == rhs.base());
+	return lhs.base() == rhs.base();
 }
 
 template <class Iterator>
@@ -98,7 +97,7 @@ template <class Iterator_L, class Iterator_R>
 bool operator!= (const reverse_iterator<Iterator_L>& lhs,
 				 const reverse_iterator<Iterator_R>& rhs)
 {
-	return (lhs.base() != rhs.base());
+	return lhs.base() != rhs.base();
 }
 
 template <class Iterator>
@@ -112,7 +111,7 @@ template <class Iterator_L, class Iterator_R>
 bool operator< (const reverse_iterator<Iterator_L>& lhs,
 				 const reverse_iterator<Iterator_R>& rhs)
 {
-	return (lhs.base() > rhs.base());
+	return lhs.base() > rhs.base();
 }
 
 template <class Iterator>
@@ -126,7 +125,7 @@ template <class Iterator_L, class Iterator_R>
 bool operator<= (const reverse_iterator<Iterator_L>& lhs,
 				 const reverse_iterator<Iterator_R>& rhs)
 {
-	return (lhs.base() >= rhs.base());
+	return lhs.base() >= rhs.base();
 }
 
 template <class Iterator>
@@ -140,7 +139,7 @@ template <class Iterator_L, class Iterator_R>
 bool operator> (const reverse_iterator<Iterator_L>& lhs,
 				 const reverse_iterator<Iterator_R>& rhs)
 {
-	return (lhs.base() < rhs.base());
+	return lhs.base() < rhs.base();
 }
 
 template <class Iterator>
@@ -154,7 +153,7 @@ template <class Iterator_L, class Iterator_R>
 bool operator>= (const reverse_iterator<Iterator_L>& lhs,
 				 const reverse_iterator<Iterator_R>& rhs)
 {
-	return (lhs.base() <= rhs.base());
+	return lhs.base() <= rhs.base();
 }
 
 template <class Iterator>

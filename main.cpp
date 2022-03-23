@@ -293,32 +293,40 @@ struct Buffer
 
 int		main(void)
 {
-	ft::vector<TESTED_TYPE> vct(10);
+	ft::vector<TESTED_TYPE> vct(5);
 	ft::vector<TESTED_TYPE> vct2;
+	const int cut = 3;
 
 	for (unsigned long int i = 0; i < vct.size(); ++i)
+		vct[i] = (vct.size() - i) * 7;
+	// printSize(vct);
+
+	vct2.insert(vct2.begin(), vct.begin(), vct.begin() + cut);
+	// printSize(vct2);
+	vct2.insert(vct2.begin(), vct.begin() + cut, vct.end());
+	// printSize(vct2);
+	std::cout << std::endl;
+	for (ft::vector<int>::iterator i = vct2.begin(); i != vct2.end(); ++i )
 	{
-		vct[i] = (vct.size() - i) * 3;
+		std::cout << *(i) << " ";
 	}
-	// printSize(vct);
+	std::cout << std::endl;
 
-	vct2.insert(vct2.end(), 42);
-	vct2.insert(vct2.begin(), 2, 21);
+	vct2.insert(vct2.end(), vct.begin(), vct.begin() + cut);
+	std::cout << std::endl;
+	for (ft::vector<int>::iterator i = vct2.begin(); i != vct2.end(); ++i )
+	{
+		std::cout << *(i) << " ";
+	}
+	std::cout << std::endl;
 	// printSize(vct2);
 
-	vct2.insert(vct2.end() - 2, 42);
-	// printSize(vct2);
+	std::cout << "insert return:" << std::endl;
 
-	vct2.insert(vct2.end(), 2, 84);
-	// printSize(vct2);
-	vct2.resize(4);
-	// printSize(vct2);
+	std::cout << *vct2.insert(vct2.end(), 42) << std::endl;
+	std::cout << *vct2.insert(vct2.begin() + 5, 84) << std::endl;
+	std::cout << "----------------------------------------" << std::endl;
 
-	std::cout << "hello you little fuck\n";
-	vct2.insert(vct2.begin() + 2, vct.begin(), vct.end());
-	vct.clear();
 	// printSize(vct2);
-
-	// printSize(vct);
 	return (0);
 }

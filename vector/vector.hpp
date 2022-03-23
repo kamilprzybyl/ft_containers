@@ -147,7 +147,7 @@ public:
 	void 		insert (iterator position, size_type n, const value_type& val);
 	template <class InputIterator>
 	void 		insert (iterator position, InputIterator first, InputIterator last,
-						typename std::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true);
+						typename ft::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true);
 
 	iterator 	erase (iterator position);
 	iterator 	erase (iterator first, iterator last);
@@ -326,12 +326,12 @@ template <typename T, typename Allocator>
 template <class InputIterator>
 void
 vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last,
-							 typename std::enable_if<!std::is_integral<InputIterator>::value, bool>::type)
+							 typename ft::enable_if<!std::is_integral<InputIterator>::value, bool>::type)
 {
 	size_type n = ft::distance(first, last);
 	if (n > max_size() || n + size() > max_size())
 		throw std::length_error("Length error: vector::insert");
-	size_type start = std::distance(position, begin());
+	size_type start = std::distance(begin(), position);
 	size_type end = size();
 	resize(size() + n);
 	ft::copy_backward(begin() + start, begin() + end, begin() + start + n);
