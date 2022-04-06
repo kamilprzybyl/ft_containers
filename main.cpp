@@ -8,7 +8,7 @@
 	namespace ft = std;
 #else
 	// #include <map.hpp>
-	// #include <stack.hpp>
+	#include "stack/stack.hpp"
 	#include "vector/vector.hpp"
 #endif
 
@@ -285,15 +285,34 @@ int main()
 		// std::cout << "op[]: " << i3[2] << std::endl;
 
 		// pair
-		std::pair<int,char> foo (10,'z');
-		std::pair<int,char> bar (90,'a');
+		// std::pair<int,char> foo (10,'z');
+		// std::pair<int,char> bar (90,'a');
 
-		if (foo==bar) std::cout << "foo and bar are equal\n";
-		if (foo!=bar) std::cout << "foo and bar are not equal\n";
-		if (foo< bar) std::cout << "foo is less than bar\n";
-		if (foo> bar) std::cout << "foo is greater than bar\n";
-		if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
-		if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+		// if (foo==bar) std::cout << "foo and bar are equal\n";
+		// if (foo!=bar) std::cout << "foo and bar are not equal\n";
+		// if (foo< bar) std::cout << "foo is less than bar\n";
+		// if (foo> bar) std::cout << "foo is greater than bar\n";
+		// if (foo<=bar) std::cout << "foo is less than or equal to bar\n";
+		// if (foo>=bar) std::cout << "foo is greater than or equal to bar\n";
+
+
+
+		// stack
+		ft::stack<int> stack;
+
+		stack.push(32);
+		stack.push(2141);
+		stack.push(-123);
+		stack.push(0);
+		stack.push(2131);
+
+		std::cout << "top: " << stack.top() << std::endl;
+		std::cout << "size: " << stack.size() << std::endl;
+
+		stack.pop();
+
+		std::cout << "top: " << stack.top() << std::endl;
+		std::cout << "size: " << stack.size() << std::endl;
 	}
 	catch (std::exception & e)
 	{
