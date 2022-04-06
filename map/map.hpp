@@ -26,17 +26,26 @@ public:
     typedef typename allocator_type::difference_type difference_type;
 	// typedef implementation-defined                   iterator;
     // typedef implementation-defined                   const_iterator;
-    // typedef std::reverse_iterator<iterator>          reverse_iterator;
-    // typedef std::reverse_iterator<const_iterator>    const_reverse_iterator;
+    // typedef ft::reverse_iterator<iterator>          reverse_iterator;
+    // typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
 
 	//	Constructors
 	explicit map (const key_compare& comp = key_compare(),
 				  const allocator_type& alloc = allocator_type());
+
 	template <class InputIterator>
-	map (InputIterator first, InputIterator last,
-		const key_compare& comp = key_compare(),
-		const allocator_type& alloc = allocator_type());
-	map (const map& x);
+		map (InputIterator first, InputIterator last,
+			 const key_compare& comp = key_compare(),
+			 const allocator_type& alloc = allocator_type());
+        : _tree(__vc(comp), typename __base::allocator_type(alloc))
+        {
+            insert(__f, __l);
+        }
+	map (const map& x)
+		: _tree(x._tree)
+	{
+		insert(x.begin(), x.end());
+	}
 
 	map& operator= (const map& x);
 
