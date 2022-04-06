@@ -7,13 +7,13 @@ A container is a holder object that stores a collection of other objects (its el
 This project consist of a few container types of the C++ standard template library and additional tools i.e. iterators
 - [x] vector
 - [ ] map
-- [ ] stack
+- [x] stack
 - [ ] set
 - [x] iterators_traits
 - [x] reverse_iterator
-- [ ] enable_if
+- [x] enable_if
 - [ ] is_integral
 - [x] equal
 - [x] lexicographical_compare
-- [ ] std::pair
+- [x] std::pair
 - [ ] std::make_pair
