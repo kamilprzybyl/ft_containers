@@ -3,6 +3,7 @@
 
 #include <iostream>
 #include <memory>
+#include "../utils/tree.hpp"
 
 namespace ft
 {
@@ -28,6 +29,23 @@ public:
     // typedef implementation-defined                   const_iterator;
     // typedef ft::reverse_iterator<iterator>          reverse_iterator;
     // typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
+
+	class value_compare
+		: public binary_function<value_type, value_type, bool>
+	{
+		friend class map;
+	protected:
+		key_compare comp;
+
+		value_compare(key_compare c) : comp(c) {}
+	public:
+		bool operator()(const value_type& x, const value_type& y) const
+		{return comp(x.first, y.first);}	};
+
+	private:
+		typedef	ft::tree<value_type, vc, allocator_type>	_base;
+
+		_base _tree;
 
 	//	Constructors
 	explicit map (const key_compare& comp = key_compare(),

@@ -5,7 +5,7 @@
 	#include <map>
 	#include <stack>
 	#include <vector>
-	namespace ft = std;
+	namespace ft = std;https://github.com/kamilprzybyl/ft_containers.git
 #else
 	// #include <map.hpp>
 	#include "stack/stack.hpp"
@@ -298,21 +298,24 @@ int main()
 
 
 		// stack
-		ft::stack<int> stack;
+		// ft::stack<int> stack;
 
-		stack.push(32);
-		stack.push(2141);
-		stack.push(-123);
-		stack.push(0);
-		stack.push(2131);
+		// stack.push(32);
+		// stack.push(2141);
+		// stack.push(-123);
+		// stack.push(0);
+		// stack.push(2131);
 
-		std::cout << "top: " << stack.top() << std::endl;
-		std::cout << "size: " << stack.size() << std::endl;
+		// std::cout << "top: " << stack.top() << std::endl;
+		// std::cout << "size: " << stack.size() << std::endl;
 
-		stack.pop();
+		// stack.pop();
 
-		std::cout << "top: " << stack.top() << std::endl;
-		std::cout << "size: " << stack.size() << std::endl;
+		// std::cout << "top: " << stack.top() << std::endl;
+		// std::cout << "size: " << stack.size() << std::endl;
+
+
+		
 	}
 	catch (std::exception & e)
 	{
