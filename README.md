@@ -16,4 +16,4 @@ This project consist of a few container types of the C++ standard template libra
 - [x] equal
 - [x] lexicographical_compare
 - [x] std::pair
-- [ ] std::make_pair
+- [x] std::make_pair
