@@ -30,17 +30,17 @@ public:
     // typedef ft::reverse_iterator<iterator>          reverse_iterator;
     // typedef ft::reverse_iterator<const_iterator>    const_reverse_iterator;
 
-	class value_compare
-		: public binary_function<value_type, value_type, bool>
-	{
-		friend class map;
-	protected:
-		key_compare comp;
+	// class value_compare
+	// 	: public binary_function<value_type, value_type, bool>
+	// {
+	// 	friend class map;
+	// protected:
+	// 	key_compare comp;
 
-		value_compare(key_compare c) : comp(c) {}
-	public:
-		bool operator()(const value_type& x, const value_type& y) const
-		{return comp(x.first, y.first);}	};
+	// 	value_compare(key_compare c) : comp(c) {}
+	// public:
+	// 	bool operator()(const value_type& x, const value_type& y) const
+	// 	{return comp(x.first, y.first);}	};
 
 	private:
 		typedef	ft::tree<value_type, vc, allocator_type>	_base;
@@ -49,59 +49,75 @@ public:
 
 	//	Constructors
 	explicit map (const key_compare& comp = key_compare(),
-				  const allocator_type& alloc = allocator_type());
+				  const allocator_type& alloc = allocator_type())
+		: _tree(vc(comp), alloc) {}
 
 	template <class InputIterator>
 		map (InputIterator first, InputIterator last,
 			 const key_compare& comp = key_compare(),
 			 const allocator_type& alloc = allocator_type());
-        : _tree(__vc(comp), typename __base::allocator_type(alloc))
+        : _tree(vc(comp), alloc)
         {
-            insert(__f, __l);
+            insert(first, last);
         }
+
 	map (const map& x)
 		: _tree(x._tree)
 	{
 		insert(x.begin(), x.end());
 	}
 
-	map& operator= (const map& x);
+	map& operator= (const map& x)
+	{
+		if (this != &x)
+		{
+			_tree.clear();
+			// stuff
+		}
+		return *this;
+	}
 
 	//	Destructor
 	~map();
 
 	// 	Iterators
-	iterator 				begin();
-	const_iterator 			begin() const;
-	iterator 				end();
-	const_iterator 			end() const;
+	iterator 				begin() {return _tree.begin();}
+	const_iterator 			begin() const {return _tree.begin();}
+	iterator 				end() {return _tree.end();}
+	const_iterator 			end() const {return _tree.end();}
 
-	reverse_iterator 		rbegin();
-	const_reverse_iterator 	rbegin() const;
-	reverse_iterator 		rend();
-	const_reverse_iterator 	rend() const;
+	reverse_iterator 		rbegin() {return reverse_iterator(end());}
+	const_reverse_iterator 	rbegin() const {return const_reverse_iterator(end());}
+	reverse_iterator 		rend() {return reverse_iterator(begin());}
+	const_reverse_iterator 	rend() const {return const_reverse_iterator(begin());}
 
 	//	Capacity
-	bool 		empty() const;
-	size_type 	size() const;
-	size_type 	max_size() const;
+	bool 		empty() const {return _tree.size() == 0;}
+	size_type 	size() const {return __tree_.size();}
+	size_type 	max_size() const {return __tree_.max_size();}
 
 	//	Element access
 	reference 		operator[]( size_type pos );
 	const_reference operator[] (size_type n) const;
 
 	//	Modifiers
-	pair<iterator,bool> insert (const value_type& val);
-	iterator 			insert (iterator position, const value_type& val);
-	template <class InputIterator>
-	void 				insert (InputIterator first, InputIterator last);
+	pair<iterator,bool> insert (const value_type& val)
+		{return _tree.insert(val);}
 
-	void 		erase (iterator position);
+	iterator 			insert (iterator position, const value_type& val)
+		{return _tree.insert(position, val);}
+
+	template <class InputIterator>
+	void 				insert (InputIterator first, InputIterator last)
+		{_tree.insert(first, last);}
+
+	void 		erase (iterator position) {return _tree.erase(position.i)}
 	size_type 	erase (const key_type& k);
 	void 		erase (iterator first, iterator last);
 
-	void 		swap (map& x);
-	void 		clear();
+	void 		swap (map& x)
+		{_tree.swap(x._tree);}
+	void 		clear() {_tree(clear);}
 
 	//	Observers
 	key_compare key_comp() const;
