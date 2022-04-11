@@ -203,7 +203,7 @@ public:
 	// const_iterator begin()
 	// 	{return const_iterator(find_min(_root));}
 	iterator end()
-		{return iterator(nullptr);}
+		{return iterator(_root);}
 	// const_iterator end()
 	// 	{return const_iterator(nullptr);}
 

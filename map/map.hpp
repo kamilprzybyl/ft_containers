@@ -168,6 +168,7 @@ public:
 	{return comp(x.first, y.first);}
 };
 
+
 }   // ft
 
 #endif	// MAP_HPP

@@ -335,8 +335,6 @@ int main()
 			std::cout << "key: " << it->first << "| value: " << it->second << std::endl;
 			it++;
 		}
-		std::cout << "kurwa: " << it->first << std::endl;
-		(void)it;
 	}
 	catch (std::exception & e)
 	{
