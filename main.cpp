@@ -5,9 +5,9 @@
 	#include <map>
 	#include <stack>
 	#include <vector>
-	namespace ft = std;https://github.com/kamilprzybyl/ft_containers.git
+	namespace ft = std;
 #else
-	// #include <map.hpp>
+	#include "map/map.hpp"
 	#include "stack/stack.hpp"
 	#include "vector/vector.hpp"
 #endif
@@ -114,7 +114,7 @@ struct Buffer
 // << " "cout << "---" << std::endl;
 // 	return (0);
 // }
-
+#include <map>
 int main()
 {
 
@@ -315,7 +315,28 @@ int main()
 		// std::cout << "size: " << stack.size() << std::endl;
 
 
-		
+		// map
+		ft::map<std::string, int> map1;
+
+		map1.insert(ft::pair<std::string, int>("1", 5));
+		map1.insert(ft::pair<std::string, int>("2", 1));
+		map1.insert(ft::pair<std::string, int>("3", 25));
+		map1.insert(ft::pair<std::string, int>("4", 5));
+		map1.insert(ft::pair<std::string, int>("5", 124));
+		map1.insert(ft::pair<std::string, int>("6", -25));
+		map1.insert(ft::pair<std::string, int>("7", 45));
+		map1.insert(ft::pair<std::string, int>("8", 11));
+		map1.insert(ft::pair<std::string, int>("9", 35));
+		// map1.print_tree();
+		// map1.erase("2");
+		ft::map<std::string, int>::iterator it = map1.begin();
+		while (it != map1.end())
+		{
+			std::cout << "key: " << it->first << "| value: " << it->second << std::endl;
+			it++;
+		}
+		std::cout << "kurwa: " << it->first << std::endl;
+		(void)it;
 	}
 	catch (std::exception & e)
 	{
