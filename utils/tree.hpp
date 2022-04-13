@@ -227,13 +227,18 @@ public:
 		}
 	}
 
-	ft::pair<iterator, bool> insert(const value_type& v)
+	node *new_node(const value_type& v)
 	{
 		node *new_node = _a_node.allocate(1);
 		_a.construct(&new_node->value, v);
 		new_node->parent = nullptr;
 		new_node->left = nullptr;
 		new_node->right = nullptr;
+	}
+
+	ft::pair<iterator, bool> insert(const value_type& v)
+	{
+		node *new_node = new_node(v);
 
 		_dummy.left = _root;
 
