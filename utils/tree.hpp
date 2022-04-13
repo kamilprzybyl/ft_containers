@@ -34,8 +34,11 @@ public:
 	tree_iterator() : _current() { }
 	tree_iterator(tree_node const &in) : _current(in) { }
 	tree_iterator(const tree_iterator<T *, container, value> & in) : _current(in.base()) { }
+
 	const tree_node	&base() const { return _current; }
+
 	tree_node	&base() { return _current; }
+
 	tree_iterator &operator++() {
 		if (_current->right != nullptr) {
 			_current = _current->right;
@@ -56,43 +59,9 @@ public:
 	}
 
 	tree_iterator operator++(int) {
-		tree_iterator save = _current;
-		if (_current->right != nullptr) {
-			_current = _current->right;
-			while (_current->left) {
-				_current = _current->left;
-			}
-		}
-		else {
-			tree_node	c = _current;
-			_current = _current->parent;
-			while (_current->right == c)
-			{
-				c = _current;
-				_current = _current->parent;
-			}
-		}
-		return save;
-	}
-
-	tree_iterator operator--(int) {
-		tree_iterator save = _current;
-		if (_current->left != nullptr) {
-			_current = _current->left;
-			while (_current->right) {
-				_current = _current->right;
-			}
-			
-		}
-		else {
-			tree_node	c = _current;
-			_current = _current->parent;
-			while (_current->left == c) {
-				c = _current;
-				_current = _current->parent;
-			}
-		}
-		return save;
+		tree_iterator tmp = *this;
+		++(*this);
+		return tmp;
 	}
 
 	tree_iterator &operator--() {
@@ -112,6 +81,12 @@ public:
 			}
 		}
 		return *this;
+	}
+
+	tree_iterator operator--(int) {
+		tree_iterator tmp = *this;
+		--(*this);
+		return tmp;
 	}
 
 	tree_iterator	operator-(int const &i) const {
@@ -134,7 +109,7 @@ public:
 
 	pointer	operator->() { return &(this->operator*()); }
 	pointer	operator->() const { return &(this->operator*()); }
-	// }
+	
 	bool operator==(tree_iterator const &other) const {
 		return _current == other._current;
 	}
@@ -161,31 +136,35 @@ public:
 	typedef	Compare																value_compare;
 	typedef	Allocator															allocator_type;
 
-	typedef typename Allocator::template rebind<tree_node<value_type> >::other		tree_node_allocator_type;
-	typedef	tree_node<value_type>													node;
+	typedef typename Allocator::template rebind<tree_node<value_type> >::other	tree_node_allocator_type;
+	typedef	tree_node<value_type>												node;
 	typedef	tree_iterator<node *, tree, T>										iterator;
 	typedef	tree_iterator<const node *, tree, const T>							const_iterator;
-	typedef	ft::reverse_iterator<iterator>							reverse_iterator;
-	typedef	ft::reverse_iterator<const_iterator>							const_reverse_iterator;
+	typedef	ft::reverse_iterator<iterator>										reverse_iterator;
+	typedef	ft::reverse_iterator<const_iterator>								const_reverse_iterator;
 	typedef	size_t																size_type;
 
 private:
-	value_compare	_comp;
-	allocator_type	_a;
+	value_compare				_comp;
+	allocator_type				_a;
 	tree_node_allocator_type	_a_node;
-	node			*_root;
-	node			*_parent;
-	size_type		_size;
-	size_type		_max_size;
+	node						*_root;
+	node						_dummy;
+	size_type					_size;
+	size_type					_max_size;
 
 public:
 	tree(const value_compare& comp, const allocator_type& a)
 		: _comp(comp),
 		  _a(a),
+		  _a_node(a),
 		  _root(nullptr),
-		  _size(),
+		  _dummy(),
+		  _size(0),
 		  _max_size()
 	{
+		_dummy.left = &_dummy;
+		_dummy.right = nullptr;
 	}
 
 	~tree() {}
@@ -199,38 +178,53 @@ public:
 	}
 
 	iterator begin()
-		{return iterator(find_min(_root));}
+		{return iterator(find_min(&_dummy));}
 	// const_iterator begin()
-	// 	{return const_iterator(find_min(_root));}
+	// 	{return const_iterator(find_min(&_dummy));}
 	iterator end()
-		{return iterator(_root);}
+		{return iterator(&_dummy);}
 	// const_iterator end()
-	// 	{return const_iterator(nullptr);}
+	// 	{return const_iterator(&_dummy);}
 
 	size_type size() const {return _size;}
 	size_type max_size() const {return _max_size;}
 
 
-	void printHelper(node* root, std::string indent, bool last) {
-		// print the tree structure on the screen
-		if (root != nullptr) {
-			if (last) {
-				std::cout<<"└────";
-				indent += "     ";
-			} else {
-				std::cout<<"├────";
-				indent += "|    ";
-			}
+	// void printHelper(node* root, std::string indent, bool last) {
+	// 	// print the tree structure on the screen
+	// 	if (root != nullptr) {
+	// 		if (last) {
+	// 			std::cout<<"└────";
+	// 			indent += "     ";
+	// 		} else {
+	// 			std::cout<<"├────";
+	// 			indent += "|    ";
+	// 		}
 
-			std::cout << "[" << root->value.first << "|" << root->value.second << "]" << std::endl;
+	// 		std::cout << "[" << root->value.first << "|" << root->value.second << "]" << std::endl;
 
-			printHelper(root->left, indent, false);
-			printHelper(root->right, indent, true);
+	// 		printHelper(root->left, indent, false);
+	// 		printHelper(root->right, indent, true);
+	// 	}
+	// }
+
+	// void prettyPrint() {
+	// 	printHelper(_root, "", true);
+	// }
+	void inorder(node *root, node *new_node)
+	{
+		if (root == nullptr){
+			root = new_node;
 		}
-	}
-
-	void prettyPrint() {
-		printHelper(_root, "", true);
+		else {
+			new_node->parent = _root;
+			if (new_node->value < root->value)
+			{
+				inorder(root->left, new_node);
+			}
+			else
+				inorder(root->right, new_node);
+		}
 	}
 
 	ft::pair<iterator, bool> insert(const value_type& v)
@@ -240,28 +234,34 @@ public:
 		new_node->parent = nullptr;
 		new_node->left = nullptr;
 		new_node->right = nullptr;
-		node *y = nullptr;
-		node *x = this->_root;
-		_size++;
 
-		while (x != nullptr) {
-			y = x;
-			if (new_node->value < x->value) {
-				x = x->left;
-			} else {
-				x = x->right;
+		_dummy.left = _root;
+
+		node *tmp_parent = &_dummy;
+		node *tmp_root = this->_root;
+
+		while (tmp_root != nullptr)
+		{
+			tmp_parent = tmp_root;
+			if (new_node->value < tmp_root->value) {
+				tmp_root = tmp_root->left;
+			}
+			else {
+				tmp_root = tmp_root->right;
 			}
 		}
 
-		// y is parent of x
-		new_node->parent = y;
-		if (y == nullptr) {
+		new_node->parent = tmp_parent;
+
+		if (tmp_parent == &_dummy) {
 			_root = new_node;
-		} else if (new_node->value < y->value) {
-			y->left = new_node;
+		} else if (new_node->value < tmp_parent->value) {
+			tmp_parent->left = new_node;
 		} else {
-			y->right = new_node;
+			tmp_parent->right = new_node;
 		}
+	
+		_size++;
 
 		return ft::make_pair(iterator(new_node), true);
 	}
