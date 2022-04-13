@@ -169,7 +169,18 @@ public:
 
 	~tree() {}
 
-	node	*find_min(node *root) const
+	node *create_node(const value_type& v)
+	{
+		node *new_node = _a_node.allocate(1);
+		_a.construct(&new_node->value, v);
+		new_node->parent = nullptr;
+		new_node->left = nullptr;
+		new_node->right = nullptr;
+
+		return new_node;
+	}
+
+	node	*min(node *root) const
 	{
 		while (root && root->left) {
 			root = root->left;
@@ -178,13 +189,13 @@ public:
 	}
 
 	iterator begin()
-		{return iterator(find_min(&_dummy));}
+		{return iterator(min(&_dummy));}
 	// const_iterator begin()
-	// 	{return const_iterator(find_min(&_dummy));}
+	// 	{return const_iterator(min(&_dummy));}
 	iterator end()
 		{return iterator(&_dummy);}
-	// const_iterator end()
-	// 	{return const_iterator(&_dummy);}
+	const_iterator end()
+		{return const_iterator(&_dummy);}
 
 	size_type size() const {return _size;}
 	size_type max_size() const {return _max_size;}
@@ -211,6 +222,7 @@ public:
 	// void prettyPrint() {
 	// 	printHelper(_root, "", true);
 	// }
+
 	void inorder(node *root, node *new_node)
 	{
 		if (root == nullptr){
@@ -227,21 +239,10 @@ public:
 		}
 	}
 
-	node *new_node(const value_type& v)
-	{
-		node *new_node = _a_node.allocate(1);
-		_a.construct(&new_node->value, v);
-		new_node->parent = nullptr;
-		new_node->left = nullptr;
-		new_node->right = nullptr;
-	}
-
 	ft::pair<iterator, bool> insert(const value_type& v)
 	{
-		node *new_node = new_node(v);
-
+		node *new_node = create_node(v);
 		_dummy.left = _root;
-
 		node *tmp_parent = &_dummy;
 		node *tmp_root = this->_root;
 
@@ -257,7 +258,6 @@ public:
 		}
 
 		new_node->parent = tmp_parent;
-
 		if (tmp_parent == &_dummy) {
 			_root = new_node;
 		} else if (new_node->value < tmp_parent->value) {
@@ -265,15 +265,10 @@ public:
 		} else {
 			tmp_parent->right = new_node;
 		}
-	
 		_size++;
 
 		return ft::make_pair(iterator(new_node), true);
 	}
-	// pair<iterator, bool> insert(const value_type& v)
-	// {
-
-	// }
 
 	// iterator  erase(const_iterator first, const_iterator last)
 	// {
@@ -301,14 +296,33 @@ public:
 		return search(root->left, v);
 	}
 
-	size_type 	erase (const value_type& v)
-	{
-		node	*tmp = search(_root, v);
-		if (!tmp || !equals(v, tmp->value))
-			return 0;
-		// erase(tmp);
-		return 1;
-	}
+	// void	erase(iterator position)
+	// 	{ this->erase((*position).first); }
+
+
+
+	// size_type 	erase (const value_type& v)
+	// {
+	// 	if (this->find(k) == this->end())
+	// 		return (0);
+	// 	_bst.removeByKey(ft::make_pair(k, mapped_type()));
+	// 	return (1);
+	// }
+
+	// void clear()
+	// {
+	// 	//use erase for that
+	// }
+
+	iterator *find(const value_type& v)
+		{return search(_root, v);}
+
+	const_iterator *find(const value_type& v) const
+		{return search(_root, v);}
+
+	size_type count (const value_type& k) const
+		{return find(k) != end();}
+
 };
 
 

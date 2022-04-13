@@ -102,13 +102,19 @@ public:
 		{return _tree.insert(val);}
 
 	iterator 			insert (iterator position, const value_type& val)
-		{return _tree.insert(position, val);}
+		{return _tree.insert(val).first; (void)position;}
 
 	template <class InputIterator>
-	void 				insert (InputIterator first, InputIterator last)
-		{_tree.insert(first, last);}
+		void 	insert (InputIterator first, InputIterator last)
+		{
+			while (first != last)
+			{
+				_tree.insert(*first);
+				++first;
+			}
+		}
 
-	void 		erase (iterator position) {return _tree.erase(position.i);}
+	void 		erase (iterator position) {return _tree.erase(position);}
 	size_type 	erase (const key_type& k)
 		{return _tree.erase(ft::make_pair(k, mapped_type()));}
 	void 		erase (iterator first, iterator last)
