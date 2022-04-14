@@ -190,11 +190,11 @@ public:
 
 	iterator begin()
 		{return iterator(min(&_dummy));}
-	// const_iterator begin()
-	// 	{return const_iterator(min(&_dummy));}
+	const_iterator begin() const
+		{return const_iterator(min(&_dummy));}
 	iterator end()
 		{return iterator(&_dummy);}
-	const_iterator end()
+	const_iterator end() const
 		{return const_iterator(&_dummy);}
 
 	size_type size() const {return _size;}
@@ -314,10 +314,10 @@ public:
 	// 	//use erase for that
 	// }
 
-	iterator *find(const value_type& v)
+	iterator find(const value_type& v)
 		{return search(_root, v);}
 
-	const_iterator *find(const value_type& v) const
+	const_iterator find(const value_type& v) const
 		{return search(_root, v);}
 
 	size_type count (const value_type& k) const
