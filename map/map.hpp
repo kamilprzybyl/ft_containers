@@ -115,11 +115,11 @@ public:
 		}
 
 	void 		erase (iterator position)
-		{return erase((*position).first);}
+		{erase((*position).first);}
 
 	size_type 	erase (const key_type& k)
 	{
-		if (find(v) == end())
+		if (find(k) == end())
 			return 0;
 		_tree.erase(ft::make_pair(k, mapped_type()));
 		return 1;

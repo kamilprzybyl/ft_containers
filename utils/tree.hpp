@@ -300,10 +300,50 @@ public:
 	// 	{ this->erase((*position).first); }
 
 
+	node* deleteNode(node* root, const value_type& v)
+	{
+		if (root == NULL) 
+			return root;
+
+		if (v.first < root->value.first)
+			root->left = deleteNode(root->left, v);
+		else if (v.first > root->value.first)
+			root->right = deleteNode(root->right, v);
+		else {
+			if (root->left == NULL)
+			{
+				node *temp = root->right;
+				_a_node.destroy(root);
+				_a_node.deallocate(root, 1);
+				return temp;
+			}
+			else if (root->right == NULL)
+			{
+				node *temp = root->left;
+				_a_node.destroy(root);
+				_a_node.deallocate(root, 1);
+				return temp;
+			}
+			node* temp = min(root->right);
+			_a.construct(&temp->value, temp->value);
+			root->right = deleteNode(root->right, temp->value);
+		}
+		return root;
+	}
 
 	size_type 	erase (const value_type& v)
 	{
-		
+		_root = deleteNode(_root, v);
+		// node *to_erase = search(_root, v);
+		// std::cout << "try...\n";
+		// if (!to_erase->left && !to_erase->right)
+		// {
+		// 	std::cout << "DO\n";
+		// 	to_erase = nullptr;
+		// 	std::cout << "DONE\n";
+		// 	// std::cout << min(_root)->value.first << std::endl;
+		// }
+		return 1;
 	}
 
 	// void clear()
