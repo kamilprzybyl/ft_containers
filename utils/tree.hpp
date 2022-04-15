@@ -301,13 +301,10 @@ public:
 
 
 
-	// size_type 	erase (const value_type& v)
-	// {
-	// 	if (this->find(k) == this->end())
-	// 		return (0);
-	// 	_bst.removeByKey(ft::make_pair(k, mapped_type()));
-	// 	return (1);
-	// }
+	size_type 	erase (const value_type& v)
+	{
+		
+	}
 
 	// void clear()
 	// {
@@ -315,10 +312,20 @@ public:
 	// }
 
 	iterator find(const value_type& v)
-		{return search(_root, v);}
+	{
+		node *res = search(_root, v);
+		if (!res || !equals(res->value, v))
+			return end();
+		return iterator(res);
+	}
 
 	const_iterator find(const value_type& v) const
-		{return search(_root, v);}
+	{
+		node *res = search(_root, v);
+		if (!res || !equals(res->value, v))
+			return end();
+		return const_iterator(res);
+	}
 
 	size_type count (const value_type& k) const
 		{return find(k) != end();}

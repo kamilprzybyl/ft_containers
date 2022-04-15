@@ -114,11 +114,25 @@ public:
 			}
 		}
 
-	void 		erase (iterator position) {return _tree.erase(position);}
+	void 		erase (iterator position)
+		{return erase((*position).first);}
+
 	size_type 	erase (const key_type& k)
-		{return _tree.erase(ft::make_pair(k, mapped_type()));}
+	{
+		if (find(v) == end())
+			return 0;
+		_tree.erase(ft::make_pair(k, mapped_type()));
+		return 1;
+	}
+
 	void 		erase (iterator first, iterator last)
-		{_tree.erase(first, last);}
+	{
+		while (first != last)
+		{
+			erase((*(first)).first);
+			first++;
+		}
+	}
 
 	void 		swap (map& x)
 		{_tree.swap(x._tree);}
