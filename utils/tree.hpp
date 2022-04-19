@@ -161,7 +161,7 @@ public:
 		  _root(nullptr),
 		  _dummy(),
 		  _size(0),
-		  _max_size()
+		  _max_size(0)
 	{
 		_dummy.left = &_dummy;
 		_dummy.right = nullptr;
@@ -173,7 +173,7 @@ public:
 	{
 		node *new_node = _a_node.allocate(1);
 		_a.construct(&new_node->value, v);
-		new_node->parent = nullptr;
+		new_node->parent = &_dummy;
 		new_node->left = nullptr;
 		new_node->right = nullptr;
 
@@ -182,16 +182,16 @@ public:
 
 	node	*min(node *root) const
 	{
-		while (root && root->left) {
+		while (root && root->left && root != &_dummy) {
 			root = root->left;
 		}
 		return root;
 	}
 
 	iterator begin()
-		{return iterator(min(&_dummy));}
+		{return iterator(min(_dummy.left));}
 	const_iterator begin() const
-		{return const_iterator(min(&_dummy));}
+		{return const_iterator(min(_dummy.left));}
 	iterator end()
 		{return iterator(&_dummy);}
 	const_iterator end() const
@@ -200,82 +200,40 @@ public:
 	size_type size() const {return _size;}
 	size_type max_size() const {return _max_size;}
 
-
-	// void printHelper(node* root, std::string indent, bool last) {
-	// 	// print the tree structure on the screen
-	// 	if (root != nullptr) {
-	// 		if (last) {
-	// 			std::cout<<"└────";
-	// 			indent += "     ";
-	// 		} else {
-	// 			std::cout<<"├────";
-	// 			indent += "|    ";
-	// 		}
-
-	// 		std::cout << "[" << root->value.first << "|" << root->value.second << "]" << std::endl;
-
-	// 		printHelper(root->left, indent, false);
-	// 		printHelper(root->right, indent, true);
-	// 	}
-	// }
-
-	// void prettyPrint() {
-	// 	printHelper(_root, "", true);
-	// }
-
-	void inorder(node *root, node *new_node)
+	node *my_insert(node *root, node *new_node)
 	{
-		if (root == nullptr){
-			root = new_node;
+		if (root == nullptr) {
+			return new_node;
 		}
-		else {
-			new_node->parent = _root;
-			if (new_node->value < root->value)
-			{
-				inorder(root->left, new_node);
-			}
-			else
-				inorder(root->right, new_node);
+
+		if (new_node->value < root->value) {
+			node *left = my_insert(root->left, new_node);
+			root->left = left;
+
+			left->parent = root;
 		}
+		else if (new_node->value > root->value) {
+			node *right = my_insert(root->right, new_node);
+			root->right = right;
+
+			right->parent = root;
+		}
+
+		return root;
 	}
 
 	ft::pair<iterator, bool> insert(const value_type& v)
 	{
 		node *new_node = create_node(v);
 		_dummy.left = _root;
-		node *tmp_parent = &_dummy;
-		node *tmp_root = this->_root;
-
-		while (tmp_root != nullptr)
-		{
-			tmp_parent = tmp_root;
-			if (new_node->value < tmp_root->value) {
-				tmp_root = tmp_root->left;
-			}
-			else {
-				tmp_root = tmp_root->right;
-			}
-		}
-
-		new_node->parent = tmp_parent;
-		if (tmp_parent == &_dummy) {
-			_root = new_node;
-		} else if (new_node->value < tmp_parent->value) {
-			tmp_parent->left = new_node;
-		} else {
-			tmp_parent->right = new_node;
-		}
+		_root = my_insert(_root, new_node);
 		_size++;
 
 		return ft::make_pair(iterator(new_node), true);
 	}
 
-	// iterator  erase(const_iterator first, const_iterator last)
-	// {
-		
-	// }
-
-	bool	equals(value_type const &first, value_type const &second) const {
+	bool	equals(value_type const &first, value_type const &second) const
+	{
 		return (!_comp(first, second) && !_comp(second, first));
 	}
 
@@ -296,10 +254,6 @@ public:
 		return search(root->left, v);
 	}
 
-	// void	erase(iterator position)
-	// 	{ this->erase((*position).first); }
-
-
 	node* deleteNode(node* root, const value_type& v)
 	{
 		if (root == NULL) 
@@ -310,9 +264,14 @@ public:
 		else if (v.first > root->value.first)
 			root->right = deleteNode(root->right, v);
 		else {
-			if (root->left == NULL)
+			if (root->left == NULL && root->right == NULL)
+			{
+				return nullptr;
+			}
+			else if (root->left == NULL)
 			{
 				node *temp = root->right;
+				temp->parent = root->parent;
 				_a_node.destroy(root);
 				_a_node.deallocate(root, 1);
 				return temp;
@@ -320,13 +279,18 @@ public:
 			else if (root->right == NULL)
 			{
 				node *temp = root->left;
+				temp->parent = root->parent;
 				_a_node.destroy(root);
 				_a_node.deallocate(root, 1);
 				return temp;
 			}
-			node* temp = min(root->right);
-			_a.construct(&temp->value, temp->value);
-			root->right = deleteNode(root->right, temp->value);
+			else 
+			{
+				node* temp = min(root->right);
+				temp->parent = root->parent;
+				_a.construct(&temp->value, temp->value);
+				root->right = deleteNode(root->right, temp->value);
+			}
 		}
 		return root;
 	}
@@ -334,22 +298,17 @@ public:
 	size_type 	erase (const value_type& v)
 	{
 		_root = deleteNode(_root, v);
-		// node *to_erase = search(_root, v);
-		// std::cout << "try...\n";
-		// if (!to_erase->left && !to_erase->right)
-		// {
-		// 	std::cout << "DO\n";
-		// 	to_erase = nullptr;
-		// 	std::cout << "DONE\n";
-		// 	// std::cout << min(_root)->value.first << std::endl;
-		// }
+		_size--;
+
 		return 1;
 	}
 
-	// void clear()
-	// {
-	// 	//use erase for that
-	// }
+	void clear()
+	{
+		while (_size != 0) {
+			erase(begin());
+		}
+	}
 
 	iterator find(const value_type& v)
 	{

@@ -327,10 +327,14 @@ int main()
 		map1.insert(ft::pair<std::string, int>("7", 45));
 		map1.insert(ft::pair<std::string, int>("8", 11));
 		map1.insert(ft::pair<std::string, int>("1", 35));
-		// map1.print_tree();
+
 		map1.erase("1");
+		map1.erase("4");
+		map1.erase("8");
+		map1.erase("7");
 		map1.erase("2");
 		map1.erase("3");
+		map1.erase("5");
 
 		std::cout << "count: " << map1.count("8") << std::endl;
 		std::cout << "count: " << map1.count("-12") << std::endl;
@@ -340,6 +344,7 @@ int main()
 
 		std::cout << "size: " << map1.size() << std::endl;
 		ft::map<std::string, int>::iterator it = map1.begin();
+		(void)it;
 		while (it != map1.end())
 		{
 			std::cout << "key: " << (it++)->first << std::endl;
@@ -347,14 +352,16 @@ int main()
 
 		ft::map<std::string, int> map2;
 	
-		map2.insert(map1.begin(), map1.begin() + 3);
+		std::cout << std::endl;
+		map2.insert(map1.begin(), map1.begin() + 2);
 
 		std::cout << "size: " << map2.size() << std::endl;
 	
 		ft::map<std::string, int>::iterator it2 = map2.begin();
 		while (it2 != map2.end())
 		{
-			std::cout << "key: " << (++it2)->first << std::endl;
+			std::cout << "key: " << it2->first << std::endl;
+			it2++;
 		}
 
 	}
