@@ -114,7 +114,12 @@ struct Buffer
 // << " "cout << "---" << std::endl;
 // 	return (0);
 // }
-#include <map>
+#define T1 int
+#define T2 int
+typedef ft::map<T1, T2>::value_type T3;
+typedef ft::map<T1, T2>::iterator ft_iterator;
+typedef ft::map<T1, T2>::const_iterator ft_const_iterator;
+#include <list>
 int main()
 {
 
@@ -328,6 +333,21 @@ int main()
 		map1.insert(ft::pair<std::string, int>("8", 11));
 		map1.insert(ft::pair<std::string, int>("1", 35));
 
+		ft::map<std::string, int>::iterator it = map1.begin();
+		(void)it;
+		while (it != map1.end())
+		{
+			std::cout << "key: " << (it++)->first << std::endl;
+		}
+
+		ft::map<std::string, int>::iterator it_bound = map1.lower_bound("5");
+		std::cout << "lower_bound: " << std::endl;
+		std::cout << it_bound->first << " -> " << it_bound->second << std::endl;
+		
+		it_bound = map1.upper_bound("5");
+		std::cout << "upper_bound: " << std::endl;
+		std::cout << it_bound->first << " -> " << it_bound->second << std::endl;
+
 		map1.erase("1");
 		map1.erase("4");
 		map1.erase("8");
@@ -343,26 +363,38 @@ int main()
 		std::cout << "find: " << f->second << std::endl;
 
 		std::cout << "size: " << map1.size() << std::endl;
-		ft::map<std::string, int>::iterator it = map1.begin();
-		(void)it;
-		while (it != map1.end())
+		ft::map<std::string, int>::iterator it1 = map1.begin();
+		while (it1 != map1.end())
 		{
-			std::cout << "key: " << (it++)->first << std::endl;
+			std::cout << "key: " << (it1++)->first << std::endl;
 		}
 
-		ft::map<std::string, int> map2;
-	
+		std::list<T3> lst;
+		unsigned int lst_size = 10;
+		for (unsigned int i = 0; i < lst_size; ++i)
+			lst.push_back(T3(i + 1, (i + 1) * 3));
+		ft::map<T1, T2> mp(lst.begin(), lst.end());
+
 		std::cout << std::endl;
-		map2.insert(map1.begin(), map1.begin() + 2);
-
-		std::cout << "size: " << map2.size() << std::endl;
-	
-		ft::map<std::string, int>::iterator it2 = map2.begin();
-		while (it2 != map2.end())
+		ft::map<int, int>::iterator it3 = mp.begin();
+		while (it3 != mp.end())
 		{
-			std::cout << "key: " << it2->first << std::endl;
-			it2++;
+			std::cout << "key: " << (it3++)->first << std::endl;
 		}
+
+		// ft::map<std::string, int> map2;
+	
+		// std::cout << std::endl;
+		// map2.insert(map1.begin(), map1.begin() + 2);
+
+		// std::cout << "size: " << map2.size() << std::endl;
+	
+		// ft::map<std::string, int>::iterator it2 = map2.begin();
+		// while (it2 != map2.end())
+		// {
+		// 	std::cout << "key: " << it2->first << std::endl;
+		// 	it2++;
+		// }
 
 	}
 	catch (std::exception & e)

@@ -329,6 +329,37 @@ public:
 	size_type count (const value_type& k) const
 		{return find(k) != end();}
 
+	iterator 		lower_bound (const value_type& k)
+	{
+		iterator it = begin();
+
+		while (it != end() && !equals(*it, k) && !_comp(k, *it)) {
+			it++;
+		}
+		return it;
+	}
+
+	const_iterator 		lower_bound (const value_type& k) const
+	{
+		return const_iterator(this->lower_bound(k));
+	}
+
+	iterator 		upper_bound (const value_type& k)
+	{
+		iterator it = begin();
+
+		while (it != end()) {
+			if (_comp(k, *it))
+				break;
+			it++;
+		}
+		return it;
+	}
+
+	const_iterator 		upper_bound (const value_type& k) const
+	{
+		return const_iterator(this->upper_bound(k));
+	}
 };
 
 
