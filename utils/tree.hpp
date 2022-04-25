@@ -110,11 +110,11 @@ public:
 	pointer	operator->() { return &(this->operator*()); }
 	pointer	operator->() const { return &(this->operator*()); }
 	
-	bool operator==(tree_iterator const &other) const {
-		return _current == other._current;
+	bool operator==(tree_iterator const &x) const {
+		return _current == x._current;
 	}
-	bool operator!=(tree_iterator const &other) const {
-		return !(*this == other);
+	bool operator!=(tree_iterator const &x) const {
+		return !(*this == x);
 	}
 	value_type	&operator*() {
 		return _current->value;
@@ -167,6 +167,21 @@ public:
 		_dummy.right = nullptr;
 	}
 
+	tree	&operator=(const tree & x) {
+		if (this != &x) {
+			this->clear();
+			_dummy.left = x._dummy.left;
+			_root = nullptr;
+			_size = 0;
+			_comp = x._comp;
+			_a = x._a;
+			_a_node = x._a_node;
+			_root = clone(x._root);
+			// std::cout << "root: " << _root->value.first << std::endl;
+		}
+		return *this;
+	}
+
 	~tree() {}
 
 	node *create_node(const value_type& v)
@@ -186,6 +201,20 @@ public:
 			root = root->left;
 		}
 		return root;
+	}
+
+	node* clone(node* root)
+	{
+		if (root == nullptr) {
+			return nullptr;
+		}
+	
+		node* root_copy = create_node(root->value);
+	
+		root_copy->left = clone(root->left);
+		root_copy->right = clone(root->right);
+	
+		return root_copy;
 	}
 
 	iterator begin()
@@ -303,10 +332,21 @@ public:
 		return 1;
 	}
 
-	void clear()
+	void 		swap (tree& x)
+	{
+		if (this != &x)
+		{
+			node save = this->_dummy;
+			this->_dummy = x._dummy;
+			x._dummy = save;
+		}
+	}
+
+	void	clear()
 	{
 		while (_size != 0) {
-			erase(begin());
+			node *res = min(_root);
+			erase(res->value);
 		}
 	}
 
@@ -331,12 +371,14 @@ public:
 
 	iterator 		lower_bound (const value_type& k)
 	{
-		iterator it = begin();
+		// iterator it = begin();
 
-		while (it != end() && !equals(*it, k) && !_comp(k, *it)) {
-			it++;
-		}
-		return it;
+		// while (it != end() && !equals(*it, k) && !_comp(k, *it)) {
+		// 	it++;
+		// }
+		// return it;
+				(void)k;
+		return begin();
 	}
 
 	const_iterator 		lower_bound (const value_type& k) const
@@ -346,14 +388,13 @@ public:
 
 	iterator 		upper_bound (const value_type& k)
 	{
-		iterator it = begin();
-
-		while (it != end()) {
-			if (_comp(k, *it))
-				break;
-			it++;
-		}
-		return it;
+		// reverse_iterator rbg = reverse_iterator(end());
+		// reverse_iterator ren = reverse_iterator(begin());
+		// while (rbg != ren && !equals(*rbg, k) && _comp(k, *rbg)) {
+		// 	rbg++;
+		// }
+		(void)k;
+		return begin();
 	}
 
 	const_iterator 		upper_bound (const value_type& k) const

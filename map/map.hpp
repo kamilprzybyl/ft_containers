@@ -57,25 +57,21 @@ public:
 	map (const map& x)
 		: _tree(x._tree)
 	{
-		insert(x.begin(), x.end());
+		// insert(x.begin(), x.end());
 	}
 
 	map& operator= (const map& x)
 	{
-		if (this != &x)
-		{
-			_tree.clear();
-			// stuff
-		}
+		// if (this != &x) {
+			// std::cout << "here\n";
+			_tree = _tree.operator=(x._tree);
+			// std::cout << "============ " << (*begin()).first << std::endl;
+		// }
 		return *this;
 	}
 
 	//	Destructor
 	~map() {}
-
-	// test
-	void print_tree()
-	{_tree.prettyPrint();}
 
 	// 	Iterators
 	iterator 				begin() {return _tree.begin();}
@@ -89,13 +85,19 @@ public:
 	const_reverse_iterator 	rend() const {return const_reverse_iterator(begin());}
 
 	//	Capacity
-	bool 		empty() const {return _tree.size() == 0;}
+	bool 		empty() const {return begin() == end();}
 	size_type 	size() const {return _tree.size();}
 	size_type 	max_size() const {return _tree.max_size();}
 
 	//	Element access
-	reference 		operator[]( size_type pos );
-	const_reference operator[] (size_type n) const;
+	mapped_type& operator[] (const key_type& k)
+	{
+		// iterator ret = insert(ft::make_pair(k, mapped_type())).first;
+		// return ret->second;
+		return (*((this->insert(ft::make_pair(k, mapped_type()))).first)).second;
+	}
+	// reference 		operator[]( size_type pos );
+	// const_reference operator[] (size_type n) const;
 
 	//	Modifiers
 	pair<iterator, bool> insert (const value_type& val)
@@ -136,7 +138,7 @@ public:
 
 	void 		swap (map& x)
 		{_tree.swap(x._tree);}
-	void 		clear() {_tree.clear();}
+	void 		clear() {this->erase(this->begin(), this->end());}
 
 	//	Observers
 	key_compare key_comp() const
