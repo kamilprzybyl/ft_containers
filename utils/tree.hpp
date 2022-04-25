@@ -28,12 +28,14 @@ public:
 	typedef				value_type						iterator_category;
 	typedef				ptrdiff_t						difference_type;
 	typedef	typename	ft::bidirectional_iterator_tag	iterator_catgeory;
+
 private:
 	tree_node	_current;
+
 public:
 	tree_iterator() : _current() { }
 	tree_iterator(tree_node const &in) : _current(in) { }
-	tree_iterator(const tree_iterator<T *, container, value> & in) : _current(in.base()) { }
+	tree_iterator(const tree_iterator<typename container::node *, container, typename container::value_type> & in) : _current(in.base()) { }
 
 	const tree_node	&base() const { return _current; }
 
@@ -123,7 +125,6 @@ public:
 	value_type	&operator*() const {
 		return _current->value;
 	}
-
 };
 
 
@@ -170,14 +171,12 @@ public:
 	tree	&operator=(const tree & x) {
 		if (this != &x) {
 			this->clear();
-			_dummy.left = x._dummy.left;
-			_root = nullptr;
-			_size = 0;
+			_size = x._size;
 			_comp = x._comp;
 			_a = x._a;
 			_a_node = x._a_node;
 			_root = clone(x._root);
-			// std::cout << "root: " << _root->value.first << std::endl;
+			_dummy.left = _root;
 		}
 		return *this;
 	}
@@ -336,9 +335,9 @@ public:
 	{
 		if (this != &x)
 		{
-			node save = this->_dummy;
-			this->_dummy = x._dummy;
-			x._dummy = save;
+			// node save = this->_dummy;
+			// this->_dummy = x._dummy;
+			// x._dummy = save;
 		}
 	}
 
@@ -349,6 +348,9 @@ public:
 			erase(res->value);
 		}
 	}
+
+	value_compare	value_comp() const
+		{ return _comp; }
 
 	iterator find(const value_type& v)
 	{

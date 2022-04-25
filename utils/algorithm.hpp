@@ -1,5 +1,5 @@
-#ifndef FILL_HPP
-#define FILL_HPP
+#ifndef ALGORITHM_HPP
+#define ALGORITHM_HPP
 
 
 namespace ft

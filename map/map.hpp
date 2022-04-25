@@ -5,6 +5,7 @@
 #include <memory>
 #include "../utils/tree.hpp"
 #include "../utils/utility.hpp"
+#include "../utils/algorithm.hpp"
 
 namespace ft
 {
@@ -62,11 +63,9 @@ public:
 
 	map& operator= (const map& x)
 	{
-		// if (this != &x) {
-			// std::cout << "here\n";
+		if (this != &x) {
 			_tree = _tree.operator=(x._tree);
-			// std::cout << "============ " << (*begin()).first << std::endl;
-		// }
+		}
 		return *this;
 	}
 
@@ -142,9 +141,9 @@ public:
 
 	//	Observers
 	key_compare key_comp() const
-		{return _tree.value_comp().key_comp();}
+		{return key_compare();}
 	value_compare value_comp() const
-		{return value_compare(_tree.value_comp().key_comp());}
+		{return value_compare(key_compare());}
 
 	//	Allocator
 	allocator_type get_allocator() const
@@ -189,6 +188,43 @@ public:
 	bool operator()(const value_type& x, const value_type& y) const
 	{return comp(x.first, y.first);}
 };
+
+
+template <class Key, class T, class Compare, typename Allocator>
+	void swap (map<Key, T, Compare, Allocator>& x, map<Key, T, Compare, Allocator>& y) {
+		x.swap(y);
+	}
+
+template <class Key, class T, class Compare, typename Allocator>
+	bool operator==( const ft::map<Key, T, Compare, Allocator>& lhs, const ft::map<Key, T, Compare, Allocator>& rhs ) {
+		if (lhs.size() != rhs.size())
+			return false;
+		return ft::equal(lhs.begin(), lhs.end(), rhs.begin());
+	}
+
+template <class Key, class T, class Compare, typename Allocator>
+	bool operator!=( const ft::map<Key, T, Compare, Allocator>& lhs, const ft::map<Key, T, Compare, Allocator>& rhs ) {
+		return !(lhs == rhs);
+	}
+template <class Key, class T, class Compare, typename Allocator>
+	bool operator<( const ft::map<Key, T, Compare, Allocator>& lhs, const ft::map<Key, T, Compare, Allocator>& rhs ) {
+		return ft::lexicographical_compare(lhs.begin(), lhs.end(), rhs.begin(), rhs.end());
+	}
+
+template <class Key, class T, class Compare, typename Allocator>
+	bool operator<=( const ft::map<Key, T, Compare, Allocator>& lhs, const ft::map<Key, T, Compare, Allocator>& rhs ) {
+		return !(rhs < lhs);
+	}
+
+template <class Key, class T, class Compare, typename Allocator>
+	bool operator>( const ft::map<Key, T, Compare, Allocator>& lhs, const ft::map<Key, T, Compare, Allocator>& rhs ) {
+		return rhs < lhs;
+	}
+
+template <class Key, class T, class Compare, typename Allocator>
+	bool operator>=( const ft::map<Key, T, Compare, Allocator>& lhs, const ft::map<Key, T, Compare, Allocator>& rhs ) {
+		return !(rhs > lhs);
+	}
 
 
 }   // ft
