@@ -152,7 +152,6 @@ private:
 	node						*_root;
 	node						_dummy;
 	size_type					_size;
-	size_type					_max_size;
 
 public:
 	tree(const value_compare& comp, const allocator_type& a)
@@ -161,11 +160,23 @@ public:
 		  _a_node(a),
 		  _root(nullptr),
 		  _dummy(),
-		  _size(0),
-		  _max_size(0)
+		  _size(0)
 	{
 		_dummy.left = &_dummy;
 		_dummy.right = nullptr;
+	}
+
+	tree(const tree &x)
+		: _comp(x._comp),
+		  _a(x._a),
+		  _a_node(x._a_node),
+		//   _root(x._root),
+		//   _dummy(),
+		  _size(x._size)
+	{
+		this->clear();
+		_root = clone(x._root);
+		_dummy.left = _root;
 	}
 
 	tree	&operator=(const tree & x) {
@@ -226,7 +237,7 @@ public:
 		{return const_iterator(&_dummy);}
 
 	size_type size() const {return _size;}
-	size_type max_size() const {return _max_size;}
+	size_type max_size() const {return _a_node.max_size();}
 
 	node *my_insert(node *root, node *new_node)
 	{
@@ -234,13 +245,15 @@ public:
 			return new_node;
 		}
 
-		if (new_node->value < root->value) {
+		// if (new_node->value < root->value) {
+		if (equals(new_node->value, root->value)) {
 			node *left = my_insert(root->left, new_node);
 			root->left = left;
 
 			left->parent = root;
 		}
-		else if (new_node->value > root->value) {
+		// else if (new_node->value > root->value) {
+		else if (!equals(root->value, new_node->value)) {
 			node *right = my_insert(root->right, new_node);
 			root->right = right;
 
@@ -252,6 +265,12 @@ public:
 
 	ft::pair<iterator, bool> insert(const value_type& v)
 	{
+		if (this->find(v) != end())
+		{
+			// std::cout << "00\n";
+			node *res = search(_root, v);
+			return ft::make_pair(iterator(res), true);
+		}
 		node *new_node = create_node(v);
 		_dummy.left = _root;
 		_root = my_insert(_root, new_node);
@@ -370,39 +389,6 @@ public:
 
 	size_type count (const value_type& k) const
 		{return find(k) != end();}
-
-	iterator 		lower_bound (const value_type& k)
-	{
-		// iterator it = begin();
-
-		// while (it != end() && !equals(*it, k) && !_comp(k, *it)) {
-		// 	it++;
-		// }
-		// return it;
-				(void)k;
-		return begin();
-	}
-
-	const_iterator 		lower_bound (const value_type& k) const
-	{
-		return const_iterator(this->lower_bound(k));
-	}
-
-	iterator 		upper_bound (const value_type& k)
-	{
-		// reverse_iterator rbg = reverse_iterator(end());
-		// reverse_iterator ren = reverse_iterator(begin());
-		// while (rbg != ren && !equals(*rbg, k) && _comp(k, *rbg)) {
-		// 	rbg++;
-		// }
-		(void)k;
-		return begin();
-	}
-
-	const_iterator 		upper_bound (const value_type& k) const
-	{
-		return const_iterator(this->upper_bound(k));
-	}
 };
 
 

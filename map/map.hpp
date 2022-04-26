@@ -38,7 +38,8 @@ public:
 private:
 	typedef	tree<value_type, value_compare, allocator_type>	_base;
 
-	_base _tree;
+	_base 		_tree;
+	key_compare	_comp;
 
 public:
 	//	Constructors
@@ -56,15 +57,12 @@ public:
 		}
 
 	map (const map& x)
-		: _tree(x._tree)
-	{
-		// insert(x.begin(), x.end());
-	}
+		:	_tree(x._tree) {}
 
 	map& operator= (const map& x)
 	{
 		if (this != &x) {
-			_tree = _tree.operator=(x._tree);
+			_tree = x._tree;
 		}
 		return *this;
 	}
@@ -90,13 +88,7 @@ public:
 
 	//	Element access
 	mapped_type& operator[] (const key_type& k)
-	{
-		// iterator ret = insert(ft::make_pair(k, mapped_type())).first;
-		// return ret->second;
-		return (*((this->insert(ft::make_pair(k, mapped_type()))).first)).second;
-	}
-	// reference 		operator[]( size_type pos );
-	// const_reference operator[] (size_type n) const;
+		{ return (*((this->insert(ft::make_pair(k, mapped_type()))).first)).second; }
 
 	//	Modifiers
 	pair<iterator, bool> insert (const value_type& val)
@@ -159,19 +151,60 @@ public:
 		{return _tree.count(ft::make_pair(k, mapped_type()));}
 
 	iterator 		lower_bound (const key_type& k)
-		{return _tree.lower_bound(ft::make_pair(k, mapped_type()));}
+	{
+		iterator it = begin();
+
+		while (it != end())
+		{
+			if (_comp((*it).first, k) == false)
+				break;
+			it++;
+		}
+		return it;
+	}
+
 	const_iterator 	lower_bound (const key_type& k) const
-		{return _tree.lower_bound(ft::make_pair(k, mapped_type()));}
+	{
+		const_iterator it = begin();
+
+		while (it != end())
+		{
+			if (_comp((*it).first, k) == false)
+				break;
+			it++;
+		}
+		return it;
+	}
 
 	iterator 		upper_bound (const key_type& k)
-		{return _tree.upper_bound(ft::make_pair(k, mapped_type()));}
-	const_iterator 	upper_bound (const key_type& k) const
-		{return _tree.upper_bound(ft::make_pair(k, mapped_type()));}
+	{
+		iterator it = begin();
 
-	pair<const_iterator,const_iterator> equal_range (const key_type& k) const
-		{return _tree.equal_range(ft::make_pair(k, mapped_type()));}
-	pair<iterator,iterator>             equal_range (const key_type& k)
-		{return _tree.equal_range(ft::make_pair(k, mapped_type()));}
+		while (it != end())
+		{
+			if (_comp(k, (*it).first))
+				break;
+			it++;
+		}
+		return it;
+	}
+	const_iterator 	upper_bound (const key_type& k) const
+	{
+		const_iterator it = begin();
+
+		while (it != end())
+		{
+			if (_comp(k, (*it).first))
+				break;
+			it++;
+		}
+		return it;
+	}
+
+	ft::pair<const_iterator, const_iterator> equal_range (const key_type& k) const
+		{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }
+	ft::pair<iterator, iterator> equal_range (const key_type& k)
+		{ return (ft::make_pair(this->lower_bound(k), this->upper_bound(k))); }
 };
 
 

@@ -403,6 +403,14 @@ int main()
 		{
 			std::cout << "key: " << (it4++)->first << std::endl;
 		}
+
+		ft::map<int, int> test(mp);
+		std::cout << std::endl << "copy constr\n";
+		it4 = test.begin();
+		while (it4 != test.end())
+		{
+			std::cout << "key: " << (it4++)->first << std::endl;
+		}
 		// mp.swap(mp2);
 
 		// ft::map<std::string, int> map2;
