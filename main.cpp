@@ -382,7 +382,6 @@ int main()
 		ft::map<T1, T2> mp2(lst2.begin(), lst2.end());
 
 		std::cout << std::endl << "mp\n";
-		std::cout << std::endl << "mp\n";
 		ft::map<int, int>::iterator it3 = mp.begin();
 		while (it3 != mp.end())
 		{
@@ -412,36 +411,21 @@ int main()
 		// 	std::cout << "key: " << (it4++)->first << std::endl;
 		// }
 
-		ft::map<int, std::string> mp_2000;
-		ft::map<int, std::string>::iterator mp_2000_it;
+		// ft::map<int, std::string> mp_2000;
+		// ft::map<int, std::string>::iterator mp_2000_it;
 
-		mp_2000[42] = "fgzgxfn";
-		mp_2000[25] = "funny";
-		mp_2000[80] = "hey";
-		mp_2000[12] = "no";
-		mp_2000[27] = "bee";
-		mp_2000[90] = "8";
+		// mp_2000[42] = "fgzgxfn";
+		// mp_2000[25] = "funny";
+		// mp_2000[80] = "hey";
+		// mp_2000[12] = "no";
+		// mp_2000[27] = "bee";
+		// mp_2000[90] = "8";
 
-		mp_2000_it = mp_2000.begin();
-		std::cout << std::endl << "operator[] \n";
-		while (mp_2000_it != mp_2000.end())
-		{
-			std::cout << "key: " << (mp_2000_it++)->first << std::endl;
-		}
-		// mp.swap(mp2);
-
-		// ft::map<std::string, int> map2;
-	
-		// std::cout << std::endl;
-		// map2.insert(map1.begin(), map1.begin() + 2);
-
-		// std::cout << "size: " << map2.size() << std::endl;
-	
-		// ft::map<std::string, int>::iterator it2 = map2.begin();
-		// while (it2 != map2.end())
+		// mp_2000_it = mp_2000.begin();
+		// std::cout << std::endl << "operator[] \n";
+		// while (mp_2000_it != mp_2000.end())
 		// {
-		// 	std::cout << "key: " << it2->first << std::endl;
-		// 	it2++;
+		// 	std::cout << "key: " << (mp_2000_it++)->first << std::endl;
 		// }
 
 	}

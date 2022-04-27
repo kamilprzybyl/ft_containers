@@ -129,7 +129,8 @@ public:
 
 	void 		swap (map& x)
 		{_tree.swap(x._tree);}
-	void 		clear() {this->erase(this->begin(), this->end());}
+	void 		clear() //{this->erase(this->begin(), this->end());}
+		{_tree.clear();}
 
 	//	Observers
 	key_compare key_comp() const
