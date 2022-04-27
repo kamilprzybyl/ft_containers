@@ -245,15 +245,13 @@ public:
 			return new_node;
 		}
 
-		// if (new_node->value < root->value) {
-		if (equals(new_node->value, root->value)) {
+		if (_comp(new_node->value, root->value)) {
 			node *left = my_insert(root->left, new_node);
 			root->left = left;
 
 			left->parent = root;
 		}
-		// else if (new_node->value > root->value) {
-		else if (!equals(root->value, new_node->value)) {
+		else if (_comp(root->value, new_node->value)) {
 			node *right = my_insert(root->right, new_node);
 			root->right = right;
 
@@ -267,7 +265,6 @@ public:
 	{
 		if (this->find(v) != end())
 		{
-			// std::cout << "00\n";
 			node *res = search(_root, v);
 			return ft::make_pair(iterator(res), true);
 		}
@@ -344,6 +341,9 @@ public:
 
 	size_type 	erase (const value_type& v)
 	{
+		// node	*res = search(_root, v);
+		// if (!res || !equals(v, res->value))
+		// 	return 0;
 		_root = deleteNode(_root, v);
 		_size--;
 

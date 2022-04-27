@@ -404,12 +404,29 @@ int main()
 			std::cout << "key: " << (it4++)->first << std::endl;
 		}
 
-		ft::map<int, int> test(mp);
-		std::cout << std::endl << "copy constr\n";
-		it4 = test.begin();
-		while (it4 != test.end())
+		// ft::map<int, int> test(mp);
+		// std::cout << std::endl << "copy constr\n";
+		// it4 = test.begin();
+		// while (it4 != test.end())
+		// {
+		// 	std::cout << "key: " << (it4++)->first << std::endl;
+		// }
+
+		ft::map<int, std::string> mp_2000;
+		ft::map<int, std::string>::iterator mp_2000_it;
+
+		mp_2000[42] = "fgzgxfn";
+		mp_2000[25] = "funny";
+		mp_2000[80] = "hey";
+		mp_2000[12] = "no";
+		mp_2000[27] = "bee";
+		mp_2000[90] = "8";
+
+		mp_2000_it = mp_2000.begin();
+		std::cout << std::endl << "operator[] \n";
+		while (mp_2000_it != mp_2000.end())
 		{
-			std::cout << "key: " << (it4++)->first << std::endl;
+			std::cout << "key: " << (mp_2000_it++)->first << std::endl;
 		}
 		// mp.swap(mp2);
 
