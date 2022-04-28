@@ -57,7 +57,10 @@ public:
 		}
 
 	map (const map& x)
-		:	_tree(x._tree) {}
+		:	_tree(x._tree) 
+		{
+			insert(x.begin(), x.end());
+		}
 
 	map& operator= (const map& x)
 	{
@@ -149,7 +152,8 @@ public:
 		{return _tree.find(ft::make_pair(k, mapped_type()));}
 
 	size_type count (const key_type& k) const
-		{return _tree.count(ft::make_pair(k, mapped_type()));}
+		// {return _tree.count(ft::make_pair(k, mapped_type()));}
+		{return find(k) != end();}
 
 	iterator 		lower_bound (const key_type& k)
 	{

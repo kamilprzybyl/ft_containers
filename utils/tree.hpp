@@ -4,6 +4,7 @@
 #include "../utils/iterator_traits.hpp"
 #include "../utils/iterator.hpp"
 #include "../utils/utility.hpp"
+#include "../utils/algorithm.hpp"
 
 template<class T>
 struct tree_node
@@ -167,15 +168,6 @@ private:
 		return new_node;
 	}
 
-	void	swapValues(node *a, node *b)
-	{
-		int tmp;
-
-		tmp = a->value;
-		a->value = b->value;
-		b->value = tmp;
-	}
-
 	node	*min(node *root) const
 	{
 		while (root && root->left && root != &_dummy) {
@@ -210,8 +202,6 @@ private:
 		_a.destroy(&root->value);
 		_a_node.deallocate(root, 1);
 	}
-
-
 
 	bool	equals(value_type const &first, value_type const &second) const
 	{
@@ -276,134 +266,7 @@ private:
 		return root;
 	}
 
-
-public:
-	tree(const value_compare& comp, const allocator_type& a)
-		: _comp(comp),
-		  _a(a),
-		  _a_node(a),
-		  _root(nullptr),
-		  _dummy(),
-		  _size(0)
-	{
-		_dummy.left = &_dummy;
-		_dummy.right = nullptr;
-	}
-
-	tree(const tree &x)
-		: _comp(x._comp),
-		  _a(x._a),
-		  _a_node(x._a_node),
-		//   _root(x._root),
-		//   _dummy(),
-		  _size(x._size)
-	{
-		this->clear();
-		_root = clone(x._root);
-		_dummy.left = _root;
-	}
-
-	tree	&operator=(const tree & x) {
-		if (this != &x) {
-			this->clear();
-			_size = x._size;
-			_comp = x._comp;
-			_a = x._a;
-			_a_node = x._a_node;
-			_root = clone(x._root);
-			// _root = x._root;
-			// iterator it = begin();
-			// while (it != end())
-			// {
-			// 	insert(*it);
-			// 	++it;
-			// }
-			// insert(x.begin(), x.end());
-			_dummy.left = _root;
-		}
-		return *this;
-	}
-
-	~tree() {}
-
-	iterator begin()
-		{return iterator(min(_dummy.left));}
-	const_iterator begin() const
-		{return const_iterator(min(_dummy.left));}
-	iterator end()
-		{return iterator(&_dummy);}
-	const_iterator end() const
-		{return const_iterator(&_dummy);}
-
-	size_type size() const {return _size;}
-	size_type max_size() const {return _a_node.max_size();}
-
-
-	// ft::pair<iterator, bool> insert(const value_type& v)
-	// {
-	// 	if (this->find(v) != end())
-	// 	{
-	// 		node *res = search(_root, v);
-	// 		return ft::make_pair(iterator(res), true);
-	// 	}
-	// 	node *new_node = create_node(v);
-	// 	_dummy.left = _root;
-	// 	_root = my_insert(_root, new_node);
-	// 	_size++;
-
-	// 	return ft::make_pair(iterator(new_node), true);
-	// }
-
-	size_type 	erase (const value_type& v)
-	{
-		node	*res = search(_root, v);
-		// if (!res || !equals(v, res->value))
-		// 	return 0;
-		// _root = deleteNode(_root, v);
-		delete_node(res);
-		_size--;
-
-		return 1;
-	}
-
-	void 		swap (tree& x)
-	{
-		if (this != &x)
-		{
-			// node save = this->_dummy;
-			// this->_dummy = x._dummy;
-			// x._dummy = save;
-		}
-	}
-
-	void	clear()
-	{
-		delete_tree(_root);
-	}
-
-	value_compare	value_comp() const
-		{ return _comp; }
-
-	iterator find(const value_type& v)
-	{
-		node *res = search(_root, v);
-		if (!res || !equals(res->value, v))
-			return end();
-		return iterator(res);
-	}
-
-	const_iterator find(const value_type& v) const
-	{
-		node *res = search(_root, v);
-		if (!res || !equals(res->value, v))
-			return end();
-		return const_iterator(res);
-	}
-
-	size_type count (const value_type& k) const
-		{return find(k) != end();}
-
-	void	right_rotate(node *x)
+	void	rightRotate(node *x)
 	{
 		if (!x->left)
 			return ;
@@ -447,7 +310,7 @@ public:
 		// x->parent = y;
 	}
 
-	void	left_rotate(node *x)
+	void	leftRotate(node *x)
 	{
 		if (!x || !x->right)
 			return ;
@@ -513,14 +376,14 @@ public:
 					 
 					// std::cout << "case 2\n";
 					z = z->parent;
-					left_rotate(z);
+					leftRotate(z);
 				}
 				else {									// case 3: z's uncle is black (line)
 					// recolor the original parent and grandparent (switch colors)
 					// std::cout << "case 3\n";
 					z->parent->is_black = 1;
 					z->parent->parent->is_black = 0;
-					right_rotate(z->parent->parent);	// rotate z's grandparent
+					rightRotate(z->parent->parent);	// rotate z's grandparent
 				}
 			}
 			else
@@ -535,12 +398,12 @@ public:
 				}
 				else if (z == z->parent->left) {
 					z = z->parent;
-					right_rotate(z);
+					rightRotate(z);
 				}
 				else {
 					z->parent->is_black = 1;
 					z->parent->parent->is_black = 0;
-					left_rotate(z->parent->parent);
+					leftRotate(z->parent->parent);
 				}
 			}
 		}
@@ -582,6 +445,261 @@ public:
 		rb_insert_fixup(z);
 	}
 
+	// returns pointer to sibling
+	node	*sibling(node *x)
+	{
+		if (x == nullptr || x->parent == nullptr) {
+			return nullptr;
+		}
+		if (x == x->parent->left) {
+			return x->parent->right;
+		}
+		return x->parent->left;
+	}
+
+	// find node that do not have a left child
+	// in the subtree of the given node
+	node	*successor(node *x)
+	{
+		node *tmp = x;
+
+		while (tmp->left != nullptr) {
+			tmp = tmp->left;
+		}
+		return tmp;
+	}
+
+	// find node that replaces a deleted node in the tree
+	node	*replace(node *x)
+	{
+		// if (!x)
+			// return nullptr;
+
+		// when has 2 children
+		if (x->left != nullptr && x->right != nullptr)
+			return successor(x->right);
+
+		// when leaf
+		if (x->left == nullptr && x->right == nullptr)
+			return nullptr;
+
+		// when has a 1 child
+		if (x->right == nullptr)
+			return x->left;
+		else
+			return x->right;
+	}
+
+	void	doubleBlackFixup(node *x)
+	{
+		if (x == _root) {
+			return ;
+		}
+
+		node *sibling = this->sibling(x);
+		node *parent = x->parent; // ?????????
+
+		if (sibling == nullptr)
+		{
+			doubleBlackFixup(parent);
+		}
+		else
+		{
+			if (!sibling->is_black)
+			{
+				parent->is_black = 0;
+				sibling->is_black = 1;
+				if (sibling == sibling->parent->left) {
+					rightRotate(parent);
+				}
+				else {
+					leftRotate(parent);
+				}
+				doubleBlackFixup(x);
+			}
+			else
+			{
+				if (!sibling->left->is_black || !sibling->right->is_black)
+				{
+					if (sibling->left != nullptr && !sibling->left->is_black)
+					{
+						if (sibling == sibling->parent->left) {
+							sibling->left->is_black = sibling->is_black;
+							sibling->is_black = parent->is_black;
+							rightRotate(parent);
+						}
+						else {
+							sibling->left->is_black = parent->is_black;
+							rightRotate(sibling);
+							leftRotate(parent);
+						}
+					}
+					else
+					{
+						if (sibling->parent && sibling == sibling->parent->left) {
+							sibling->right->is_black = parent->is_black;
+							leftRotate(sibling);
+							rightRotate(parent);
+						}
+						else {
+							sibling->right->is_black = sibling->is_black;
+							sibling->is_black = parent->is_black;
+							leftRotate(parent);
+						}
+					}
+					parent->is_black = 1;
+				}
+				else {
+					sibling->is_black = 0;
+					if (parent->is_black) {
+						doubleBlackFixup(parent);
+					}
+					else {
+						parent->is_black = 1;
+					}
+				}
+			}
+		}
+	}
+
+	void	deleteNode(node *v)
+	{
+		node *u  = replace(v);
+		bool uvBlack = ((u == nullptr || u->is_black) && (v->is_black));
+		node *parent = v->parent; // maybe delete it later on, loooks like it's useless
+
+		if (u == nullptr)
+		{
+			if (v == _root)
+			{
+				_root = nullptr;
+				_dummy.left = &_dummy;
+			}
+			else
+			{
+				if (uvBlack == true) {
+					doubleBlackFixup(v);
+				}
+				else {
+					if (sibling(v) != nullptr) {
+						sibling(v)->is_black = 0;
+					}
+				}
+
+				if (v == v->parent->left) {
+					parent->left = nullptr;
+				}
+				else {
+					parent->right = nullptr;
+				}
+			}
+			_a.destroy(&v->value);
+			_a_node.deallocate(v, 1);
+			return ;
+		}
+
+		if (v->left == nullptr || v->right == nullptr)
+		{
+			if (v == _root)
+			{
+				// v->value = u->value;
+				// v->left = nullptr;
+				// v->right = nullptr;
+				_root = u;
+				_root->parent = &_dummy;
+				u->left = nullptr;
+				u->right = nullptr;
+				u->is_black = 1;
+				_a.destroy(&u->value);
+				_a_node.deallocate(u, 1);
+			}
+			else
+			{
+				if (v == v->parent->left) {
+					parent->left = u;
+				}
+				else {
+					parent->right = u;
+				}
+				_a.destroy(&v->value);
+				_a_node.deallocate(v, 1);
+				u->parent = parent;
+				if (uvBlack == true) {
+					doubleBlackFixup(u);
+				}
+				else {
+					u->is_black = 1;
+				}
+			}
+			return ;
+		}
+		ft::swap(u->value, v->value);
+		_a.destroy(&u->value);
+		_a_node.deallocate(u, 1);
+	}
+
+public:
+	tree(const value_compare& comp, const allocator_type& a)
+		: _comp(comp),
+		  _a(a),
+		  _a_node(a),
+		  _root(nullptr),
+		  _dummy(),
+		  _size(0)
+	{
+		_dummy.left = &_dummy;
+		_dummy.right = nullptr;
+	}
+
+	tree(const tree &x)
+		: _comp(x._comp),
+		  _a(x._a),
+		  _a_node(x._a_node),
+		  _root(),
+		  _dummy(),
+		  _size(x._size)
+	{
+		// _root = clone(x._root);
+		// _root->parent = &_dummy;
+		// _dummy.left = _root;
+	}
+
+	tree	&operator=(const tree & x) {
+		if (this != &x) {
+			this->clear();
+			_size = x._size;
+			_comp = x._comp;
+			_a = x._a;
+			_a_node = x._a_node;
+			_root = clone(x._root);
+			// _root = x._root;
+			// iterator it = begin();
+			// while (it != end())
+			// {
+			// 	insert(*it);
+			// 	++it;
+			// }
+			// insert(x.begin(), x.end());
+			// _root->parent = &_dummy;
+			_dummy.left = _root;
+		}
+		return *this;
+	}
+
+	~tree() {}
+
+	iterator begin()
+		{return iterator(min(_dummy.left));}
+	const_iterator begin() const
+		{return const_iterator(min(_dummy.left));}
+	iterator end()
+		{return iterator(&_dummy);}
+	const_iterator end() const
+		{return const_iterator(&_dummy);}
+
+	size_type size() const {return _size;}
+	size_type max_size() const {return _a_node.max_size();}
+
 	ft::pair<iterator, bool> insert(const value_type& v)
 	{
 		if (this->find(v) != end())
@@ -600,121 +718,53 @@ public:
 		return ft::make_pair(iterator(z), true);
 	}
 
-	// // returns pointer to sibling
-	// node	*sibling(node *x)
-	// {
-	// 	if (x == nullptr || x->parent == nullptr) {
-	// 		return nullptr;
-	// 	}
-	// 	if (x == x->parent->left) {
-	// 		return x->parent->right;
-	// 	}
-	// 	return x->parent->left;
-	// }
+	size_type 	erase (const value_type& v)
+	{
+		node	*res = search(_root, v);
+		// if (!res || !equals(v, res->value))
+		// 	return 0;
+		// _root = deleteNode(_root, v);
+		deleteNode(res);
+		_size--;
 
-	// // find node that do not have a left child
-	// // in the subtree of the given node
-	// node	*successor(node *x)
-	// {
-	// 	node *tmp = x;
+		return 1;
+	}
 
-	// 	while (tmp->left != nullptr) {
-	// 		tmp = tmp->left;
-	// 	}
-	// 	return tmp;
-	// }
+	void 		swap (tree& x)
+	{
+		if (this != &x)
+		{
+			ft::swap(_dummy.left, x._dummy.left);
+			ft::swap(_root, x._root);
+			ft::swap(_a, x._a);
+			ft::swap(_a_node, x._a_node);
+			ft::swap(_comp, x._comp);
+			ft::swap(_size, x._size);
+			_root->parent = &_dummy;
+			x._root->parent = &x._dummy;
+		}
+	}
 
-	// // find node that replaces a deleted node in the tree
-	// node	*replace(node *x)
-	// {
-	// 	// if (!x)
-	// 		// return nullptr;
+	void	clear()
+	{
+		delete_tree(_root);
+	}
 
-	// 	// when has 2 children
-	// 	if (x->left != nullptr && x->right != nullptr)
-	// 		return successor(x->right);
+	iterator find(const value_type& v)
+	{
+		node *res = search(_root, v);
+		if (!res || !equals(res->value, v))
+			return end();
+		return iterator(res);
+	}
 
-	// 	// when leaf
-	// 	if (x->left == nullptr && x->right == nullptr)
-	// 		return nullptr;
-
-	// 	// when has a 1 child
-	// 	if (x->right == nullptr)
-	// 		return x->left;
-	// 	else
-	// 		return x->right;
-	// }
-
-	// void	delete_node(node *v)
-	// {
-	// 	node *u  = replace(v);
-	// 	bool uvBlack = ((u == nullptr || u->is_black) && (v->is_black));
-	// 	node *parent = v->parent; // maybe delete it later on, loooks like it's useless
-
-	// 	if (u == nullptr)
-	// 	{
-	// 		if (v == _root)
-	// 		{
-	// 			_root = nullptr;
-	// 			_dummy.left = &_dummy;
-	// 		}
-	// 		else
-	// 		{
-	// 			if (uvBlack == true) {
-	// 				doubleBlackFixup(v);
-	// 			}
-	// 			else {
-	// 				if (sibling(v) != nullptr) {
-	// 					sibling(v)->is_black = 0;
-	// 				}
-	// 			}
-
-	// 			if (v == v->parent->left) {
-	// 				parent->left = nullptr;
-	// 			}
-	// 			else {
-	// 				parent->right = nullptr;
-	// 			}
-	// 		}
-	// 		_a.destroy(&v->value);
-	// 		_a_node.deallocate(v, 1);
-	// 		return ;
-	// 	}
-
-	// 	if (v->left == nullptr || v->right == nullptr)
-	// 	{
-	// 		if (v == _root)
-	// 		{
-	// 			v->value = u->value;
-	// 			v->left = nullptr;
-	// 			v->right = nullptr;
-	// 			_a.destroy(&u->value);
-	// 			_a_node.deallocate(u, 1);
-	// 		}
-	// 		else
-	// 		{
-	// 			if (v == v->parent->left) {
-	// 				parent->left = u;
-	// 			}
-	// 			else {
-	// 				parent->right = u;
-	// 			}
-	// 			_a.destroy(&v->value);
-	// 			_a_node.deallocate(v, 1);
-	// 			u->parent = parent;
-	// 			if (uvBlack == true) {
-	// 				doubleBlackFixup(u);
-	// 			}
-	// 			else {
-	// 				u->is_black = 1;
-	// 			}
-	// 		}
-	// 		return ;
-	// 	}
-	// 	swapValues(u, v);
-	// 	_a.destroy(&u->value);
-	// 	_a_node.deallocate(u, 1);
-	// }
+	const_iterator find(const value_type& v) const
+	{
+		node *res = search(_root, v);
+		if (!res || !equals(res->value, v))
+			return end();
+		return const_iterator(res);
+	}
 };
 
 

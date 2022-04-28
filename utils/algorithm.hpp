@@ -89,6 +89,12 @@ copy_backward(InputIterator first, InputIterator last, iterator position)
 	return position + n;
 }
 
+template <class T>
+void
+swap ( T& a, T& b )
+{
+	T c(a); a=b; b=c;
+}
 
 }
 

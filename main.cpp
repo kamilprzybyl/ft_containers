@@ -394,22 +394,30 @@ int main()
 			std::cout << "key: " << (it4++)->first << std::endl;
 		}
 
-		mp = mp2;
-
-		std::cout << std::endl << "mp after operator=\n";
-		it4 = mp.begin();
-		while (it4 != mp.end())
+		ft::map<T1, T2> mp3(mp2);
+		std::cout << std::endl << "mp3\n";
+		it4 = mp3.begin();
+		while (it4 != mp3.end())
 		{
 			std::cout << "key: " << (it4++)->first << std::endl;
 		}
 
-		ft::map<int, int> test(mp);
-		std::cout << std::endl << "copy constr\n";
-		it4 = test.begin();
-		while (it4 != test.end())
-		{
-			std::cout << "key: " << (it4++)->first << std::endl;
-		}
+		// mp = mp2;
+
+		// std::cout << std::endl << "mp after operator=\n";
+		// it4 = mp.begin();
+		// while (it4 != mp.end())
+		// {
+		// 	std::cout << "key: " << (it4++)->first << std::endl;
+		// }
+
+		// ft::map<int, int> test(mp);
+		// std::cout << std::endl << "copy constr\n";
+		// it4 = test.begin();
+		// while (it4 != test.end())
+		// {
+		// 	std::cout << "key: " << (it4++)->first << std::endl;
+		// }
 
 		// ft::map<int, int> mp_2000;
 		// ft::map<int, int>::iterator mp_2000_it;
