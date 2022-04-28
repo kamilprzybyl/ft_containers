@@ -417,28 +417,72 @@ public:
 
 	void	right_rotate(node *x)
 	{
-		node *y = x->left;		// y is soon to be parent of x
-		x->left = y->right;		
-		if (y->right != nullptr) {
-			y->right->parent = x;
+		if (!x->left)
+			return ;
+		node	*y = x->left;
+		if (x == _root) {
+			_root = y;
+			_root->parent = &_dummy;
+			_dummy.left = _root;
+		}
+		if (x->parent && x->parent != &_dummy) {
+			if (x->parent->left == x) {
+				x->parent->left = y;
+			} else {
+				x->parent->right = y;
+			}
 		}
 		y->parent = x->parent;
-		// if (x->parent == nullptr) {
-		if (x->parent == &_dummy) {
-			_root = y;
-		}
-		else if (x == x->parent->left) {
-			x->parent->left = y;
-		}
-		else {
-			x->parent->right = y;
+		x->parent = y;
+		x->left = y->right;
+		if (x->left) {
+			x->left->parent = x;
 		}
 		y->right = x;
-		x->parent = y;
+		// node *y = x->left;		// y is soon to be parent of x
+		// x->left = y->right;		
+		// if (y->right != nullptr) {
+		// 	y->right->parent = x;
+		// }
+		// y->parent = x->parent;
+		// // if (x->parent == nullptr) {
+		// if (x->parent == &_dummy) {
+		// 	_root = y;
+		// }
+		// else if (x == x->parent->left) {
+		// 	x->parent->left = y;
+		// }
+		// else {
+		// 	x->parent->right = y;
+		// }
+		// y->right = x;
+		// x->parent = y;
 	}
 
 	void	left_rotate(node *x)
 	{
+		// if (!x || !x->right)
+		// 	return ;
+		// node *y = x->right;
+		// if (x == _root) {
+		// 	_root = y;
+		// 	_root->parent = &_dummy;
+		// 	_dummy.left = _root;
+		// }
+		// if (x->parent && x->parent != &_dummy) {
+		// 	if (x->parent->left == x) {
+		// 		x->parent->left = y;
+		// 	} else {
+		// 		x->parent->right = y;
+		// 	}
+		// }
+		// y->parent = x->parent;
+		// x->parent = y;
+		// x->right = y->left;
+		// if (x->right) {
+		// 	x->right->parent = x;
+		// }
+		// y->left = x;
 		node *y = x->right;		// y is soon to be parent of x
 		x->right = y->left;		
 		if (y->left != nullptr) {
@@ -459,61 +503,59 @@ public:
 		x->parent = y;
 	}
 
-	void	rb_insert_fixup(node *z, node *y)
+	//	2. Recolor and rotate nodes to fix violation (covers 4 scenarios)
+	void	rb_insert_fixup(node *z)
 	{
+		node *y;
 		while (z->parent && z->parent != &_dummy && !z->parent->is_black)
 		{
 			std::cout << "while" << std::endl;
 			if (z->parent == z->parent->parent->left)
 			{
-				std::cout << "left line | key = " << z->value.first << std::endl;
-				y = z->parent->parent->right;
-				if (y && !y->is_black) {
-					std::cout << "case 1 | key = " << z->value.first << std::endl;
+				y = z->parent->parent->right;			// z's uncle
+				if (y && !y->is_black) {				// case 1: z's uncle is red
+					// recolor z's parent, grandparent and uncle
 					z->parent->is_black = 1;
 					y->is_black = 1;
 					z->parent->parent->is_black = 0;
 					z = z->parent->parent;
 				}
-				else if (z == z->parent->right) {
-					std::cout << "case 2 | key = " << z->value.first << std::endl;
+				else if (z == z->parent->right) {		// case 2: z's uncle is black (triangle)
+					 
 					z = z->parent;
 					left_rotate(z);
 				}
-				else {		// case 3: z's uncle is black
-					std::cout << "case 3 | key = " << z->value.first << std::endl;
+				else {									// case 3: z's uncle is black (line)
+					// recolor the original parent and grandparent (switch colors)
 					z->parent->is_black = 1;
 					z->parent->parent->is_black = 0;
-					right_rotate(z->parent->parent);
+					right_rotate(z->parent->parent);	// rotate z's grandparent
 				}
 			}
 			else
 			{
-				std::cout << "right line | key = " << z->value.first << std::endl;
 				y = z->parent->parent->left;
 				if (y && !y->is_black) {
-					std::cout << "case 1 | key = " << z->value.first << std::endl;
 					z->parent->is_black = 1;
 					y->is_black = 1;
 					z->parent->parent->is_black = 0;
 					z = z->parent->parent;
 				}
 				else if (z == z->parent->left) {
-					std::cout << "case 2 | key = " << z->value.first << std::endl;
 					z = z->parent;
 					right_rotate(z);
 				}
 				else {
-					std::cout << "case 3 | key = " << z->value.first << std::endl;
 					z->parent->is_black = 1;
 					z->parent->parent->is_black = 0;
 					left_rotate(z->parent->parent);
 				}
 			}
 		}
-		_root->is_black = 1;
+		_root->is_black = 1;	// case 0: color z black
 	}
 
+	//	1. Insert Z and color it red (simple insertion)
 	void	rb_insert(node *z)
 	{
 		node *y = nullptr;
@@ -540,10 +582,8 @@ public:
 		else {
 			y->right = z;
 		}
-		// z->left = nullptr;
-		// z->right = nullptr;
-		// z->is_black = 0;
-		rb_insert_fixup(z, y);
+
+		rb_insert_fixup(z);
 	}
 
 	ft::pair<iterator, bool> insert(const value_type& v)
