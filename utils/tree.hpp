@@ -167,6 +167,15 @@ private:
 		return new_node;
 	}
 
+	void	swapValues(node *a, node *b)
+	{
+		int tmp;
+
+		tmp = a->value;
+		a->value = b->value;
+		b->value = tmp;
+	}
+
 	node	*min(node *root) const
 	{
 		while (root && root->left && root != &_dummy) {
@@ -302,6 +311,14 @@ public:
 			_a = x._a;
 			_a_node = x._a_node;
 			_root = clone(x._root);
+			// _root = x._root;
+			// iterator it = begin();
+			// while (it != end())
+			// {
+			// 	insert(*it);
+			// 	++it;
+			// }
+			// insert(x.begin(), x.end());
 			_dummy.left = _root;
 		}
 		return *this;
@@ -339,10 +356,11 @@ public:
 
 	size_type 	erase (const value_type& v)
 	{
-		// node	*res = search(_root, v);
+		node	*res = search(_root, v);
 		// if (!res || !equals(v, res->value))
 		// 	return 0;
-		_root = deleteNode(_root, v);
+		// _root = deleteNode(_root, v);
+		delete_node(res);
 		_size--;
 
 		return 1;
@@ -384,36 +402,6 @@ public:
 
 	size_type count (const value_type& k) const
 		{return find(k) != end();}
-
-
-
-
-
-
-
-
-
-	node *my_insert(node *root, node *new_node)
-	{
-		if (root == nullptr) {
-			return new_node;
-		}
-
-		if (_comp(new_node->value, root->value)) {
-			node *left = my_insert(root->left, new_node);
-			root->left = left;
-
-			left->parent = root;
-		}
-		else if (_comp(root->value, new_node->value)) {
-			node *right = my_insert(root->right, new_node);
-			root->right = right;
-
-			right->parent = root;
-		}
-
-		return root;
-	}
 
 	void	right_rotate(node *x)
 	{
@@ -461,46 +449,46 @@ public:
 
 	void	left_rotate(node *x)
 	{
-		// if (!x || !x->right)
-		// 	return ;
-		// node *y = x->right;
-		// if (x == _root) {
-		// 	_root = y;
-		// 	_root->parent = &_dummy;
-		// 	_dummy.left = _root;
-		// }
-		// if (x->parent && x->parent != &_dummy) {
-		// 	if (x->parent->left == x) {
-		// 		x->parent->left = y;
-		// 	} else {
-		// 		x->parent->right = y;
-		// 	}
-		// }
-		// y->parent = x->parent;
-		// x->parent = y;
-		// x->right = y->left;
-		// if (x->right) {
-		// 	x->right->parent = x;
-		// }
-		// y->left = x;
-		node *y = x->right;		// y is soon to be parent of x
-		x->right = y->left;		
-		if (y->left != nullptr) {
-			y->left->parent = x;
+		if (!x || !x->right)
+			return ;
+		node *y = x->right;
+		if (x == _root) {
+			_root = y;
+			_root->parent = &_dummy;
+			_dummy.left = _root;
+		}
+		if (x->parent && x->parent != &_dummy) {
+			if (x->parent->left == x) {
+				x->parent->left = y;
+			} else {
+				x->parent->right = y;
+			}
 		}
 		y->parent = x->parent;
-		// if (x->parent == nullptr) {
-		if (x->parent == &_dummy) {
-			_root = y;
-		}
-		else if (x == x->parent->left) {
-			x->parent->left = y;
-		}
-		else {
-			x->parent->right = y;
+		x->parent = y;
+		x->right = y->left;
+		if (x->right) {
+			x->right->parent = x;
 		}
 		y->left = x;
-		x->parent = y;
+		// node *y = x->right;		// y is soon to be parent of x
+		// x->right = y->left;		
+		// if (y->left != nullptr) {
+		// 	y->left->parent = x;
+		// }
+		// y->parent = x->parent;
+		// // if (x->parent == nullptr) {
+		// if (x->parent == &_dummy) {
+		// 	_root = y;
+		// }
+		// else if (x == x->parent->left) {
+		// 	x->parent->left = y;
+		// }
+		// else {
+		// 	x->parent->right = y;
+		// }
+		// y->left = x;
+		// x->parent = y;
 	}
 
 	//	2. Recolor and rotate nodes to fix violation (covers 4 scenarios)
@@ -509,11 +497,12 @@ public:
 		node *y;
 		while (z->parent && z->parent != &_dummy && !z->parent->is_black)
 		{
-			std::cout << "while" << std::endl;
 			if (z->parent == z->parent->parent->left)
 			{
+				// std::cout << "left\n";
 				y = z->parent->parent->right;			// z's uncle
 				if (y && !y->is_black) {				// case 1: z's uncle is red
+					// std::cout << "case 1\n";
 					// recolor z's parent, grandparent and uncle
 					z->parent->is_black = 1;
 					y->is_black = 1;
@@ -522,11 +511,13 @@ public:
 				}
 				else if (z == z->parent->right) {		// case 2: z's uncle is black (triangle)
 					 
+					// std::cout << "case 2\n";
 					z = z->parent;
 					left_rotate(z);
 				}
 				else {									// case 3: z's uncle is black (line)
 					// recolor the original parent and grandparent (switch colors)
+					// std::cout << "case 3\n";
 					z->parent->is_black = 1;
 					z->parent->parent->is_black = 0;
 					right_rotate(z->parent->parent);	// rotate z's grandparent
@@ -534,6 +525,7 @@ public:
 			}
 			else
 			{
+				// std::cout << "right\n";
 				y = z->parent->parent->left;
 				if (y && !y->is_black) {
 					z->parent->is_black = 1;
@@ -573,13 +565,17 @@ public:
 		}
 		z->parent = y;
 		if (y == nullptr) {
-			z->parent = &_dummy;
 			_root = z;
+			_root->is_black = 1;
+			_root->parent = &_dummy;
+			_dummy.left = _root;
 		}
 		else if (_comp(z->value, y->value)) {
+			// y->left->parent = y;
 			y->left = z;
 		}
 		else {
+			// y->right->parent = y;
 			y->right = z;
 		}
 
@@ -594,12 +590,131 @@ public:
 			return ft::make_pair(iterator(res), true);
 		}
 		node *z = create_node(v);
+		// if (equals(v, z->value)) {
+		// 	return (ft::make_pair(iterator(z), false));
+		// }
 		_dummy.left = _root;
 		rb_insert(z);
 		_size++;
 
 		return ft::make_pair(iterator(z), true);
 	}
+
+	// // returns pointer to sibling
+	// node	*sibling(node *x)
+	// {
+	// 	if (x == nullptr || x->parent == nullptr) {
+	// 		return nullptr;
+	// 	}
+	// 	if (x == x->parent->left) {
+	// 		return x->parent->right;
+	// 	}
+	// 	return x->parent->left;
+	// }
+
+	// // find node that do not have a left child
+	// // in the subtree of the given node
+	// node	*successor(node *x)
+	// {
+	// 	node *tmp = x;
+
+	// 	while (tmp->left != nullptr) {
+	// 		tmp = tmp->left;
+	// 	}
+	// 	return tmp;
+	// }
+
+	// // find node that replaces a deleted node in the tree
+	// node	*replace(node *x)
+	// {
+	// 	// if (!x)
+	// 		// return nullptr;
+
+	// 	// when has 2 children
+	// 	if (x->left != nullptr && x->right != nullptr)
+	// 		return successor(x->right);
+
+	// 	// when leaf
+	// 	if (x->left == nullptr && x->right == nullptr)
+	// 		return nullptr;
+
+	// 	// when has a 1 child
+	// 	if (x->right == nullptr)
+	// 		return x->left;
+	// 	else
+	// 		return x->right;
+	// }
+
+	// void	delete_node(node *v)
+	// {
+	// 	node *u  = replace(v);
+	// 	bool uvBlack = ((u == nullptr || u->is_black) && (v->is_black));
+	// 	node *parent = v->parent; // maybe delete it later on, loooks like it's useless
+
+	// 	if (u == nullptr)
+	// 	{
+	// 		if (v == _root)
+	// 		{
+	// 			_root = nullptr;
+	// 			_dummy.left = &_dummy;
+	// 		}
+	// 		else
+	// 		{
+	// 			if (uvBlack == true) {
+	// 				doubleBlackFixup(v);
+	// 			}
+	// 			else {
+	// 				if (sibling(v) != nullptr) {
+	// 					sibling(v)->is_black = 0;
+	// 				}
+	// 			}
+
+	// 			if (v == v->parent->left) {
+	// 				parent->left = nullptr;
+	// 			}
+	// 			else {
+	// 				parent->right = nullptr;
+	// 			}
+	// 		}
+	// 		_a.destroy(&v->value);
+	// 		_a_node.deallocate(v, 1);
+	// 		return ;
+	// 	}
+
+	// 	if (v->left == nullptr || v->right == nullptr)
+	// 	{
+	// 		if (v == _root)
+	// 		{
+	// 			v->value = u->value;
+	// 			v->left = nullptr;
+	// 			v->right = nullptr;
+	// 			_a.destroy(&u->value);
+	// 			_a_node.deallocate(u, 1);
+	// 		}
+	// 		else
+	// 		{
+	// 			if (v == v->parent->left) {
+	// 				parent->left = u;
+	// 			}
+	// 			else {
+	// 				parent->right = u;
+	// 			}
+	// 			_a.destroy(&v->value);
+	// 			_a_node.deallocate(v, 1);
+	// 			u->parent = parent;
+	// 			if (uvBlack == true) {
+	// 				doubleBlackFixup(u);
+	// 			}
+	// 			else {
+	// 				u->is_black = 1;
+	// 			}
+	// 		}
+	// 		return ;
+	// 	}
+	// 	swapValues(u, v);
+	// 	_a.destroy(&u->value);
+	// 	_a_node.deallocate(u, 1);
+	// }
 };
 
 
