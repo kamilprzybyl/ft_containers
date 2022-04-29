@@ -70,6 +70,9 @@ public:
 		return *this;
 	}
 
+	void print(){
+		_tree.print();
+	}
 	//	Destructor
 	~map() {}
 
