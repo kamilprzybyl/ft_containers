@@ -98,7 +98,7 @@ public:
 		{
 			ret--;
 		}
-		return (ret);
+		return ret;
 	}
 
 	tree_iterator	operator+(int const &i) const {
@@ -107,7 +107,7 @@ public:
 		{
 			ret++;
 		}
-		return (ret);
+		return ret;
 	}
 
 	pointer	operator->() { return &(this->operator*()); }
@@ -434,12 +434,12 @@ private:
 			_dummy.left = _root;
 		}
 		else if (_comp(z->value, y->value)) {
-			// y->left->parent = y;
 			y->left = z;
+			y->left->parent = y;
 		}
 		else {
-			// y->right->parent = y;
 			y->right = z;
+			y->right->parent = y;
 		}
 
 		rb_insert_fixup(z);
@@ -473,7 +473,7 @@ private:
 	node	*replace(node *x)
 	{
 		// if (!x)
-			// return nullptr;
+		// 	return nullptr;
 
 		// when has 2 children
 		if (x->left != nullptr && x->right != nullptr)
@@ -505,6 +505,8 @@ private:
 		}
 		else
 		{
+			// std::cout << "elsse\n";
+			// std::cout << "sibling: " << sibling->value << std::endl;
 			if (!sibling->is_black)
 			{
 				parent->is_black = 0;
@@ -519,8 +521,10 @@ private:
 			}
 			else
 			{
-				if (!sibling->left->is_black || !sibling->right->is_black)
+				// std::cout << "is black\n";
+				if ((sibling->left && !sibling->left->is_black) || (sibling->right && !sibling->right->is_black))
 				{
+					// std::cout << "!sibling->left->is_black || !sibling->right->is_black\n";
 					if (sibling->left != nullptr && !sibling->left->is_black)
 					{
 						if (sibling == sibling->parent->left) {
@@ -536,6 +540,7 @@ private:
 					}
 					else
 					{
+						// std::cout << "one of the child is red\n";
 						if (sibling->parent && sibling == sibling->parent->left) {
 							sibling->right->is_black = parent->is_black;
 							leftRotate(sibling);
@@ -565,15 +570,17 @@ private:
 	void	deleteNode(node *v)
 	{
 		node *u  = replace(v);
-		// std::cout << "u: " << u->value << std::endl;
-		// std::cout << "v: " << v->value << std::endl;
 		bool uvBlack = ((u == nullptr || u->is_black) && (v->is_black));
 		node *parent = v->parent; // maybe delete it later on, loooks like it's useless
-		// std::cout << "parent: " << parent->value << std::endl;
 
+		std::cout << "v: " << v->value << std::endl;
+		if (u)
+			std::cout << "u: " << u->value << std::endl;
+		else
+			std::cout << "u: nullptr" << std::endl;
 		if (u == nullptr)
 		{
-			// std::cout << "if\n";
+			std::cout << "leaf\n";
 			if (v == _root)
 			{
 				_root = nullptr;
@@ -604,7 +611,7 @@ private:
 
 		if (v->left == nullptr || v->right == nullptr) // only one child
 		{
-			// std::cout << "onde child\n";
+			std::cout << "one child\n";
 			if (v == _root)
 			{
 				// v->value = u->value;
@@ -642,8 +649,37 @@ private:
 			}
 			return ;
 		}
-		swapNode(u, v);
-		deleteNode(v);
+		else {
+			std::cout << "two children\n";
+			if (v == _root) {
+				_root = u;
+			}
+			if (v->parent && v->parent->left == v) {
+				v->parent->left = u;
+			} else if (v->parent && v->parent->right == v) {
+				v->parent->right = u;
+			}
+			if (v->right) {
+				v->right->parent = u;
+			}
+			if (v->left) {
+				v->left->parent = u;
+			}
+			if (u->parent && u == u->parent->left) {
+				u->parent->left = v;
+			}
+			if (u->parent && u == u->parent->right) {
+				u->parent->right = v;
+			}
+			// print();
+			ft::swap(u->parent, v->parent);
+			ft::swap(u->left, v->left);
+			ft::swap(u->right, v->right);
+			ft::swap(u->is_black, v->is_black);
+			// std::cout << "-------\n";
+			// swapNode(u, v);
+			deleteNode(v);
+		}
 	}
 
 	void swapNode(node *u, node *v)
@@ -884,10 +920,16 @@ public:
 			std::cout << (isLeft ? "├──" : "└──" );
 
 			// print the value of the node
-			if (node->is_black)
-				std::cout << "<" << node->value << ">" << std::endl;
-			else
-				std::cout << node->value << std::endl;
+			if (!node->is_black) {
+				std::cout << "\033[0;31m";
+				std::cout << node->value;
+				std::cout << "\033[0m\n";
+			}
+			else {
+				std::cout << node->value;
+			}
+
+			std::cout << std::endl;
 
 			// enter the next tree level - left and right branch
 			printBT( prefix + (isLeft ? "│   " : "    "), node->left, true);

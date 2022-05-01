@@ -369,32 +369,32 @@ int main()
 		// 	std::cout << "key: " << (it1++)->first << std::endl;
 		// }
 
-		std::list<T3> lst;
-		unsigned int lst_size = 10;
-		for (unsigned int i = 0; i < lst_size; ++i)
-			lst.push_back(T3(i + 1, (i + 1) * 3));
+		// std::list<T3> lst;
+		// unsigned int lst_size = 10;
+		// for (unsigned int i = 0; i < lst_size; ++i)
+		// 	lst.push_back(T3(i + 1, (i + 1) * 3));
 		// std::list<T3> lst2;
 		// lst_size = 20;
 		// for (unsigned int i = 10; i < lst_size; ++i)
 		// 	lst2.push_back(T3(i + 1, (i + 1) * 3));
 
-		ft::map<T1, T2> mp(lst.begin(), lst.end());
+		// ft::map<T1, T2> mp(lst.begin(), lst.end());
 		// mp.print();
-		std::cout << std::endl;
+		// std::cout << std::endl;
 		// ft::map<T1, T2> mp2(lst2.begin(), lst2.end());
 
-		mp.print();
-		mp.erase(3);
 		// mp.print();
-		mp.print();
-		std::cout << std::endl;
-		std::cout << std::endl << "mp\n";
-		ft::map<int, int>::iterator it3 = mp.begin();
-		while (it3 != mp.end())
-		{
-			std::cout << "key: " << it3->first << std::endl;
-			it3++;
-		}
+		// mp.erase(3);
+		// // mp.print();
+		// mp.print();
+		// std::cout << std::endl;
+		// std::cout << std::endl << "mp\n";
+		// ft::map<int, int>::iterator it3 = mp.begin();
+		// while (it3 != mp.end())
+		// {
+		// 	std::cout << "key: " << it3->first << std::endl;
+		// 	it3++;
+		// }
 		// std::cout << std::endl << "mp2\n";
 		// ft::map<int, int>::iterator it4 = mp2.begin();
 		// while (it4 != mp2.end())
@@ -427,23 +427,49 @@ int main()
 		// 	std::cout << "key: " << (it4++)->first << std::endl;
 		// }
 
-		// ft::map<int, int> mp_2000;
-		// ft::map<int, int>::iterator mp_2000_it;
+		ft::map<int, int> mp_2000;
+		ft::map<int, int>::iterator mp_2000_it;
 
-		// mp_2000[6] = 1;
-		// mp_2000[5] = 1;
-		// mp_2000[4] = 1;
-		// mp_2000[3] = 1;
-		// mp_2000[2] = 1;
-		// mp_2000[1] = 1;
+		mp_2000[1] = 1;
+		mp_2000[2] = 1;
+		mp_2000[3] = 1;
+		mp_2000[4] = 1;
+		mp_2000[5] = 1;
+		mp_2000[6] = 1;
+		mp_2000[7] = 1;
+		mp_2000[8] = 1;
+		mp_2000[9] = 1;
+		mp_2000[10] = 1;
+		mp_2000.print();
 
-		// mp_2000_it = mp_2000.begin();
-		// std::cout << std::endl << "operator[] \n";
-		// while (mp_2000_it != mp_2000.end())
-		// {
-		// 	std::cout << "key: " << (mp_2000_it++)->first << std::endl;
-		// }
+		mp_2000_it = mp_2000.begin();
+		std::cout << std::endl << "operator[] \n";
+		while (mp_2000_it != mp_2000.end())
+		{
+			std::cout << "key: " << (mp_2000_it++)->first << std::endl;
+		}
 
+		mp_2000.erase(6);
+
+		mp_2000.print();
+
+		mp_2000_it = mp_2000.begin();
+		std::cout << std::endl << "erase\n";
+		while (mp_2000_it != mp_2000.end())
+		{
+			std::cout << "key: " << (mp_2000_it++)->first << std::endl;
+		}
+
+		ft::map<int, int> mp_2001(mp_2000);
+		mp_2000_it = mp_2001.begin();
+		std::cout << std::endl << "copy constructor\n";
+		while (mp_2000_it != mp_2001.end())
+		{
+			std::cout << "key: " << mp_2000_it->first << std::endl;
+			mp_2000_it++;
+		}
+
+		mp_2001.print();
 	}
 	catch (std::exception & e)
 	{
