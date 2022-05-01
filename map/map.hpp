@@ -114,7 +114,11 @@ public:
 		}
 
 	void 		erase (iterator position)
-		{erase((*position).first);}
+		// {erase((*position).first);}
+		{
+
+			_tree.deleteNode(position.base());
+		}
 
 	size_type 	erase (const key_type& k)
 	{
@@ -126,11 +130,13 @@ public:
 
 	void 		erase (iterator first, iterator last)
 	{
-		while (first != last)
-		{
-			erase((*(first)).first);
-			first++;
-		}
+		_tree.erase(first, last);
+		// while (first != last)
+		// {
+		// 	std::cout << "^\n";
+		// 	erase((*(first)).first);
+		// 	first++;
+		// }
 	}
 
 	void 		swap (map& x)

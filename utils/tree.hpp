@@ -65,6 +65,23 @@ public:
 		tree_iterator tmp = *this;
 		++(*this);
 		return tmp;
+		// tree_iterator save = _current;
+		// if (_current->right != nullptr) {
+		// 	_current = _current->right;
+		// 	while (_current->left) {
+		// 		_current = _current->left;
+		// 	}
+		// }
+		// else {
+		// 	tree_node	c = _current;
+		// 	_current = _current->parent;
+		// 	while (_current->right == c)
+		// 	{
+		// 		c = _current;
+		// 		_current = _current->parent;
+		// 	}
+		// }
+		// return save;
 	}
 
 	tree_iterator &operator--() {
@@ -87,6 +104,23 @@ public:
 	}
 
 	tree_iterator operator--(int) {
+		// tree_iterator save = _current;
+		// if (_current->left != nullptr) {
+		// 	_current = _current->left;
+		// 	while (_current->right) {
+		// 		_current = _current->right;
+		// 	}
+			
+		// }
+		// else {
+		// 	tree_node	c = _current;
+		// 	_current = _current->parent;
+		// 	while (_current->left == c) {
+		// 		c = _current;
+		// 		_current = _current->parent;
+		// 	}
+		// }
+		// return save;
 		tree_iterator tmp = *this;
 		--(*this);
 		return tmp;
@@ -573,14 +607,14 @@ private:
 		bool uvBlack = ((u == nullptr || u->is_black) && (v->is_black));
 		node *parent = v->parent; // maybe delete it later on, loooks like it's useless
 
-		std::cout << "v: " << v->value << std::endl;
-		if (u)
-			std::cout << "u: " << u->value << std::endl;
-		else
-			std::cout << "u: nullptr" << std::endl;
+		// std::cout << "v: " << v->value << std::endl;
+		// if (u)
+		// 	std::cout << "u: " << u->value << std::endl;
+		// else
+		// 	std::cout << "u: nullptr" << std::endl;
 		if (u == nullptr)
 		{
-			std::cout << "leaf\n";
+			// std::cout << "leaf\n";
 			if (v == _root)
 			{
 				_root = nullptr;
@@ -611,12 +645,9 @@ private:
 
 		if (v->left == nullptr || v->right == nullptr) // only one child
 		{
-			std::cout << "one child\n";
+			// std::cout << "one child\n";
 			if (v == _root)
 			{
-				// v->value = u->value;
-				// v->left = nullptr;
-				// v->right = nullptr;
 				_root = u;
 				_root->parent = &_dummy;
 				u->left = nullptr;
@@ -650,7 +681,7 @@ private:
 			return ;
 		}
 		else {
-			std::cout << "two children\n";
+			// std::cout << "two children\n";
 			if (v == _root) {
 				_root = u;
 			}
@@ -676,109 +707,9 @@ private:
 			ft::swap(u->left, v->left);
 			ft::swap(u->right, v->right);
 			ft::swap(u->is_black, v->is_black);
-			// std::cout << "-------\n";
-			// swapNode(u, v);
 			deleteNode(v);
 		}
 	}
-
-	void swapNode(node *u, node *v)
-	{
-		// std::cout << "swap\n";
-		node tmp;
-
-		tmp.parent = u->parent;
-		tmp.left = u->left;
-		tmp.right = u->right;
-		tmp.is_black = u->is_black;
-
-		bool uIsRight = (u->parent->right == u) ? 1 : 0;
-		node *tmp_v_parent = v->parent;
-		node *tmp_u_left = u->left;
-		node *tmp_u_right = u->right;
-		node *tmp_v_child = (v->left == u) ? v->right : v->left;
-
-		u->parent = v->parent;
-		u->left = (v->left == u) ? v : v->left;
-		u->right = (v->right == u) ? v : v->right;
-		u->is_black = v->is_black;
-
-		v->parent = u;
-		v->left = tmp.left;
-		v->right = tmp.right;
-		v->is_black = tmp.is_black;
-
-		correct_child(tmp_v_parent, uIsRight, u);
-		if (tmp_u_left)
-			tmp_u_left->parent = v;
-		if (tmp_u_right)
-			tmp_u_right->parent = v;
-		tmp_v_child = u;
-
-	}
-
-	// void	correct_parent(node *child, node *new_child)
-	// {
-	// 	if (child->parent->left == child) {
-	// 		child->parent->left = new_child;
-	// 		new_child->parent = child->parent;
-	// 	}
-	// 	else {
-	// 		child->parent->right = new_child;
-	// 		new_child->parent = child->parent;
-	// 	}
-	// }
-
-	void	correct_child(node *parent, bool right, node *child)
-	{
-		if (right) {
-			// if (parent->right) {
-				parent->right = child;
-			// }
-			// child->right = parent->right;
-		}
-		else {
-			// if (parent->left) {
-				parent->left = child;
-			// }
-			// child->left = parent->left;
-		}
-	}
-	// void swapNode(node *u, node *v)
-	// {
-	// 	node tmp;
-
-	// 	tmp.parent = u->parent;
-	// 	tmp.left = u->left;
-	// 	tmp.right = u->right;
-	// 	tmp.is_black = u->is_black;
-
-	// 	correct_parent(v, u);
-	// 	// std::cout << "v-right: " << v->right->value << std::endl;
-
-	// 	// stupid_function(u, v);
-	// 	u->parent = v->parent;
-	// 	correct_child(u, 0, v);
-	// 	// u->left = v->left;
-		
-	// 	// std::cout << "v-right: " << v->right->value << std::endl;
-	// 	correct_child(u, 1, v);
-	// 	// u->right = v->right;
-	// 	u->is_black = v->is_black;
-
-	// 	v->parent = tmp.parent;
-	// 	correct_child(v, 0, u);
-	// 	// v->left = tmp.left;
-	// 	correct_child(v, 1, u);
-	// 	// v->right = tmp.right;
-	// 	v->is_black = tmp.is_black;
-	// 	print();
-	// 	exit(0) ;
-	// }
-
-
-
-
 
 public:
 	tree(const value_compare& comp, const allocator_type& a)
@@ -815,14 +746,14 @@ public:
 			_a_node = x._a_node;
 			_root = clone(x._root);
 			// _root = x._root;
-			// iterator it = begin();
-			// while (it != end())
+			// const_iterator it = x.begin();
+			// while (it != x.end())
 			// {
 			// 	insert(*it);
 			// 	++it;
 			// }
 			// insert(x.begin(), x.end());
-			// _root->parent = &_dummy;
+			_root->parent = &_dummy;
 			_dummy.left = _root;
 		}
 		return *this;
@@ -861,19 +792,39 @@ public:
 		return ft::make_pair(iterator(z), true);
 	}
 
+	iterator	insert(iterator position, const value_type &val) {
+		return insert(val).first;
+		(void)position;
+	}
+
+	template<class InputIterator>
+		void	insert(InputIterator first, InputIterator last) {
+			while (first != last)
+			{
+				insert(*first);
+				first++;
+			}
+		}
+
 	size_type 	erase (const value_type& v)
 	{
 		// std::cout << "start\n";
 		node	*res = search(_root, v);
 		// std::cout << "value: " << res->value << std::endl;
-		// if (!res || !equals(v, res->value))
-		// 	return 0;
+		if (!res || !equals(v, res->value))
+			return 0;
 		// _root = deleteNode(_root, v);
 		deleteNode(res);
 		_size--;
 
 		return 1;
 	}
+		void	erase(iterator first, iterator last) {
+			while (first != last) {
+				deleteNode(first++.base());
+				_size--;
+			}
+		}
 
 	void 		swap (tree& x)
 	{
