@@ -744,17 +744,16 @@ public:
 			_comp = x._comp;
 			_a = x._a;
 			_a_node = x._a_node;
-			_root = clone(x._root);
+			// _root = clone(x._root);
 			// _root = x._root;
-			// const_iterator it = x.begin();
-			// while (it != x.end())
-			// {
-			// 	insert(*it);
-			// 	++it;
-			// }
-			// insert(x.begin(), x.end());
-			_root->parent = &_dummy;
-			_dummy.left = _root;
+			const_iterator it = x.begin();
+			while (it != x.end())
+			{
+				insert(*it);
+				++it;
+			}
+			// _root->parent = &_dummy;
+			// _dummy.left = _root;
 		}
 		return *this;
 	}
