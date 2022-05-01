@@ -188,7 +188,8 @@ private:
 	node						_dummy;
 	size_type					_size;
 
-private:
+// private:
+public:
 	node *create_node(const value_type& v)
 	{
 		node *new_node = _a_node.allocate(1);
@@ -392,8 +393,11 @@ private:
 	void	rb_insert_fixup(node *z)
 	{
 		node *y;
+		// std::cout << "rb_insert_fixup\n";
+		// std::cout << "node to insert: " << z->value << std::endl;
 		while (z->parent && z->parent != &_dummy && !z->parent->is_black)
 		{
+			// std::cout << "while = true\n";
 			if (z->parent == z->parent->parent->left)
 			{
 				// std::cout << "left\n";
@@ -450,8 +454,10 @@ private:
 		node *y = nullptr;
 		node *x = _root;
 
+		// std::cout << "root: " << _root->value << std::endl;
 		while (x != nullptr)
 		{
+			// std::cout << "nullllllllll\n";
 			y = x;
 			if (_comp(z->value, x->value)) {
 				x = x->left;
@@ -462,20 +468,23 @@ private:
 		}
 		z->parent = y;
 		if (y == nullptr) {
+			// std::cout << "empty tree\n";
 			_root = z;
 			_root->is_black = 1;
 			_root->parent = &_dummy;
 			_dummy.left = _root;
 		}
 		else if (_comp(z->value, y->value)) {
+			// std::cout << "lesser\n";
 			y->left = z;
-			y->left->parent = y;
+			// y->left->parent = y;
 		}
 		else {
+			// std::cout << "greater\n";
 			y->right = z;
-			y->right->parent = y;
+			// y->right->parent = y;
 		}
-
+		// std::cout << "rb_insert\n";
 		rb_insert_fixup(z);
 	}
 
@@ -653,8 +662,8 @@ private:
 				u->left = nullptr;
 				u->right = nullptr;
 				u->is_black = 1;
-				_a.destroy(&u->value);
-				_a_node.deallocate(u, 1);
+				_a.destroy(&v->value);
+				_a_node.deallocate(v, 1);
 			}
 			else
 			{
@@ -730,8 +739,14 @@ public:
 		  _a_node(x._a_node),
 		  _root(),
 		  _dummy(),
-		  _size(x._size)
+		  _size(0)
 	{
+		const_iterator it = x.begin();
+		while (it != x.end())
+		{
+			insert(*it);
+			++it;
+		}
 		// _root = clone(x._root);
 		// _root->parent = &_dummy;
 		// _dummy.left = _root;
@@ -740,20 +755,21 @@ public:
 	tree	&operator=(const tree & x) {
 		if (this != &x) {
 			this->clear();
-			_size = x._size;
+			_size = 0;
 			_comp = x._comp;
 			_a = x._a;
 			_a_node = x._a_node;
 			// _root = clone(x._root);
 			// _root = x._root;
+			_root = nullptr;
 			const_iterator it = x.begin();
 			while (it != x.end())
 			{
 				insert(*it);
 				++it;
 			}
-			// _root->parent = &_dummy;
-			// _dummy.left = _root;
+			_root->parent = &_dummy;
+			_dummy.left = _root;
 		}
 		return *this;
 	}
@@ -775,17 +791,21 @@ public:
 
 	ft::pair<iterator, bool> insert(const value_type& v)
 	{
+		// std::cout << "1\n";
 		if (this->find(v) != end())
 		{
 			node *res = search(_root, v);
 			return ft::make_pair(iterator(res), true);
 		}
+		// std::cout << "2\n";
 		node *z = create_node(v);
 		// if (equals(v, z->value)) {
 		// 	return (ft::make_pair(iterator(z), false));
 		// }
 		_dummy.left = _root;
+		// _root->parent = &_dummy;
 		rb_insert(z);
+		// std::cout << "3\n";
 		_size++;
 
 		return ft::make_pair(iterator(z), true);
@@ -810,18 +830,21 @@ public:
 		// std::cout << "start\n";
 		node	*res = search(_root, v);
 		// std::cout << "value: " << res->value << std::endl;
+		std::cout << "-----------------\n";
 		if (!res || !equals(v, res->value))
 			return 0;
 		// _root = deleteNode(_root, v);
 		deleteNode(res);
 		_size--;
+		std::cout << "-----------------\n";
 
 		return 1;
 	}
 		void	erase(iterator first, iterator last) {
 			while (first != last) {
-				deleteNode(first++.base());
-				_size--;
+				// deleteNode(first++.base());
+				// _size--;
+				erase((*first).first);
 			}
 		}
 
@@ -843,6 +866,9 @@ public:
 	void	clear()
 	{
 		delete_tree(_root);
+		_dummy.left = &_dummy;
+		_root = nullptr;
+		_size = 0;
 	}
 
 	iterator find(const value_type& v)

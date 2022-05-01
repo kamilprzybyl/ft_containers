@@ -114,11 +114,11 @@ public:
 		}
 
 	void 		erase (iterator position)
-		// {erase((*position).first);}
-		{
+		{erase((*position).first);}
+		// {
 
-			_tree.deleteNode(position.base());
-		}
+		// 	_tree.deleteNode(position.base());
+		// }
 
 	size_type 	erase (const key_type& k)
 	{
@@ -133,7 +133,7 @@ public:
 		_tree.erase(first, last);
 		// while (first != last)
 		// {
-		// 	std::cout << "^\n";
+		// 	// std::cout << "^\n";
 		// 	erase((*(first)).first);
 		// 	first++;
 		// }
