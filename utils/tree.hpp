@@ -5,6 +5,11 @@
 #include "../utils/iterator.hpp"
 #include "../utils/utility.hpp"
 #include "../utils/algorithm.hpp"
+#include <stddef.h>
+
+#ifndef nullptr
+# define nullptr NULL
+#endif
 
 template<class T>
 struct tree_node

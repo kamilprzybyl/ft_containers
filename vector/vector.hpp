@@ -58,7 +58,7 @@ public:
 	template <class InputIterator>
     vector (InputIterator first, InputIterator last,
 			const allocator_type& alloc = allocator_type(),
-			typename ft::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true)
+			typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type = true)
 		:	_capacity(),
 			_begin(),
 			_end(),
@@ -147,7 +147,7 @@ public:
 	void 		insert (iterator position, size_type n, const value_type& val);
 	template <class InputIterator>
 	void 		insert (iterator position, InputIterator first, InputIterator last,
-						typename ft::enable_if<!std::is_integral<InputIterator>::value, bool>::type = true);
+						typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type = true);
 
 	iterator 	erase (iterator position);
 	iterator 	erase (iterator first, iterator last);
@@ -326,7 +326,7 @@ template <typename T, typename Allocator>
 template <class InputIterator>
 void
 vector<T, Allocator>::insert(iterator position, InputIterator first, InputIterator last,
-							 typename ft::enable_if<!std::is_integral<InputIterator>::value, bool>::type)
+							 typename ft::enable_if<!ft::is_integral<InputIterator>::value, bool>::type)
 {
 	size_type n = ft::distance(first, last);
 	if (n > max_size() || n + size() > max_size())
