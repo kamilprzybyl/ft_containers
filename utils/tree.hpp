@@ -635,7 +635,10 @@ public:
 		return *this;
 	}
 
-	~tree() {}
+	~tree()
+	{
+		clear();
+	}
 
 	iterator begin()
 		{return iterator(min(_dummy.left));}
