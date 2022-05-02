@@ -369,19 +369,9 @@ template <typename T, typename Allocator>
 void
 vector<T, Allocator>::swap (vector& x)
 {
-	pointer		tmp_pointer = this->_end;
-	size_type	tmp_size = this->_capacity;
-
-	this->_end = x._end;
-	x._end = tmp_pointer;
-	tmp_pointer = this->_begin;
-	this->_begin = x._begin;
-	x._begin = tmp_pointer;
-	this->_capacity = x._capacity;
-	x._capacity = tmp_size;
-	// vector<T, Allocator> temp = *this;
-	// *this = x;
-	// x = temp;
+	ft::swap(_end, x._end);
+	ft::swap(_begin, x._begin);
+	ft::swap(_capacity, x._capacity);
 }
 
 template <typename T, typename Allocator>

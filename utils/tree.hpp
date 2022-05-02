@@ -34,16 +34,17 @@ private:
 	tree_node	_current;
 
 public:
-	tree_iterator() : _current() { }
-	tree_iterator(tree_node const &in) : _current(in) { }
+	tree_iterator() : _current() {}
 	tree_iterator(const tree_iterator<typename container::node *, container, typename container::value_type> & in) : _current(in.base()) { }
+	tree_iterator(tree_node const &in) : _current(in) {}
+	virtual ~tree_iterator() {}
 
+	tree_node		&base() { return _current; }
 	const tree_node	&base() const { return _current; }
 
-	tree_node	&base() { return _current; }
-
-	tree_iterator &operator++() {
-		if (_current->right != nullptr) {
+	tree_iterator &operator++()
+	{
+		if (_current->right != nullptr){
 			_current = _current->right;
 			while (_current->left) {
 				_current = _current->left;
@@ -61,30 +62,15 @@ public:
 		return *this;
 	}
 
-	tree_iterator operator++(int) {
+	tree_iterator operator++(int)
+	{
 		tree_iterator tmp = *this;
 		++(*this);
 		return tmp;
-		// tree_iterator save = _current;
-		// if (_current->right != nullptr) {
-		// 	_current = _current->right;
-		// 	while (_current->left) {
-		// 		_current = _current->left;
-		// 	}
-		// }
-		// else {
-		// 	tree_node	c = _current;
-		// 	_current = _current->parent;
-		// 	while (_current->right == c)
-		// 	{
-		// 		c = _current;
-		// 		_current = _current->parent;
-		// 	}
-		// }
-		// return save;
 	}
 
-	tree_iterator &operator--() {
+	tree_iterator &operator--()
+	{
 		if (_current->left != nullptr) {
 			_current = _current->left;
 			while (_current->right) {
@@ -103,33 +89,17 @@ public:
 		return *this;
 	}
 
-	tree_iterator operator--(int) {
-		// tree_iterator save = _current;
-		// if (_current->left != nullptr) {
-		// 	_current = _current->left;
-		// 	while (_current->right) {
-		// 		_current = _current->right;
-		// 	}
-			
-		// }
-		// else {
-		// 	tree_node	c = _current;
-		// 	_current = _current->parent;
-		// 	while (_current->left == c) {
-		// 		c = _current;
-		// 		_current = _current->parent;
-		// 	}
-		// }
-		// return save;
+	tree_iterator operator--(int)
+	{
 		tree_iterator tmp = *this;
 		--(*this);
 		return tmp;
 	}
 
-	tree_iterator	operator-(int const &i) const {
+	tree_iterator	operator-(int const &i) const
+	{
 		tree_iterator ret = *this;
-		for (int j = 0; j < i; j++)
-		{
+		for (int j = 0; j < i; j++) {
 			ret--;
 		}
 		return ret;
@@ -137,8 +107,7 @@ public:
 
 	tree_iterator	operator+(int const &i) const {
 		tree_iterator ret = *this;
-		for (int j = 0; j < i; j++)
-		{
+		for (int j = 0; j < i; j++) {
 			ret++;
 		}
 		return ret;
@@ -147,19 +116,15 @@ public:
 	pointer	operator->() { return &(this->operator*()); }
 	pointer	operator->() const { return &(this->operator*()); }
 	
-	bool operator==(tree_iterator const &x) const {
-		return _current == x._current;
-	}
-	bool operator!=(tree_iterator const &x) const {
-		return !(*this == x);
-	}
-	value_type	&operator*() {
-		return _current->value;
-	}
+	bool operator==(tree_iterator const &x) const
+		{ return _current == x._current; }
+	bool operator!=(tree_iterator const &x) const
+		{ return !(*this == x); }
 
-	value_type	&operator*() const {
-		return _current->value;
-	}
+	value_type	&operator*()
+		{ return _current->value; }
+	value_type	&operator*() const
+		{ return _current->value; }
 };
 
 
@@ -190,12 +155,41 @@ private:
 
 // private:
 public:
+	/*
+	void	printTree(const std::string& prefix, node* node, bool left) const
+	{
+		if( node != NULL )
+		{
+			std::cout << prefix;
+
+			std::cout << (left ? "├──" : "└──" );
+
+			if (!node->is_black) {
+				std::cout << "\033[0;31m";
+				std::cout << node->value;
+				std::cout << "\033[0m\n";
+			}
+			else {
+				std::cout << node->value;
+			}
+			std::cout << std::endl;
+
+			printTree(prefix + (left ? "│   " : "    "), node->left, true);
+			printTree(prefix + (left ? "│   " : "    "), node->right, false);
+		}
+	}
+
+	void print()
+	{
+		this->printTree("", _root, false);
+	}
+	*/
+
 	node *create_node(const value_type& v)
 	{
 		node *new_node = _a_node.allocate(1);
 		_a.construct(&new_node->value, v);
 		new_node->parent = &_dummy;
-		// new_node->parent = nullptr;
 		new_node->left = nullptr;
 		new_node->right = nullptr;
 		new_node->is_black = 0;
@@ -211,43 +205,30 @@ public:
 		return root;
 	}
 
-	node* clone(node* root)
-	{
-		if (root == nullptr) {
-			return nullptr;
-		}
-	
-		node* root_copy = create_node(root->value);
-	
-		root_copy->left = clone(root->left);
-		root_copy->right = clone(root->right);
-	
-		return root_copy;
-	}
-
-	void	delete_tree(node *root)
+	void	deleteTree(node *root)
 	{
 		if (root == nullptr) {
 			return ;
 		}
 
-		delete_tree(root->left);
-		delete_tree(root->right);
+		deleteTree(root->left);
+		deleteTree(root->right);
 
 		_a.destroy(&root->value);
 		_a_node.deallocate(root, 1);
 	}
 
 	bool	equals(value_type const &first, value_type const &second) const
-	{
-		return (!_comp(first, second) && !_comp(second, first));
-	}
+		{ return (!_comp(first, second) && !_comp(second, first)); }
 
-	node	*search(node *root, const value_type &v) const {
-		if (!root)
+	node	*search(node *root, const value_type &v) const
+	{
+		if (!root) {
 			return nullptr;
-		if (equals(root->value, v))
+		}
+		if (equals(root->value, v)) {
 			return root;
+		}
 		if (_comp(v, root->value) && root->left == nullptr) {
 			return root;
 		}
@@ -260,58 +241,16 @@ public:
 		return search(root->left, v);
 	}
 
-	// node* deleteNode(node* root, const value_type& v)
-	// {
-	// 	if (root == NULL) 
-	// 		return root;
-
-	// 	if (v.first < root->value.first)
-	// 		root->left = deleteNode(root->left, v);
-	// 	else if (v.first > root->value.first)
-	// 		root->right = deleteNode(root->right, v);
-	// 	else {
-	// 		if (root->left == NULL && root->right == NULL)
-	// 		{
-	// 			return nullptr;
-	// 		}
-	// 		else if (root->left == NULL)
-	// 		{
-	// 			node *temp = root->right;
-	// 			temp->parent = root->parent;
-	// 			_a_node.destroy(root);
-	// 			_a_node.deallocate(root, 1);
-	// 			return temp;
-	// 		}
-	// 		else if (root->right == NULL)
-	// 		{
-	// 			node *temp = root->left;
-	// 			temp->parent = root->parent;
-	// 			_a_node.destroy(root);
-	// 			_a_node.deallocate(root, 1);
-	// 			return temp;
-	// 		}
-	// 		else 
-	// 		{
-	// 			node* temp = min(root->right);
-	// 			temp->parent = root->parent;
-	// 			_a.construct(&temp->value, temp->value);
-	// 			root->right = deleteNode(root->right, temp->value);
-	// 		}
-	// 	}
-	// 	return root;
-	// }
-
 	void	rightRotate(node *x)
 	{
-		if (!x->left)
-			return ;
 		node	*y = x->left;
 		if (x == _root) {
 			_root = y;
 			_root->parent = &_dummy;
 			_dummy.left = _root;
 		}
-		if (x->parent && x->parent != &_dummy) {
+		if (x->parent && x->parent != &_dummy)
+		{
 			if (x->parent->left == x) {
 				x->parent->left = y;
 			} else {
@@ -325,37 +264,18 @@ public:
 			x->left->parent = x;
 		}
 		y->right = x;
-		// node *y = x->left;		// y is soon to be parent of x
-		// x->left = y->right;		
-		// if (y->right != nullptr) {
-		// 	y->right->parent = x;
-		// }
-		// y->parent = x->parent;
-		// // if (x->parent == nullptr) {
-		// if (x->parent == &_dummy) {
-		// 	_root = y;
-		// }
-		// else if (x == x->parent->left) {
-		// 	x->parent->left = y;
-		// }
-		// else {
-		// 	x->parent->right = y;
-		// }
-		// y->right = x;
-		// x->parent = y;
 	}
 
 	void	leftRotate(node *x)
 	{
-		if (!x || !x->right)
-			return ;
 		node *y = x->right;
 		if (x == _root) {
 			_root = y;
 			_root->parent = &_dummy;
 			_dummy.left = _root;
 		}
-		if (x->parent && x->parent != &_dummy) {
+		if (x->parent && x->parent != &_dummy)
+	{
 			if (x->parent->left == x) {
 				x->parent->left = y;
 			} else {
@@ -369,42 +289,18 @@ public:
 			x->right->parent = x;
 		}
 		y->left = x;
-		// node *y = x->right;		// y is soon to be parent of x
-		// x->right = y->left;		
-		// if (y->left != nullptr) {
-		// 	y->left->parent = x;
-		// }
-		// y->parent = x->parent;
-		// // if (x->parent == nullptr) {
-		// if (x->parent == &_dummy) {
-		// 	_root = y;
-		// }
-		// else if (x == x->parent->left) {
-		// 	x->parent->left = y;
-		// }
-		// else {
-		// 	x->parent->right = y;
-		// }
-		// y->left = x;
-		// x->parent = y;
 	}
 
 	//	2. Recolor and rotate nodes to fix violation (covers 4 scenarios)
 	void	rb_insert_fixup(node *z)
 	{
 		node *y;
-		// std::cout << "rb_insert_fixup\n";
-		// std::cout << "node to insert: " << z->value << std::endl;
 		while (z->parent && z->parent != &_dummy && !z->parent->is_black)
 		{
-			// std::cout << "while = true\n";
 			if (z->parent == z->parent->parent->left)
 			{
-				// std::cout << "left\n";
 				y = z->parent->parent->right;			// z's uncle
 				if (y && !y->is_black) {				// case 1: z's uncle is red
-					// std::cout << "case 1\n";
-					// recolor z's parent, grandparent and uncle
 					z->parent->is_black = 1;
 					y->is_black = 1;
 					z->parent->parent->is_black = 0;
@@ -412,21 +308,18 @@ public:
 				}
 				else if (z == z->parent->right) {		// case 2: z's uncle is black (triangle)
 					 
-					// std::cout << "case 2\n";
 					z = z->parent;
 					leftRotate(z);
 				}
 				else {									// case 3: z's uncle is black (line)
 					// recolor the original parent and grandparent (switch colors)
-					// std::cout << "case 3\n";
 					z->parent->is_black = 1;
 					z->parent->parent->is_black = 0;
-					rightRotate(z->parent->parent);	// rotate z's grandparent
+					rightRotate(z->parent->parent);		// rotate z's grandparent
 				}
 			}
 			else
 			{
-				// std::cout << "right\n";
 				y = z->parent->parent->left;
 				if (y && !y->is_black) {
 					z->parent->is_black = 1;
@@ -445,7 +338,7 @@ public:
 				}
 			}
 		}
-		_root->is_black = 1;	// case 0: color z black
+		_root->is_black = 1;							// case 0: color z black
 	}
 
 	//	1. Insert Z and color it red (simple insertion)
@@ -454,10 +347,8 @@ public:
 		node *y = nullptr;
 		node *x = _root;
 
-		// std::cout << "root: " << _root->value << std::endl;
 		while (x != nullptr)
 		{
-			// std::cout << "nullllllllll\n";
 			y = x;
 			if (_comp(z->value, x->value)) {
 				x = x->left;
@@ -468,23 +359,18 @@ public:
 		}
 		z->parent = y;
 		if (y == nullptr) {
-			// std::cout << "empty tree\n";
 			_root = z;
 			_root->is_black = 1;
 			_root->parent = &_dummy;
 			_dummy.left = _root;
 		}
 		else if (_comp(z->value, y->value)) {
-			// std::cout << "lesser\n";
 			y->left = z;
-			// y->left->parent = y;
 		}
 		else {
-			// std::cout << "greater\n";
 			y->right = z;
-			// y->right->parent = y;
 		}
-		// std::cout << "rb_insert\n";
+
 		rb_insert_fixup(z);
 	}
 
@@ -515,9 +401,6 @@ public:
 	// find node that replaces a deleted node in the tree
 	node	*replace(node *x)
 	{
-		// if (!x)
-		// 	return nullptr;
-
 		// when has 2 children
 		if (x->left != nullptr && x->right != nullptr)
 			return successor(x->right);
@@ -533,97 +416,84 @@ public:
 			return x->right;
 	}
 
-	void	doubleBlackFixup(node *x)
+	void	doubleBlackFixup(node *v)
 	{
-		if (x == _root) {
+		if (v == _root) {
 			return ;
 		}
 
-		node *sibling = this->sibling(x);
-		node *parent = x->parent; // ?????????
+		node *sibling = this->sibling(v);
 
 		if (sibling == nullptr)
 		{
-			doubleBlackFixup(parent);
+			doubleBlackFixup(v->parent);
 		}
 		else
 		{
-			// std::cout << "elsse\n";
-			// std::cout << "sibling: " << sibling->value << std::endl;
 			if (!sibling->is_black)
 			{
-				parent->is_black = 0;
+				v->parent->is_black = 0;
 				sibling->is_black = 1;
 				if (sibling == sibling->parent->left) {
-					rightRotate(parent);
+					rightRotate(v->parent);
 				}
 				else {
-					leftRotate(parent);
+					leftRotate(v->parent);
 				}
-				doubleBlackFixup(x);
+				doubleBlackFixup(v);
 			}
 			else
 			{
-				// std::cout << "is black\n";
 				if ((sibling->left && !sibling->left->is_black) || (sibling->right && !sibling->right->is_black))
 				{
-					// std::cout << "!sibling->left->is_black || !sibling->right->is_black\n";
 					if (sibling->left != nullptr && !sibling->left->is_black)
 					{
 						if (sibling == sibling->parent->left) {
 							sibling->left->is_black = sibling->is_black;
-							sibling->is_black = parent->is_black;
-							rightRotate(parent);
+							sibling->is_black = v->parent->is_black;
+							rightRotate(v->parent);
 						}
 						else {
-							sibling->left->is_black = parent->is_black;
+							sibling->left->is_black = v->parent->is_black;
 							rightRotate(sibling);
-							leftRotate(parent);
+							leftRotate(v->parent);
 						}
 					}
 					else
 					{
-						// std::cout << "one of the child is red\n";
 						if (sibling->parent && sibling == sibling->parent->left) {
-							sibling->right->is_black = parent->is_black;
+							sibling->right->is_black = v->parent->is_black;
 							leftRotate(sibling);
-							rightRotate(parent);
+							rightRotate(v->parent);
 						}
 						else {
 							sibling->right->is_black = sibling->is_black;
-							sibling->is_black = parent->is_black;
-							leftRotate(parent);
+							sibling->is_black = v->parent->is_black;
+							leftRotate(v->parent);
 						}
 					}
-					parent->is_black = 1;
+					v->parent->is_black = 1;
 				}
 				else {
 					sibling->is_black = 0;
-					if (parent->is_black) {
-						doubleBlackFixup(parent);
+					if (v->parent->is_black) {
+						doubleBlackFixup(v->parent);
 					}
 					else {
-						parent->is_black = 1;
+						v->parent->is_black = 1;
 					}
 				}
 			}
 		}
 	}
 
-	void	deleteNode(node *v)
+	void	rb_erase(node *v)
 	{
 		node *u  = replace(v);
 		bool uvBlack = ((u == nullptr || u->is_black) && (v->is_black));
-		node *parent = v->parent; // maybe delete it later on, loooks like it's useless
 
-		// std::cout << "v: " << v->value << std::endl;
-		// if (u)
-		// 	std::cout << "u: " << u->value << std::endl;
-		// else
-		// 	std::cout << "u: nullptr" << std::endl;
-		if (u == nullptr)
+		if (u == nullptr) // leaf
 		{
-			// std::cout << "leaf\n";
 			if (v == _root)
 			{
 				_root = nullptr;
@@ -641,10 +511,10 @@ public:
 				}
 
 				if (v == v->parent->left) {
-					parent->left = nullptr;
+					v->parent->left = nullptr;
 				}
 				else {
-					parent->right = nullptr;
+					v->parent->right = nullptr;
 				}
 			}
 			_a.destroy(&v->value);
@@ -654,7 +524,6 @@ public:
 
 		if (v->left == nullptr || v->right == nullptr) // only one child
 		{
-			// std::cout << "one child\n";
 			if (v == _root)
 			{
 				_root = u;
@@ -667,14 +536,10 @@ public:
 			}
 			else
 			{
-				// print();
-				// std::cout << "detach\n";
 				if (v == v->parent->left) {
-					// std::cout << "left\n";
 					v->parent->left = u;
 				}
 				else {
-					// std::cout << "right\n";
 					v->parent->right = u;
 				}
 				_a.destroy(&v->value);
@@ -689,8 +554,7 @@ public:
 			}
 			return ;
 		}
-		else {
-			// std::cout << "two children\n";
+		else {	// two children
 			if (v == _root) {
 				_root = u;
 			}
@@ -711,12 +575,11 @@ public:
 			if (u->parent && u == u->parent->right) {
 				u->parent->right = v;
 			}
-			// print();
 			ft::swap(u->parent, v->parent);
 			ft::swap(u->left, v->left);
 			ft::swap(u->right, v->right);
 			ft::swap(u->is_black, v->is_black);
-			deleteNode(v);
+			rb_erase(v);
 		}
 	}
 
@@ -747,9 +610,6 @@ public:
 			insert(*it);
 			++it;
 		}
-		// _root = clone(x._root);
-		// _root->parent = &_dummy;
-		// _dummy.left = _root;
 	}
 
 	tree	&operator=(const tree & x) {
@@ -759,8 +619,6 @@ public:
 			_comp = x._comp;
 			_a = x._a;
 			_a_node = x._a_node;
-			// _root = clone(x._root);
-			// _root = x._root;
 			_root = nullptr;
 			const_iterator it = x.begin();
 			while (it != x.end())
@@ -768,14 +626,11 @@ public:
 				insert(*it);
 				++it;
 			}
-			_root->parent = &_dummy;
-			_dummy.left = _root;
 		}
 		return *this;
 	}
 
-	~tree() {
-	}
+	~tree() {}
 
 	iterator begin()
 		{return iterator(min(_dummy.left));}
@@ -791,62 +646,28 @@ public:
 
 	ft::pair<iterator, bool> insert(const value_type& v)
 	{
-		// std::cout << "1\n";
-		if (this->find(v) != end())
-		{
-			node *res = search(_root, v);
-			return ft::make_pair(iterator(res), true);
-		}
-		// std::cout << "2\n";
-		node *z = create_node(v);
-		// if (equals(v, z->value)) {
-		// 	return (ft::make_pair(iterator(z), false));
-		// }
+		node	*z;
+
+		z = search(_root, v);
+		if (z && equals(v, z->value))
+			return ft::make_pair(iterator(z), false);
+		z = create_node(v);
 		_dummy.left = _root;
-		// _root->parent = &_dummy;
 		rb_insert(z);
-		// std::cout << "3\n";
 		_size++;
 
 		return ft::make_pair(iterator(z), true);
 	}
 
-	iterator	insert(iterator position, const value_type &val) {
-		return insert(val).first;
-		(void)position;
-	}
-
-	template<class InputIterator>
-		void	insert(InputIterator first, InputIterator last) {
-			while (first != last)
-			{
-				insert(*first);
-				first++;
-			}
-		}
-
 	size_type 	erase (const value_type& v)
 	{
-		// std::cout << "start\n";
-		node	*res = search(_root, v);
-		// std::cout << "value: " << res->value << std::endl;
-		std::cout << "-----------------\n";
-		if (!res || !equals(v, res->value))
+		node	*z = search(_root, v);
+		if (!z || !equals(v, z->value))
 			return 0;
-		// _root = deleteNode(_root, v);
-		deleteNode(res);
+		rb_erase(z);
 		_size--;
-		std::cout << "-----------------\n";
-
 		return 1;
 	}
-		void	erase(iterator first, iterator last) {
-			while (first != last) {
-				// deleteNode(first++.base());
-				// _size--;
-				erase((*first).first);
-			}
-		}
 
 	void 		swap (tree& x)
 	{
@@ -865,7 +686,7 @@ public:
 
 	void	clear()
 	{
-		delete_tree(_root);
+		deleteTree(_root);
 		_dummy.left = &_dummy;
 		_root = nullptr;
 		_size = 0;
@@ -885,38 +706,6 @@ public:
 		if (!res || !equals(res->value, v))
 			return end();
 		return const_iterator(res);
-	}
-
-	void printBT(const std::string& prefix, node* node, bool isLeft) const
-	{
-		if( node != NULL )
-		{
-			std::cout << prefix;
-
-			std::cout << (isLeft ? "├──" : "└──" );
-
-			// print the value of the node
-			if (!node->is_black) {
-				std::cout << "\033[0;31m";
-				std::cout << node->value;
-				std::cout << "\033[0m\n";
-			}
-			else {
-				std::cout << node->value;
-			}
-
-			std::cout << std::endl;
-
-			// enter the next tree level - left and right branch
-			printBT( prefix + (isLeft ? "│   " : "    "), node->left, true);
-			printBT( prefix + (isLeft ? "│   " : "    "), node->right, false);
-		}
-	}
-
-
-	void print()
-	{
-		this->printBT("", _root, false);
 	}
 };
 

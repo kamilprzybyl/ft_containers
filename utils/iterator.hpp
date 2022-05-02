@@ -75,7 +75,7 @@ public:
 		{ this->_current += n; return *this; }
 	reference         operator[](difference_type n) const
 		{ return *(*this + n); }
-	difference_type	operator-(reverse_iterator const &rhs) const { return rhs._current - _current; }
+	int	operator-(reverse_iterator const &rhs) const { return rhs._current - _current; }
 };
 
 
@@ -178,28 +178,6 @@ typename reverse_iterator<Iterator>::difference_type operator- (
 {
 	return rhs - lhs;
 }
-
-// template <class Iterator>
-// reverse_iterator<Iterator> operator+ (
-// 	typename reverse_iterator<Iterator>::difference_type n,
-// 	const reverse_iterator<Iterator>& rev_it)
-// {
-// 	return rev_it + n;
-// }
-
-// template <class Iterator>
-// typename reverse_iterator<Iterator>::difference_type operator- (
-// 	const reverse_iterator<Iterator>& lhs,
-// 	const reverse_iterator<Iterator>& rhs)
-// {
-// 	return rhs - lhs;
-// }
-
-		// template<typename iterator>
-		// 	reverse_iterator<iterator>	operator-(const int &lhs, reverse_iterator<iterator> const &rhs) { return rhs - lhs; }
-		// template<typename iterator>
-		// 	reverse_iterator<iterator>	operator+(const int &lhs, reverse_iterator<iterator> const &rhs) { return rhs + lhs; }
-
 
 } // ft
 

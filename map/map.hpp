@@ -114,11 +114,7 @@ public:
 		}
 
 	void 		erase (iterator position)
-		{erase((*position).first);}
-		// {
-
-		// 	_tree.deleteNode(position.base());
-		// }
+		{ erase((*position).first); }
 
 	size_type 	erase (const key_type& k)
 	{
@@ -130,18 +126,14 @@ public:
 
 	void 		erase (iterator first, iterator last)
 	{
-		_tree.erase(first, last);
-		// while (first != last)
-		// {
-		// 	// std::cout << "^\n";
-		// 	erase((*(first)).first);
-		// 	first++;
-		// }
+		while (first != last) {
+			erase((*first++).first);
+		}
 	}
 
 	void 		swap (map& x)
 		{_tree.swap(x._tree);}
-	void 		clear() //{this->erase(this->begin(), this->end());}
+	void 		clear()
 		{_tree.clear();}
 
 	//	Observers
@@ -161,8 +153,7 @@ public:
 		{return _tree.find(ft::make_pair(k, mapped_type()));}
 
 	size_type count (const key_type& k) const
-		// {return _tree.count(ft::make_pair(k, mapped_type()));}
-		{return find(k) != end();}
+		{ return find(k) != end(); }
 
 	iterator 		lower_bound (const key_type& k)
 	{
@@ -202,6 +193,7 @@ public:
 		}
 		return it;
 	}
+
 	const_iterator 	upper_bound (const key_type& k) const
 	{
 		const_iterator it = begin();
