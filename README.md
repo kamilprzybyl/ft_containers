@@ -17,3 +17,9 @@ This project consist of a few container types of the C++ standard template libra
 - [x] lexicographical_compare
 - [x] std::pair
 - [x] std::make_pair
+
+## Technologies
+- Data structures and algorithms: implementation of a balanced tree (red-black tree)
+- Iterators
+- C++ generic programming (templates)
+- SFINAE (Substitution Failure Is Not An Error)
